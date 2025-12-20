@@ -47,7 +47,7 @@ services:
       - ./certbot/conf:/etc/letsencrypt
     depends_on:
       - nginx
-    command: certonly --webroot --webroot-path=/var/www/certbot --email easyarm@yandex.ru --agree-tos --no-eff-email -d coobe.ru -d www.coobe.ru -d prometheus.coobe.ru -d grafana.coobe.ru -d node-exporter.coobe.ru
+    command: certonly --webroot --webroot-path=/var/www/certbot --email easyarm@yandex.ru --agree-tos --no-eff-email -d leprec.ru -d www.leprec.ru -d prometheus.leprec.ru -d grafana.leprec.ru -d node-exporter.leprec.ru
     networks:
       - app-network
 
@@ -73,7 +73,7 @@ services:
       - ./monitoring/grafana:/var/lib/grafana
       - ./monitoring/grafana/grafana.ini:/etc/grafana/grafana.ini
     environment:
-      GF_SERVER_ROOT_URL: https://grafana.coobe.ru
+      GF_SERVER_ROOT_URL: https://grafana.leprec.ru
       GF_SERVER_SERVE_FROM_SUB_PATH: "true"
       GF_PATHS_DATA: /var/lib/grafana
     networks:
