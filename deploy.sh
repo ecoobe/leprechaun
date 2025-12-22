@@ -17,15 +17,15 @@ get_container_ip() {
 # Ждём пока контейнер отвечает на HTTP
 # ----------------------------------------
 wait_for_container() {
-    local name=$1
+    local service=$1
     local port=$2
-    local ip
-    ip=$(get_container_ip "$name")
-    echo "Ожидаем контейнер $name ($ip:$port)..."
-    until curl -s "http://$ip:$port/" >/dev/null 2>&1; do
+    # Получаем реальное имя контейнера через docker compose ps
+    local container=$(docker compose ps -q $service)
+    echo "Ожидаем контейнер $service ($container) на порту $port..."
+    until docker exec -T $container sh -c "curl -s http://localhost:$port/ >/dev/null" >/dev/null 2>&1; do
         sleep 2
     done
-    echo "Контейнер $name готов!"
+    echo "Контейнер $service готов!"
 }
 
 echo "Останавливаем старые контейнеры и очищаем сети..."
