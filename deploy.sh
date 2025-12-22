@@ -14,8 +14,8 @@ wait_for_container() {
     local name=$1
     local port=$2
     echo "Ожидаем контейнер $name на порту $port..."
-    until $COMPOSE exec -T $name sh -c "nc -z localhost $port" >/dev/null 2>&1; do
-        sleep 2
+    until $COMPOSE exec -T $name sh -c "curl -s http://localhost:$port/ >/dev/null" >/dev/null 2>&1; do
+    	sleep 2
     done
     echo "Контейнер $name готов!"
 }
