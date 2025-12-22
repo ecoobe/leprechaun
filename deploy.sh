@@ -9,7 +9,9 @@ DOMAINS=("leprec.ru" "www.leprec.ru" "prometheus.leprec.ru" "grafana.leprec.ru" 
 COMPOSE="docker compose"
 PROJECT_DIR="$(pwd)"
 
-# Функция для проверки доступности контейнера
+# ----------------------------------------
+# Функции для ожидания готовности контейнера
+# ----------------------------------------
 wait_for_container() {
     local name=$1
     local port=$2
@@ -33,7 +35,7 @@ docker network prune -f || true
 echo "Собираем и запускаем backend и frontend..."
 $COMPOSE up -d --build backend frontend
 
-# Ждем пока backend и frontend будут доступны
+# Ждем готовности контейнеров
 wait_for_container backend 8080
 wait_for_container frontend 80
 
@@ -43,11 +45,11 @@ wait_for_container frontend 80
 echo "Запускаем Nginx..."
 $COMPOSE up -d nginx
 
-# Ждем пока Nginx поднимется
+# Небольшая пауза, чтобы Nginx успел стартовать
 sleep 5
 
 # ----------------------------------------
-# 4️⃣ Получение сертификатов через Certbot
+# 4️⃣ Получение SSL сертификатов через Certbot
 # ----------------------------------------
 echo "Получаем SSL сертификаты..."
 DOMAIN_ARGS=()
@@ -61,7 +63,7 @@ $COMPOSE run --rm certbot certonly \
     "${DOMAIN_ARGS[@]}"
 
 # ----------------------------------------
-# 5️⃣ Перезапуск Nginx, чтобы подхватил сертификаты
+# 5️⃣ Перезапуск Nginx для подхвата сертификатов
 # ----------------------------------------
 echo "Перезапускаем Nginx..."
 $COMPOSE restart nginx
