@@ -3,7 +3,7 @@ FROM golang:1.24-alpine
 WORKDIR /app
 
 # Копируем файлы зависимостей и загружаем модули
-COPY go.mod go.sum ./
+COPY backend/go.mod backend/go.sum ./
 RUN GOPROXY=https://proxy.golang.org,direct go mod download
 
 COPY backend/ ./backend/
