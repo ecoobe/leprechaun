@@ -1,56 +1,47 @@
 #!/bin/bash
 set -e
 
-# ----------------------------------------
-# Переменные
-# ----------------------------------------
 EMAIL="easyarm@yandex.ru"
 DOMAINS=("leprec.ru" "www.leprec.ru" "prometheus.leprec.ru" "grafana.leprec.ru" "node-exporter.leprec.ru")
 COMPOSE="docker compose"
-PROJECT_DIR="$(pwd)"
 
 # ----------------------------------------
-# Функции для ожидания готовности контейнера
+# Получаем IP контейнера
+# ----------------------------------------
+get_container_ip() {
+    local name=$1
+    docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "${name}"
+}
+
+# ----------------------------------------
+# Ждём пока контейнер отвечает на HTTP
 # ----------------------------------------
 wait_for_container() {
     local name=$1
     local port=$2
-    echo "Ожидаем контейнер $name на порту $port..."
-    until $COMPOSE exec -T $name sh -c "curl -s http://$name:$port/ >/dev/null" >/dev/null 2>&1; do
+    local ip
+    ip=$(get_container_ip "$name")
+    echo "Ожидаем контейнер $name ($ip:$port)..."
+    until curl -s "http://$ip:$port/" >/dev/null 2>&1; do
         sleep 2
     done
     echo "Контейнер $name готов!"
 }
 
-# ----------------------------------------
-# 1️⃣ Очищаем старые контейнеры и сети
-# ----------------------------------------
-echo "Останавливаем старые контейнеры и удаляем сети..."
+echo "Останавливаем старые контейнеры и очищаем сети..."
 $COMPOSE down -v || true
 docker network prune -f || true
 
-# ----------------------------------------
-# 2️⃣ Сборка и запуск backend и frontend
-# ----------------------------------------
 echo "Собираем и запускаем backend и frontend..."
 $COMPOSE up -d --build backend frontend
 
-# Ждем готовности контейнеров
 wait_for_container backend 8080
 wait_for_container frontend 80
 
-# ----------------------------------------
-# 3️⃣ Запуск Nginx
-# ----------------------------------------
 echo "Запускаем Nginx..."
 $COMPOSE up -d nginx
-
-# Небольшая пауза, чтобы Nginx успел стартовать
 sleep 5
 
-# ----------------------------------------
-# 4️⃣ Получение SSL сертификатов через Certbot
-# ----------------------------------------
 echo "Получаем SSL сертификаты..."
 DOMAIN_ARGS=()
 for d in "${DOMAINS[@]}"; do
@@ -62,10 +53,7 @@ $COMPOSE run --rm certbot certonly \
     --email "$EMAIL" --agree-tos --no-eff-email \
     "${DOMAIN_ARGS[@]}"
 
-# ----------------------------------------
-# 5️⃣ Перезапуск Nginx для подхвата сертификатов
-# ----------------------------------------
-echo "Перезапускаем Nginx..."
+echo "Перезапускаем Nginx для подхвата сертификатов..."
 $COMPOSE restart nginx
 
 echo "✅ Деплой завершен!"
