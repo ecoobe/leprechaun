@@ -52,7 +52,7 @@ services:
       - ./certbot/conf:/etc/letsencrypt
     depends_on:
       - nginx
-    # entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 12h & wait $${!}; certbot renew --webroot --webroot-path=/var/www/certbot --quiet; done;'"
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 12h & wait $${!}; certbot renew --webroot --webroot-path=/var/www/certbot --quiet; done;'"
     networks:
       - app-network
     restart: unless-stopped
