@@ -12,6 +12,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    restart: unless-stopped
 
   frontend:
     build:
@@ -26,6 +27,61 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    user: "472:472"
+    volumes:
+      - ./monitoring/grafana:/var/lib/grafana
+      - ./monitoring/grafana/grafana.ini:/etc/grafana/grafana.ini
+    environment:
+      GF_SERVER_ROOT_URL: https://grafana.leprec.ru
+      GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      app-network:
+        aliases:
+          - grafana
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    user: "65534:65534"
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=30d"
+      - "--web.enable-lifecycle"
+    networks:
+      app-network:
+        aliases:
+          - prometheus
+    restart: unless-stopped
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    networks:
+      app-network:
+        aliases:
+          - node-exporter
+    restart: unless-stopped
 
   nginx:
     image: nginx:alpine
@@ -41,6 +97,8 @@ services:
         condition: service_healthy
       frontend:
         condition: service_healthy
+      grafana:
+        condition: service_healthy
     networks:
       - app-network
     restart: unless-stopped
@@ -52,58 +110,22 @@ services:
       - ./certbot/conf:/etc/letsencrypt
     depends_on:
       - nginx
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 12h & wait $${!}; certbot renew --webroot --webroot-path=/var/www/certbot --quiet; done;'"
-    networks:
-      - app-network
-    restart: unless-stopped
-
-  prometheus:
-    image: prom/prometheus:latest
-    user: "65534:65534"
-    volumes:
-      - ./monitoring/prometheus:/etc/prometheus
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--storage.tsdb.retention.time=30d'
-      - '--web.enable-lifecycle'
-    networks:
-      - app-network
-    restart: unless-stopped
-
-  grafana:
-    image: grafana/grafana:latest
-    user: "472:472"
-    volumes:
-      - ./monitoring/grafana:/var/lib/grafana
-      - ./monitoring/grafana/grafana.ini:/etc/grafana/grafana.ini
-    environment:
-      GF_SERVER_ROOT_URL: https://grafana.leprec.ru
-      GF_SERVER_SERVE_FROM_SUB_PATH: "true"
-      GF_PATHS_DATA: /var/lib/grafana
-    networks:
-      - app-network
-    restart: unless-stopped
-
-  node-exporter:
-    image: prom/node-exporter:latest
-    container_name: node-exporter
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)'
+    entrypoint: >
+      /bin/sh -c '
+      trap exit TERM;
+      while :; do
+        certbot renew
+          --webroot
+          --webroot-path=/var/www/certbot
+          --quiet;
+        sleep 12h;
+      done'
     networks:
       - app-network
     restart: unless-stopped
 
 volumes:
   prometheus_data:
-    driver: local
 
 networks:
   app-network:
