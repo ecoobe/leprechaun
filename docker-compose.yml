@@ -104,6 +104,7 @@ services:
 
   certbot:
     image: certbot/certbot
+    expose: []
     volumes:
       - ./certbot/www:/var/www/certbot
       - ./certbot/conf:/etc/letsencrypt
