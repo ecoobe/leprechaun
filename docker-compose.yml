@@ -37,7 +37,6 @@ services:
       - ./monitoring/grafana/grafana.ini:/etc/grafana/grafana.ini
     environment:
       GF_SERVER_ROOT_URL: https://grafana.leprec.ru
-      GF_SERVER_SERVE_FROM_SUB_PATH: "true"
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
       interval: 10s
