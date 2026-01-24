@@ -1,99 +1,89 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-zinc-900 to-zinc-800 text-zinc-100">
-      {/* HERO */}
-      <section className="mx-auto max-w-6xl px-6 py-36">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
+    <main className="min-h-screen bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-800 text-zinc-100 overflow-x-hidden">
+      {/* Background glow */}
+      <div className="pointer-events-none fixed inset-0">
+        <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-emerald-500/20 blur-3xl" />
+        <div className="absolute top-1/3 -right-32 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl" />
+      </div>
+
+      {/* Hero */}
+      <section className="relative z-10 mx-auto flex max-w-6xl flex-col items-start px-6 py-32">
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          className="max-w-3xl"
+          transition={{ duration: 0.6 }}
+          className="text-4xl font-bold tracking-tight sm:text-6xl"
         >
-          <span className="inline-block mb-6 rounded-full border border-zinc-700 px-4 py-1 text-sm text-zinc-400">
-            Спокойная инженерия
-          </span>
+          Leprechaun
+        </motion.h1>
 
-          <h1 className="text-5xl md:text-6xl font-semibold tracking-tight leading-tight">
-            Инфраструктура,
-            <br />
-            <span className="text-emerald-400">
-              сделанная с умом
-            </span>
-          </h1>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="mt-6 max-w-2xl text-lg text-zinc-300"
+        >
+          Минималистичный проект с фокусом на инфраструктуру, мониторинг и
+          аккуратный frontend без визуального шума.
+        </motion.p>
 
-          <p className="mt-8 text-xl text-zinc-400 leading-relaxed">
-            Leprechaun — это платформа для аккуратной инфраструктуры,
-            наблюдаемости и инженерного спокойствия.
-            <br />
-            Без лишнего шума. Без хаоса. Без сюрпризов.
-          </p>
-
-          <div className="mt-12 flex flex-wrap gap-4">
-            <Button className="rounded-full bg-emerald-500 px-8 py-6 text-base font-medium text-black hover:bg-emerald-400 transition">
-              Начать
-            </Button>
-
-            <Button
-              variant="outline"
-              className="rounded-full border-zinc-700 px-8 py-6 text-base text-zinc-300 hover:bg-zinc-800 transition"
-            >
-              Документация
-            </Button>
-          </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mt-10 flex gap-4"
+        >
+          <Link
+            href="#stack"
+            className="rounded-2xl bg-emerald-500 px-6 py-3 text-sm font-medium text-zinc-950 transition hover:bg-emerald-400"
+          >
+            Стек
+          </Link>
+          <Link
+            href="#about"
+            className="rounded-2xl border border-zinc-700 px-6 py-3 text-sm font-medium text-zinc-100 transition hover:bg-zinc-800"
+          >
+            О проекте
+          </Link>
         </motion.div>
       </section>
 
-      {/* FEATURES */}
-      <section className="mx-auto max-w-6xl px-6 pb-32">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            {
-              title: "Наблюдаемость",
-              text: "Метрики, алерты и дашборды, которые действительно помогают, а не отвлекают.",
-            },
-            {
-              title: "Безопасность",
-              text: "Минимальные привилегии, понятные границы и предсказуемое поведение системы.",
-            },
-            {
-              title: "Доставка",
-              text: "Обновления без стресса. Контроль без микроменеджмента.",
-            },
-          ].map((item, i) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.12, duration: 0.6 }}
-              whileHover={{ y: -6 }}
-              className="rounded-2xl bg-zinc-900/60 backdrop-blur border border-zinc-800 p-8 transition"
-            >
-              <h3 className="text-2xl font-medium mb-4">
-                {item.title}
-              </h3>
-              <p className="text-zinc-400 leading-relaxed">
-                {item.text}
-              </p>
-            </motion.div>
-          ))}
-        </div>
+      {/* Sections */}
+      <section id="about" className="relative z-10 mx-auto max-w-6xl px-6 py-24">
+        <h2 className="text-2xl font-semibold">Идея</h2>
+        <p className="mt-4 max-w-3xl text-zinc-300">
+          Leprechaun — это песочница для экспериментов с Go, Docker,
+          мониторингом и инфраструктурой. Без лишнего UI — только то, что
+          помогает думать и развиваться.
+        </p>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-zinc-800 py-10">
-        <div className="mx-auto max-w-6xl px-6 flex flex-col sm:flex-row justify-between gap-4 text-sm text-zinc-500">
-          <span>© 2026 Leprechaun</span>
-          <span className="text-zinc-600">
-            Инфраструктура без суеты
-          </span>
-        </div>
+      <section id="stack" className="relative z-10 mx-auto max-w-6xl px-6 py-24">
+        <h2 className="text-2xl font-semibold">Стек</h2>
+        <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {["Go", "Docker", "Nginx", "Prometheus", "Grafana", "Next.js"].map(
+            (item) => (
+              <li
+                key={item}
+                className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 backdrop-blur"
+              >
+                {item}
+              </li>
+            )
+          )}
+        </ul>
+      </section>
+
+      {/* Footer */}
+      <footer className="relative z-10 border-t border-zinc-800 px-6 py-10 text-center text-sm text-zinc-500">
+        Leprechaun · infrastructure-first mindset
       </footer>
-    </div>
+    </main>
   );
 }
