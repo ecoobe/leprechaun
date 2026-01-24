@@ -7,32 +7,42 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-zinc-900 to-zinc-800 text-zinc-100">
       {/* HERO */}
-      <section className="mx-auto max-w-6xl px-6 py-32">
+      <section className="mx-auto max-w-6xl px-6 py-36">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
           className="max-w-3xl"
         >
+          <span className="inline-block mb-6 rounded-full border border-zinc-700 px-4 py-1 text-sm text-zinc-400">
+            Спокойная инженерия
+          </span>
+
           <h1 className="text-5xl md:text-6xl font-semibold tracking-tight leading-tight">
-            Infrastructure,
-            <span className="text-emerald-400"> done thoughtfully</span>
+            Инфраструктура,
+            <br />
+            <span className="text-emerald-400">
+              сделанная с умом
+            </span>
           </h1>
 
-          <p className="mt-6 text-xl text-zinc-400 leading-relaxed">
-            Leprechaun is an opinionated platform for clean infrastructure,
-            observability and calm engineering.
+          <p className="mt-8 text-xl text-zinc-400 leading-relaxed">
+            Leprechaun — это платформа для аккуратной инфраструктуры,
+            наблюдаемости и инженерного спокойствия.
+            <br />
+            Без лишнего шума. Без хаоса. Без сюрпризов.
           </p>
 
-          <div className="mt-10 flex flex-wrap gap-4">
-            <Button className="rounded-full bg-emerald-500 px-8 py-6 text-base font-medium text-black hover:bg-emerald-400">
-              Get started
+          <div className="mt-12 flex flex-wrap gap-4">
+            <Button className="rounded-full bg-emerald-500 px-8 py-6 text-base font-medium text-black hover:bg-emerald-400 transition">
+              Начать
             </Button>
+
             <Button
               variant="outline"
-              className="rounded-full border-zinc-700 px-8 py-6 text-base text-zinc-300 hover:bg-zinc-800"
+              className="rounded-full border-zinc-700 px-8 py-6 text-base text-zinc-300 hover:bg-zinc-800 transition"
             >
-              View docs
+              Документация
             </Button>
           </div>
         </motion.div>
@@ -41,19 +51,34 @@ export default function Home() {
       {/* FEATURES */}
       <section className="mx-auto max-w-6xl px-6 pb-32">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {["Monitoring", "Security", "Delivery"].map((title, i) => (
+          {[
+            {
+              title: "Наблюдаемость",
+              text: "Метрики, алерты и дашборды, которые действительно помогают, а не отвлекают.",
+            },
+            {
+              title: "Безопасность",
+              text: "Минимальные привилегии, понятные границы и предсказуемое поведение системы.",
+            },
+            {
+              title: "Доставка",
+              text: "Обновления без стресса. Контроль без микроменеджмента.",
+            },
+          ].map((item, i) => (
             <motion.div
-              key={title}
+              key={item.title}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="rounded-2xl bg-zinc-900/60 backdrop-blur border border-zinc-800 p-8"
+              transition={{ delay: i * 0.12, duration: 0.6 }}
+              whileHover={{ y: -6 }}
+              className="rounded-2xl bg-zinc-900/60 backdrop-blur border border-zinc-800 p-8 transition"
             >
-              <h3 className="text-2xl font-medium mb-3">{title}</h3>
+              <h3 className="text-2xl font-medium mb-4">
+                {item.title}
+              </h3>
               <p className="text-zinc-400 leading-relaxed">
-                Designed to stay out of your way while keeping everything
-                observable, secure and predictable.
+                {item.text}
               </p>
             </motion.div>
           ))}
@@ -62,9 +87,11 @@ export default function Home() {
 
       {/* FOOTER */}
       <footer className="border-t border-zinc-800 py-10">
-        <div className="mx-auto max-w-6xl px-6 flex justify-between text-sm text-zinc-500">
+        <div className="mx-auto max-w-6xl px-6 flex flex-col sm:flex-row justify-between gap-4 text-sm text-zinc-500">
           <span>© 2026 Leprechaun</span>
-          <span className="text-zinc-600">Calm infrastructure</span>
+          <span className="text-zinc-600">
+            Инфраструктура без суеты
+          </span>
         </div>
       </footer>
     </div>
