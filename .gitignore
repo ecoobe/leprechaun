@@ -33,3 +33,4 @@ go.work.sum
 
 # Secrets
 nginx/auth/*.htpasswd
+**/node_modules
