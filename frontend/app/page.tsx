@@ -1,111 +1,72 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-950">
-      {/* Header */}
-      <header className="border-b border-gray-800 bg-gray-900/50 backdrop-blur">
-        <div className="container mx-auto flex h-16 items-center justify-between px-6">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-lg bg-green-500/20 flex items-center justify-center">
-              <span className="text-green-500 font-bold">L</span>
-            </div>
-            <span className="text-xl font-bold text-white">Leprechaun</span>
-          </div>
-          
-          <nav className="hidden md:flex items-center gap-8">
-            <a href="#" className="text-gray-400 hover:text-white transition-colors">Главная</a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors">Инструменты</a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors">О сервисе</a>
-          </nav>
-          
-          <div className="flex items-center gap-4">
-            <button className="px-6 py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 transition-colors">
-              Войти
-            </button>
-            <button className="px-6 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors">
-              Регистрация
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero Section */}
-      <main className="container mx-auto px-6 py-20">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-8">
-            Контроль ваших <span className="text-green-500">финансов</span> стал проще
+    <div className="min-h-screen bg-gradient-to-br from-black via-zinc-900 to-zinc-800 text-zinc-100">
+      {/* HERO */}
+      <section className="mx-auto max-w-6xl px-6 py-32">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="max-w-3xl"
+        >
+          <h1 className="text-5xl md:text-6xl font-semibold tracking-tight leading-tight">
+            Infrastructure,
+            <span className="text-emerald-400"> done thoughtfully</span>
           </h1>
-          
-          <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
-            Leprechaun — это бесплатный сервис для управления долгами, 
-            кредитами и платежами. Получайте уведомления в Telegram, 
-            анализируйте долговую нагрузку и стройте финансовое будущее.
+
+          <p className="mt-6 text-xl text-zinc-400 leading-relaxed">
+            Leprechaun is an opinionated platform for clean infrastructure,
+            observability and calm engineering.
           </p>
-          
-          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
-            <button className="px-8 py-4 text-lg rounded-lg bg-green-600 text-white hover:bg-green-700 transition-all transform hover:scale-105">
-              Начать бесплатно
-            </button>
-            <button className="px-8 py-4 text-lg rounded-lg bg-gray-800 text-white hover:bg-gray-700 transition-all transform hover:scale-105">
-              Узнать больше
-            </button>
-          </div>
 
-          {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 hover:border-green-500/30 transition-colors">
-              <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-6 mx-auto">
-                <span className="text-green-500 text-2xl">💳</span>
-              </div>
-              <h3 className="text-xl font-bold text-white mb-4">Уведомления о платежах</h3>
-              <p className="text-gray-400">
-                Получайте напоминания о всех платежах в одном Telegram-боте
-              </p>
-            </div>
-            
-            <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 hover:border-green-500/30 transition-colors">
-              <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-6 mx-auto">
-                <span className="text-green-500 text-2xl">📊</span>
-              </div>
-              <h3 className="text-xl font-bold text-white mb-4">Анализ долгов</h3>
-              <p className="text-gray-400">
-                Вся долговая нагрузка в одном месте с понятной визуализацией
-              </p>
-            </div>
-            
-            <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 hover:border-green-500/30 transition-colors">
-              <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-6 mx-auto">
-                <span className="text-green-500 text-2xl">🤖</span>
-              </div>
-              <h3 className="text-xl font-bold text-white mb-4">ИИ-помощник</h3>
-              <p className="text-gray-400">
-                Персональный план погашения долгов на основе вашего дохода
-              </p>
-            </div>
+          <div className="mt-10 flex flex-wrap gap-4">
+            <Button className="rounded-full bg-emerald-500 px-8 py-6 text-base font-medium text-black hover:bg-emerald-400">
+              Get started
+            </Button>
+            <Button
+              variant="outline"
+              className="rounded-full border-zinc-700 px-8 py-6 text-base text-zinc-300 hover:bg-zinc-800"
+            >
+              View docs
+            </Button>
           </div>
+        </motion.div>
+      </section>
 
-          {/* CTA Section */}
-          <div className="mt-20 bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-gray-800 rounded-2xl p-12">
-            <h2 className="text-3xl font-bold text-white mb-6">
-              Готовы взять финансы под контроль?
-            </h2>
-            <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
-              Присоединяйтесь к сообществу людей, которые уже избавились 
-              от финансового стресса с помощью Leprechaun
-            </p>
-            <button className="px-10 py-4 text-lg rounded-lg bg-green-600 text-white hover:bg-green-700 transition-all transform hover:scale-105">
-              Зарегистрироваться бесплатно
-            </button>
-          </div>
+      {/* FEATURES */}
+      <section className="mx-auto max-w-6xl px-6 pb-32">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {["Monitoring", "Security", "Delivery"].map((title, i) => (
+            <motion.div
+              key={title}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="rounded-2xl bg-zinc-900/60 backdrop-blur border border-zinc-800 p-8"
+            >
+              <h3 className="text-2xl font-medium mb-3">{title}</h3>
+              <p className="text-zinc-400 leading-relaxed">
+                Designed to stay out of your way while keeping everything
+                observable, secure and predictable.
+              </p>
+            </motion.div>
+          ))}
         </div>
-      </main>
+      </section>
 
-      {/* Footer */}
-      <footer className="border-t border-gray-800 mt-20 py-8">
-        <div className="container mx-auto px-6 text-center text-gray-500">
-          <p>© 2024 Leprechaun Finance. Сервис полностью бесплатен.</p>
-          <p className="mt-2 text-sm">Сделано с ❤️ для тех, кто хочет разобраться в своих финансах</p>
+      {/* FOOTER */}
+      <footer className="border-t border-zinc-800 py-10">
+        <div className="mx-auto max-w-6xl px-6 flex justify-between text-sm text-zinc-500">
+          <span>© 2026 Leprechaun</span>
+          <span className="text-zinc-600">Calm infrastructure</span>
         </div>
       </footer>
     </div>
-  )
+  );
 }
