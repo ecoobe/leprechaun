@@ -123,3 +123,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+html,
+body {
+  background-color: #09090b; /* zinc-950 */
+  min-height: 100%;
+  overscroll-behavior-y: none;
+}
