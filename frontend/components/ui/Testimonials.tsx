@@ -12,25 +12,47 @@ const reviews = [
 
 function Row({ reverse = false }: { reverse?: boolean }) {
   return (
-    <motion.div
-      className="flex gap-6"
-      animate={{ x: reverse ? ["-100%", "0%"] : ["0%", "-100%"] }}
-      transition={{
-        repeat: Infinity,
-        duration: 40,
-        ease: "linear",
-      }}
-    >
-      {[...reviews, ...reviews].map((r, i) => (
-        <div
-          key={i}
-          className="min-w-[280px] rounded-2xl border border-zinc-800 bg-zinc-900/60 p-4 backdrop-blur"
-        >
-          <p className="text-sm text-zinc-300">“{r.text}”</p>
-          <div className="mt-3 text-xs text-zinc-500">{r.name}</div>
-        </div>
-      ))}
-    </motion.div>
+    <div className="relative overflow-hidden">
+      <motion.div
+        className="flex gap-6 w-max"
+        animate={{
+          x: reverse ? [0, -1200] : [-1200, 0],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 45,
+          ease: "linear",
+        }}
+      >
+        {[...reviews, ...reviews].map((r, i) => (
+          <div
+            key={i}
+            className="
+              min-w-[300px]
+              rounded-2xl
+              border border-zinc-800
+              bg-zinc-900/70
+              p-5
+              backdrop-blur
+              shadow-lg
+            "
+          >
+            <p className="text-sm text-zinc-300 leading-relaxed">
+              “{r.text}”
+            </p>
+            <div className="mt-4 text-xs text-zinc-500">
+              {r.name}
+            </div>
+          </div>
+        ))}
+      </motion.div>
+
+      {/* Градиентная маска по краям */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-zinc-950 to-transparent" />
+        <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-zinc-950 to-transparent" />
+      </div>
+    </div>
   );
 }
 
@@ -38,13 +60,13 @@ export function Testimonials() {
   return (
     <section
       id="reviews"
-      className="relative z-10 mx-auto max-w-6xl px-6 py-24 overflow-hidden"
+      className="relative z-10 mx-auto max-w-6xl px-6 py-28"
     >
-      <h2 className="text-2xl font-semibold mb-10">
+      <h2 className="mb-10 text-2xl font-semibold">
         Пользователи о Leprechaun
       </h2>
 
-      <div className="space-y-6">
+      <div className="space-y-8">
         <Row />
         <Row reverse />
       </div>
