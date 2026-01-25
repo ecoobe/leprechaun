@@ -6,17 +6,15 @@ import Link from "next/link";
 export default function HomePage() {
   return (
     <>
-      {/* Fixed background */}
-<div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-zinc-950">
+      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-zinc-950">
   {/* Gradient overlay */}
   <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-800" />
   
-  {/* Blue glow */}
-  <div className="absolute -top-48 -left-48 h-[700px] w-[700px] rounded-full blur-[180px]"
-    style={{ background: "rgba(16, 185, 129, 0.55)" }} />
   {/* Green glow */}
-  <div className="absolute top-1/3 -right-48 h-[700px] w-[700px] rounded-full blur-[200px]"
-    style={{ background: "rgba(99, 102, 241, 0.45)" }} />
+  <div className="absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-emerald-500/30 blur-[100px]" />
+  
+  {/* Blue glow */}
+  <div className="absolute top-1/3 -right-40 h-[500px] w-[500px] rounded-full bg-indigo-500/30 blur-[120px]" />
 </div>
 
       <main className="relative min-h-screen overflow-x-hidden text-zinc-100">
