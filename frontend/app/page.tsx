@@ -5,9 +5,9 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-800 text-zinc-100 overflow-x-hidden">
+    <main className="relative min-h-screen text-zinc-100 overflow-x-hidden">
       {/* Background glow */}
-      <div className="pointer-events-none fixed inset-0">
+      <div className="pointer-events-none fixed inset-0 -z-10">
         <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="absolute top-1/3 -right-32 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl" />
       </div>
@@ -45,6 +45,7 @@ export default function HomePage() {
           >
             Стек
           </Link>
+
           <Link
             href="#about"
             className="rounded-2xl border border-zinc-700 px-6 py-3 text-sm font-medium text-zinc-100 transition hover:bg-zinc-800"
@@ -54,8 +55,11 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* Sections */}
-      <section id="about" className="relative z-10 mx-auto max-w-6xl px-6 py-24">
+      {/* About */}
+      <section
+        id="about"
+        className="relative z-10 mx-auto max-w-6xl px-6 py-24"
+      >
         <h2 className="text-2xl font-semibold">Идея</h2>
         <p className="mt-4 max-w-3xl text-zinc-300">
           Leprechaun — это песочница для экспериментов с Go, Docker,
@@ -64,8 +68,13 @@ export default function HomePage() {
         </p>
       </section>
 
-      <section id="stack" className="relative z-10 mx-auto max-w-6xl px-6 py-24">
+      {/* Stack */}
+      <section
+        id="stack"
+        className="relative z-10 mx-auto max-w-6xl px-6 py-24"
+      >
         <h2 className="text-2xl font-semibold">Стек</h2>
+
         <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {["Go", "Docker", "Nginx", "Prometheus", "Grafana", "Next.js"].map(
             (item) => (
