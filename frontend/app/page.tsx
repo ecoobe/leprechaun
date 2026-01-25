@@ -6,21 +6,27 @@ import Link from "next/link";
 export default function HomePage() {
   return (
     <>
-	  {/* Background glow */}
-      <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-emerald-500/20 blur-3xl" />
-        <div className="absolute top-1/3 -right-32 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl" />
-      </div>
-      {/* Fixed gradient background */}
-      <div className="fixed inset-0 -z-10 bg-zinc-950">
+      {/* Fixed background */}
+      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-zinc-950">
+        {/* Base dark gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-800" />
-        <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-emerald-500/20 blur-3xl" />
-        <div className="absolute top-1/3 -right-32 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl" />
+
+        {/* Green glow */}
+        <div
+          className="absolute -top-40 -left-40 h-[520px] w-[520px] rounded-full blur-[140px]"
+          style={{ background: "rgba(16, 185, 129, 0.35)" }}
+        />
+
+        {/* Blue glow */}
+        <div
+          className="absolute top-1/2 -right-40 h-[520px] w-[520px] rounded-full blur-[160px]"
+          style={{ background: "rgba(99, 102, 241, 0.30)" }}
+        />
       </div>
 
-      <main className="min-h-screen text-zinc-100 overflow-x-hidden">
+      <main className="relative min-h-screen overflow-x-hidden text-zinc-100">
         {/* Hero */}
-        <section className="relative z-10 mx-auto flex max-w-6xl flex-col items-start px-6 py-32">
+        <section className="mx-auto flex max-w-6xl flex-col items-start px-6 py-32">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
