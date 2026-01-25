@@ -85,7 +85,7 @@ export default function HomePage() {
             <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
               Leprechaun
               <span className="block text-lg font-normal text-emerald-400 mt-2">
-                ваш финансовый напоминатель
+                Твой финансовый помощник
               </span>
             </h1>
             
@@ -95,7 +95,7 @@ export default function HomePage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="mt-6 max-w-2xl text-lg text-zinc-300"
             >
-              Никогда больше не пропускайте платежи по кредитам и картам. 
+              Никогда больше не пропускайте платежи по кредитным картам и кредитам. 
               Все ваши финансовые обязательства в одном месте с умными напоминаниями 
               в Telegram.
             </motion.p>
@@ -148,9 +148,9 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true, amount: 0.3 }}
           >
-            <h2 className="text-2xl font-semibold">Частые вопросы</h2>
+            <h2 className="text-2xl font-semibold">FAQs</h2>
             <p className="mt-2 text-zinc-400">
-              Коротко о самом важном — без финансового жаргона
+              Частые вопросы
             </p>
 
             <div className="mt-10 space-y-4">
@@ -178,7 +178,7 @@ export default function HomePage() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
-                В разработке • Старт Q1 2024
+                В разработке • Старт Q1 2026
               </div>
             </div>
           </div>
@@ -186,9 +186,9 @@ export default function HomePage() {
 
         {/* Footer */}
         <footer className="relative z-10 border-t border-zinc-800 px-6 py-10 text-center text-sm text-zinc-500">
-          <div>Leprechaun — ваш финансовый напоминатель</div>
+          <div>Leprechaun — ваш финансовый помощник</div>
           <div className="mt-2 text-xs text-zinc-600">
-            Сделано с ❤️ чтобы помочь разобраться с финансами
+            Сделано с заботой чтобы помочь разобраться с финансами
           </div>
         </footer>
       </main>
