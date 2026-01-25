@@ -6,15 +6,18 @@ import Link from "next/link";
 export default function HomePage() {
   return (
     <>
-      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-zinc-950">
-  {/* Gradient overlay */}
+     <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+  {/* Green glow - ОЧЕНЬ ЯРКИЙ И БЛИЗКО */}
+  <div className="absolute top-1/4 left-1/4 h-[300px] w-[300px] rounded-full bg-emerald-500 blur-[50px] opacity-80" />
+  
+  {/* Blue glow - ОЧЕНЬ ЯРКИЙ И БЛИЗКО */}
+  <div className="absolute bottom-1/4 right-1/4 h-[300px] w-[300px] rounded-full bg-indigo-500 blur-[50px] opacity-80" />
+  
+  {/* Тёмный фон поверх glow */}
+  <div className="absolute inset-0 bg-zinc-950/90" />
+  
+  {/* Градиент */}
   <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-800" />
-  
-  {/* Green glow */}
-  <div className="absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-emerald-500/30 blur-[100px]" />
-  
-  {/* Blue glow */}
-  <div className="absolute top-1/3 -right-40 h-[500px] w-[500px] rounded-full bg-indigo-500/30 blur-[120px]" />
 </div>
 
       <main className="relative min-h-screen overflow-x-hidden text-zinc-100">
