@@ -38,24 +38,30 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 }
 
 export default function HomePage() {
-  const stackItems = ["Go", "Docker", "Nginx", "Prometheus", "Grafana", "Next.js"];
-  
   const faqItems = [
     {
-      question: "Как это работает?",
-      answer: "Проект построен как песочница: backend на Go, инфраструктура в Docker, мониторинг через Prometheus и Grafana. Можно разбирать и переиспользовать."
+      question: "Что такое Leprechaun?",
+      answer: "Это ваш персональный финансовый помощник, который помогает управлять платежами по кредитам, картам и другим обязательствам. Мы напоминаем о платежах через Telegram, чтобы вы никогда не пропустили срок."
     },
     {
-      question: "Какие инструменты используются?",
-      answer: "Go, Docker, Nginx, Prometheus, Grafana, Next.js. Минимум магии — максимум прозрачности."
+      question: "Как это работает?",
+      answer: "Вы добавляете информацию о своих кредитах и картах в личном кабинете. Наш Telegram-бот подключается к вашему аккаунту и присылает уведомления о предстоящих платежах. Всё в одном месте — никакой путаницы."
+    },
+    {
+      question: "Что можно добавить в систему?",
+      answer: "Пока мы поддерживаем кредитные карты (сумма, дата займа, льготный период, минимальные платежи). В ближайших планах: кредиты, ипотека, депозиты и общая долговая нагрузка."
     },
     {
       question: "Почему это бесплатно?",
-      answer: "Проект создаётся как учебный и исследовательский. Никакой монетизации, только практика и инженерный интерес."
+      answer: "Проект создаётся на энтузиазме, чтобы помочь людям разобраться с финансами. Я — единственный разработчик, и моя цель сделать мир немного понятнее, а не заработать на чужой беде."
     },
     {
-      question: "О проекте / стеке",
-      answer: "Leprechaun — infrastructure-first подход. Сначала надёжность, наблюдаемость и контроль, потом UI."
+      question: "А как же безопасность?",
+      answer: "Мы не храним номера карт или пароли. Только информацию, необходимую для расчёта платежей. Вся архитектура построена с максимальным вниманием к безопасности данных."
+    },
+    {
+      question: "Что будет дальше?",
+      answer: "После запуска напоминаний мы добавим AI-помощника 'Плачу и плачу', который поможет составить индивидуальный план погашения долгов с учётом вашего дохода и избежать финансовых проблем."
     }
   ];
 
@@ -76,7 +82,12 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
             className="flex flex-col items-start"
           >
-            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">Leprechaun</h1>
+            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
+              Leprechaun
+              <span className="block text-lg font-normal text-emerald-400 mt-2">
+                ваш финансовый напоминатель
+              </span>
+            </h1>
             
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -84,8 +95,9 @@ export default function HomePage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="mt-6 max-w-2xl text-lg text-zinc-300"
             >
-              Минималистичный проект с фокусом на инфраструктуру, мониторинг и
-              аккуратный frontend без визуального шума.
+              Никогда больше не пропускайте платежи по кредитам и картам. 
+              Все ваши финансовые обязательства в одном месте с умными напоминаниями 
+              в Telegram.
             </motion.p>
 
             <motion.div
@@ -95,44 +107,37 @@ export default function HomePage() {
               className="mt-10 flex gap-4"
             >
               <Link
-                href="#stack"
+                href="#faq"
                 className="rounded-2xl bg-emerald-500 px-6 py-3 text-sm font-medium text-zinc-950 transition hover:bg-emerald-400"
               >
-                Стек
+                Узнать больше
               </Link>
               <Link
-                href="#about"
+                href="#faq"
                 className="rounded-2xl border border-zinc-700 px-6 py-3 text-sm font-medium text-zinc-100 transition hover:bg-zinc-800"
               >
-                О проекте
+                Как начать?
               </Link>
             </motion.div>
           </motion.div>
         </section>
 
-        {/* About Section */}
-        <section id="about" className="relative z-10 mx-auto max-w-6xl px-6 py-24">
-          <h2 className="text-2xl font-semibold">Идея</h2>
-          <p className="mt-4 max-w-3xl text-zinc-300">
-            Leprechaun — это песочница для экспериментов с Go, Docker,
-            мониторингом и инфраструктурой. Без лишнего UI — только то, что
-            помогает думать и развиваться.
-          </p>
-        </section>
-
-        {/* Stack Section */}
-        <section id="stack" className="relative z-10 mx-auto max-w-6xl px-6 py-24">
-          <h2 className="text-2xl font-semibold">Стек</h2>
-          <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {stackItems.map((item) => (
-              <li
-                key={item}
-                className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 backdrop-blur"
-              >
-                {item}
-              </li>
-            ))}
-          </ul>
+        {/* Value Proposition */}
+        <section className="relative z-10 mx-auto max-w-6xl px-6 py-24">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 backdrop-blur">
+              <div className="text-emerald-400 text-lg font-semibold mb-2">📅 Умные напоминания</div>
+              <p className="text-sm text-zinc-300">Telegram-бот пришлёт уведомление вовремя, чтобы вы не пропустили платеж</p>
+            </div>
+            <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 backdrop-blur">
+              <div className="text-emerald-400 text-lg font-semibold mb-2">🧾 Всё в одном месте</div>
+              <p className="text-sm text-zinc-300">Кредитные карты, кредиты, ипотека — все обязательства на одной панели</p>
+            </div>
+            <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 backdrop-blur">
+              <div className="text-emerald-400 text-lg font-semibold mb-2">🤖 AI-помощник</div>
+              <p className="text-sm text-zinc-300">«Плачу и плачу» поможет составить план погашения с учётом вашего дохода</p>
+            </div>
+          </div>
         </section>
 
         {/* FAQ Section */}
@@ -143,9 +148,9 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true, amount: 0.3 }}
           >
-            <h2 className="text-2xl font-semibold">Вопросы</h2>
+            <h2 className="text-2xl font-semibold">Частые вопросы</h2>
             <p className="mt-2 text-zinc-400">
-              Коротко и по делу — без маркетингового шума.
+              Коротко о самом важном — без финансового жаргона
             </p>
 
             <div className="mt-10 space-y-4">
@@ -160,9 +165,31 @@ export default function HomePage() {
           </motion.div>
         </section>
 
+        {/* CTA Section */}
+        <section className="relative z-10 mx-auto max-w-4xl px-6 py-24">
+          <div className="rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-950 p-8 text-center">
+            <h3 className="text-xl font-semibold">Готовы начать?</h3>
+            <p className="mt-2 text-zinc-400">
+              Первая версия с напоминаниями о платежах по картам уже в разработке
+            </p>
+            <div className="mt-6">
+              <div className="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-400">
+                <span className="relative flex h-2 w-2 mr-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                В разработке • Старт Q1 2024
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Footer */}
         <footer className="relative z-10 border-t border-zinc-800 px-6 py-10 text-center text-sm text-zinc-500">
-          Leprechaun · infrastructure-first mindset
+          <div>Leprechaun — ваш финансовый напоминатель</div>
+          <div className="mt-2 text-xs text-zinc-600">
+            Сделано с ❤️ чтобы помочь разобраться с финансами
+          </div>
         </footer>
       </main>
     </>
