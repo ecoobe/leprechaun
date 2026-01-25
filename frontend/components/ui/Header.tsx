@@ -7,7 +7,7 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur border-b border-zinc-800 bg-zinc-950/70">
       <div className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
         {/* Logo */}
-        <span className="font-bold text-xl text-zinc-100">
+        <span className="font-bold text-xl text-emerald-400">
             Leprechaun
         </span>
 
