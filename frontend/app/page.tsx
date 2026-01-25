@@ -56,7 +56,78 @@ export default function HomePage() {
             </motion.div>
           </motion.div>
         </section>
+		{/* How it works */}
+<section className="relative z-10 mx-auto max-w-6xl px-6 py-24">
+  <h2 className="text-2xl font-semibold">Как это работает</h2>
 
+  <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {[
+      {
+        title: "Исследуешь",
+        text: "Экспериментируешь с идеями, инфраструктурой и архитектурой без давления продакшена."
+      },
+      {
+        title: "Собираешь",
+        text: "Поднимаешь сервисы, мониторинг и окружение как единое целое."
+      },
+      {
+        title: "Наблюдаешь",
+        text: "Смотришь метрики, логи и поведение системы в реальных условиях."
+      }
+    ].map((item) => (
+      <div
+        key={item.title}
+        className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-6 backdrop-blur"
+      >
+        <h3 className="font-medium">{item.title}</h3>
+        <p className="mt-2 text-sm text-zinc-400">{item.text}</p>
+      </div>
+    ))}
+  </div>
+</section>
+{/* Tools */}
+<section className="relative z-10 mx-auto max-w-6xl px-6 py-24">
+  <h2 className="text-2xl font-semibold">Инструменты</h2>
+
+  <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {[
+      "Go — сервисы и утилиты",
+      "Docker — изоляция и повторяемость",
+      "Nginx — прокси и маршрутизация",
+      "Prometheus — метрики",
+      "Grafana — визуализация",
+      "Next.js — аккуратный интерфейс"
+    ].map((item) => (
+      <li
+        key={item}
+        className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5 text-sm text-zinc-300 backdrop-blur"
+      >
+        {item}
+      </li>
+    ))}
+  </ul>
+</section>
+{/* Why free */}
+<section className="relative z-10 mx-auto max-w-6xl px-6 py-24">
+  <h2 className="text-2xl font-semibold">Почему бесплатно</h2>
+
+  <p className="mt-6 max-w-3xl text-zinc-300">
+    Leprechaun — это не продукт и не стартап. Это пространство для практики,
+    экспериментов и роста.  
+    Здесь нет продаж, рекламы и подписок — только инженерный интерес и желание
+    делать вещи правильно.
+  </p>
+</section>
+{/* About */}
+<section className="relative z-10 mx-auto max-w-6xl px-6 py-24">
+  <h2 className="text-2xl font-semibold">О проекте</h2>
+
+  <p className="mt-6 max-w-3xl text-zinc-300">
+    Проект развивается инженером с опытом сопровождения, мониторинга и
+    инфраструктуры.  
+    Основной фокус — надёжность, наблюдаемость и понятная архитектура.
+  </p>
+</section>
         {/* About Section */}
         <section id="about" className="relative z-10 mx-auto max-w-6xl px-6 py-24">
           <h2 className="text-2xl font-semibold">Идея</h2>
