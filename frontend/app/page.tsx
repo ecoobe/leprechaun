@@ -7,14 +7,14 @@ export default function HomePage() {
   return (
     <>
      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-zinc-950">
-  {/* Полупрозрачный градиент */}
-  <div className="absolute inset-0 bg-gradient-to-br from-zinc-950/90 via-zinc-900/80 to-zinc-800/90" />
-  
-  {/* Green glow */}
+  {/* Green glow - теперь ПОД градиентом */}
   <div className="absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-emerald-500/30 blur-[100px]" />
   
-  {/* Blue glow */}
+  {/* Blue glow - теперь ПОД градиентом */}
   <div className="absolute top-1/3 -right-40 h-[500px] w-[500px] rounded-full bg-indigo-500/30 blur-[120px]" />
+  
+  {/* Градиент теперь поверх glow */}
+  <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-800" />
 </div>
 
       <main className="relative min-h-screen overflow-x-hidden text-zinc-100">
