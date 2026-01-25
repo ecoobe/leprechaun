@@ -7,11 +7,14 @@ export default function HomePage() {
   return (
     <>
      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-zinc-950">
-  {/* Green glow */}
-  <div className="absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-emerald-500/30 blur-[100px]" />
+  {/* Градиент с низким z-index */}
+  <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-800 z-0" />
   
-  {/* Blue glow */}
-  <div className="absolute top-1/3 -right-40 h-[500px] w-[500px] rounded-full bg-indigo-500/30 blur-[120px]" />
+  {/* Green glow с более высоким z-index */}
+  <div className="absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-emerald-500/30 blur-[100px] z-10" />
+  
+  {/* Blue glow с более высоким z-index */}
+  <div className="absolute top-1/3 -right-40 h-[500px] w-[500px] rounded-full bg-indigo-500/30 blur-[120px] z-10" />
 </div>
 
       <main className="relative min-h-screen overflow-x-hidden text-zinc-100">
