@@ -3,6 +3,11 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import Link from "next/link";
+import { Header } from "@/components/ui/Header";
+import { SupportButton } from "@/components/ui/SupportButton";
+import { Testimonials } from "@/components/ui/Testimonials";
+
+<Header />
 
 // FAQ Item Component
 function FAQItem({ question, answer }: { question: string; answer: string }) {
@@ -140,6 +145,8 @@ export default function HomePage() {
           </div>
         </section>
 
+		<Testimonials />
+
         {/* FAQ Section */}
         <section id="faq" className="relative z-10 mx-auto max-w-4xl px-6 py-24">
           <motion.div
@@ -178,11 +185,13 @@ export default function HomePage() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
-                В разработке • Старт Q1 2026
+                0 пользователей уже взли свои финансы под контроль
               </div>
             </div>
           </div>
         </section>
+
+        <SupportButton />
 
         {/* Footer */}
         <footer className="relative z-10 border-t border-zinc-800 px-6 py-10 text-center text-sm text-zinc-500">
