@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const screens = [
@@ -9,13 +9,12 @@ const screens = [
   "/screens/stats.png",
 ];
 
-const CARD_OFFSET = 56;
-const SCALE_INACTIVE = 0.96;
-const OPACITY_INACTIVE = 0.45;
+const OFFSET = 48; // насколько выглядывают задние карточки
+const SCALE_BG = 0.96;
+const OPACITY_BG = 0.45;
 
 export function HeroShowcase() {
   const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState<1 | -1>(1);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -27,24 +26,15 @@ export function HeroShowcase() {
     if (!ready) return;
 
     const id = setInterval(() => {
-      handleNext();
+      setIndex((i) => (i + 1) % screens.length);
     }, 7000);
 
     return () => clearInterval(id);
-  }, [ready, index]);
+  }, [ready]);
 
-  const handleNext = () => {
-    setDirection(1);
-    setIndex((i) => (i + 1) % screens.length);
-  };
-
-  const handlePrev = () => {
-    setDirection(-1);
-    setIndex((i) => (i - 1 + screens.length) % screens.length);
-  };
-
-  const prevIndex = (index - 1 + screens.length) % screens.length;
-  const nextIndex = (index + 1) % screens.length;
+  const prev = screens[(index - 1 + screens.length) % screens.length];
+  const current = screens[index];
+  const next = screens[(index + 1) % screens.length];
 
   return (
     <div className="relative w-full max-w-xl">
@@ -56,88 +46,59 @@ export function HeroShowcase() {
 
         {ready && (
           <>
-            {/* PREVIOUS */}
+            {/* PREVIOUS (left peek) */}
             <motion.div
               className="absolute inset-0 rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
               style={{ zIndex: 1 }}
               animate={{
-                x: -CARD_OFFSET,
-                scale: SCALE_INACTIVE,
-                opacity: OPACITY_INACTIVE,
+                x: -OFFSET,
+                scale: SCALE_BG,
+                opacity: OPACITY_BG,
               }}
-              transition={baseTransition}
+              transition={transition}
             >
               <img
-                src={screens[prevIndex]}
+                src={prev}
                 className="w-full h-full object-cover"
                 draggable={false}
               />
             </motion.div>
 
-            {/* NEXT */}
+            {/* NEXT (right peek) */}
             <motion.div
               className="absolute inset-0 rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
               style={{ zIndex: 1 }}
               animate={{
-                x: CARD_OFFSET,
-                scale: SCALE_INACTIVE,
-                opacity: OPACITY_INACTIVE,
+                x: OFFSET,
+                scale: SCALE_BG,
+                opacity: OPACITY_BG,
               }}
-              transition={baseTransition}
+              transition={transition}
             >
               <img
-                src={screens[nextIndex]}
+                src={next}
                 className="w-full h-full object-cover"
                 draggable={false}
               />
             </motion.div>
 
             {/* ACTIVE */}
-            <AnimatePresence initial={false} custom={direction}>
-              <motion.div
-                key={index}
-                custom={direction}
-                className="absolute inset-0 rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
-                style={{ zIndex: 2 }}
-                initial={{
-                  x: direction === 1 ? CARD_OFFSET : -CARD_OFFSET,
-                }}
-                animate={{
-                  x: 0,
-                  scale: 1,
-                  opacity: 1,
-                }}
-                exit={{
-                  x: direction === 1 ? -CARD_OFFSET : CARD_OFFSET,
-                  opacity: 0,
-                }}
-                transition={{
-                  duration: 2.2,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              >
-                <img
-                  src={screens[index]}
-                  className="w-full h-full object-cover"
-                  draggable={false}
-                />
-              </motion.div>
-            </AnimatePresence>
-
-            {/* CONTROLS */}
-            <button
-              onClick={handlePrev}
-              className="absolute left-[-48px] top-1/2 -translate-y-1/2 text-4xl text-zinc-500 hover:text-emerald-400 active:scale-90 transition"
+            <motion.div
+              className="absolute inset-0 rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
+              style={{ zIndex: 2 }}
+              animate={{
+                x: 0,
+                scale: 1,
+                opacity: 1,
+              }}
+              transition={transition}
             >
-              ‹
-            </button>
-
-            <button
-              onClick={handleNext}
-              className="absolute right-[-48px] top-1/2 -translate-y-1/2 text-4xl text-zinc-500 hover:text-emerald-400 active:scale-90 transition"
-            >
-              ›
-            </button>
+              <img
+                src={current}
+                className="w-full h-full object-cover"
+                draggable={false}
+              />
+            </motion.div>
           </>
         )}
       </div>
@@ -145,9 +106,9 @@ export function HeroShowcase() {
   );
 }
 
-const baseTransition = {
-  duration: 2.2,
-  ease: [0.22, 1, 0.36, 1],
+const transition = {
+  duration: 2.6,
+  ease: [0.22, 1, 0.36, 1], // мягкая "живая" кривая
 };
 
 function HeroLoader() {
