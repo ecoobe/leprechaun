@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useAnimation, PanInfo } from "framer-motion";
 import { useEffect, useState, useCallback, useRef } from "react";
 
 const screens = [
@@ -12,7 +12,9 @@ const screens = [
 export function HeroShowcase() {
   const [index, setIndex] = useState(0);
   const [isReady, setIsReady] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const controls = useAnimation();
 
   // Предзагрузка изображений
   useEffect(() => {
@@ -40,20 +42,52 @@ export function HeroShowcase() {
     preloadImages();
   }, []);
 
-  // Функции навигации
-  const goToNext = useCallback(() => {
+  // Плавное переключение с debounce
+  const goToNext = useCallback(async () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    
     setIndex((prev) => (prev + 1) % screens.length);
-  }, []);
+    
+    // Плавная анимация с spring physics
+    await controls.start({
+      x: [-20, 0],
+      transition: {
+        type: "spring",
+        stiffness: 400,
+        damping: 30,
+        mass: 0.5,
+      }
+    });
+    
+    setIsAnimating(false);
+  }, [controls, isAnimating]);
 
-  const goToPrev = useCallback(() => {
+  const goToPrev = useCallback(async () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    
     setIndex((prev) => (prev - 1 + screens.length) % screens.length);
-  }, []);
+    
+    // Плавная анимация с spring physics
+    await controls.start({
+      x: [20, 0],
+      transition: {
+        type: "spring",
+        stiffness: 400,
+        damping: 30,
+        mass: 0.5,
+      }
+    });
+    
+    setIsAnimating(false);
+  }, [controls, isAnimating]);
 
-  // Автопрокрутка
+  // Автопрокрутка с плавным интервалом
   useEffect(() => {
-    if (!isReady) return;
+    if (!isReady || isAnimating) return;
 
-    intervalRef.current = setInterval(goToNext, 4000);
+    intervalRef.current = setInterval(goToNext, 4500);
 
     return () => {
       if (intervalRef.current) {
@@ -61,7 +95,7 @@ export function HeroShowcase() {
         intervalRef.current = null;
       }
     };
-  }, [isReady, goToNext]);
+  }, [isReady, goToNext, isAnimating]);
 
   const handleMouseEnter = () => {
     if (intervalRef.current) {
@@ -71,8 +105,22 @@ export function HeroShowcase() {
   };
 
   const handleMouseLeave = () => {
-    if (!intervalRef.current && isReady) {
-      intervalRef.current = setInterval(goToNext, 4000);
+    if (!intervalRef.current && isReady && !isAnimating) {
+      intervalRef.current = setInterval(goToNext, 4500);
+    }
+  };
+
+  // Drag для переключения
+  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    const swipeThreshold = 50;
+    const velocityThreshold = 500;
+    
+    if (Math.abs(info.offset.x) > swipeThreshold || Math.abs(info.velocity.x) > velocityThreshold) {
+      if (info.offset.x > 0 || info.velocity.x > 0) {
+        goToPrev();
+      } else {
+        goToNext();
+      }
     }
   };
 
@@ -82,7 +130,7 @@ export function HeroShowcase() {
 
   return (
     <div 
-      className="relative w-full max-w-3xl mx-auto"
+      className="relative w-full max-w-3xl mx-auto px-4"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -94,27 +142,33 @@ export function HeroShowcase() {
       />
 
       {/* Контейнер для всей карусели */}
-      <div className="relative h-[420px] rounded-3xl overflow-visible">
+      <div className="relative h-[420px]">
         {!isReady ? (
           <HeroLoader />
         ) : (
           <>
             {/* Индикаторы прогресса */}
-            <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 z-30 flex gap-2">
+            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 z-30 flex gap-2">
               {screens.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setIndex(i)}
-                  className="relative"
+                  className="relative focus:outline-none"
+                  disabled={isAnimating}
                 >
-                  <div className="w-2 h-2 rounded-full bg-zinc-700 transition-all duration-300" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-zinc-700 transition-all duration-300" />
                   <motion.div
-                    className="absolute top-0 left-0 w-2 h-2 rounded-full bg-emerald-500"
+                    className="absolute top-0 left-0 w-1.5 h-1.5 rounded-full bg-emerald-500"
                     animate={{
-                      scale: i === index ? 1.5 : 1,
+                      scale: i === index ? 1.8 : 1,
                       opacity: i === index ? 1 : 0,
                     }}
-                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                    transition={{ 
+                      type: "spring", 
+                      stiffness: 500, 
+                      damping: 25,
+                      duration: 0.3
+                    }}
                   />
                 </button>
               ))}
@@ -122,29 +176,38 @@ export function HeroShowcase() {
 
             {/* Основная карусель */}
             <div className="relative w-full h-full flex items-center justify-center">
-              {/* Левая карточка (предыдущая) - видна только краем слева */}
+              {/* Левая карточка (предыдущая) - виден только краешек */}
               <motion.div
-                className="absolute left-0 w-[85%] h-[90%] rounded-2xl overflow-hidden border border-zinc-800/30 bg-zinc-900/60 backdrop-blur-sm shadow-xl"
-                initial={{ x: "-90%", opacity: 0.4 }}
-                animate={{ x: "-85%", opacity: 0.6 }}
+                className="absolute left-0 w-[20%] h-[88%] rounded-l-2xl overflow-hidden border-l border-y border-zinc-800/40 bg-zinc-900/60 backdrop-blur-sm cursor-pointer"
+                animate={{ 
+                  x: ["-85%", "-88%"], 
+                  opacity: [0.5, 0.6],
+                  scale: [0.96, 0.98]
+                }}
                 transition={{ 
-                  type: "spring", 
-                  stiffness: 300, 
-                  damping: 25,
-                  delay: 0.1 
+                  duration: 2,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  ease: "easeInOut"
                 }}
                 style={{
-                  zIndex: 10,
-                  boxShadow: "0 15px 30px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+                  zIndex: 5,
+                  boxShadow: "inset 8px 0 12px -8px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05)",
                 }}
                 onClick={goToPrev}
+                whileHover={{ 
+                  x: "-86%", 
+                  opacity: 0.7,
+                  scale: 0.99 
+                }}
+                whileTap={{ scale: 0.97 }}
               >
                 <div className="relative w-full h-full">
-                  <div className="absolute inset-0 bg-gradient-to-r from-zinc-900/80 to-transparent z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-zinc-900/90 via-zinc-900/50 to-transparent z-10" />
                   <img
                     src={screens[prevIndex]}
                     alt="Предыдущий интерфейс"
-                    className="w-full h-full object-cover object-top"
+                    className="w-full h-full object-cover object-top scale-105 -translate-x-4"
                     draggable={false}
                   />
                 </div>
@@ -152,122 +215,142 @@ export function HeroShowcase() {
 
               {/* Центральная карточка (активная) */}
               <motion.div
-                key={index}
-                className="absolute w-[90%] h-[95%] rounded-2xl overflow-hidden border border-zinc-800/50 bg-zinc-900/80 backdrop-blur-sm shadow-2xl"
-                initial={{ scale: 0.95, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.95, opacity: 0 }}
-                transition={{ 
-                  type: "spring", 
-                  stiffness: 300, 
-                  damping: 25 
-                }}
-                style={{
-                  zIndex: 20,
-                  boxShadow: "0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(16, 185, 129, 0.15)",
-                }}
-              >
-                <div className="relative w-full h-full">
-                  {/* Градиентная рамка */}
-                  <motion.div 
-                    className="absolute inset-0 rounded-2xl"
-                    style={{
-                      background: "linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%)",
-                    }}
-                    animate={{
-                      opacity: [0.3, 0.5, 0.3],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                  />
-                  
-                  {/* Изображение */}
-                  <img
-                    src={screens[index]}
-                    alt="Текущий интерфейс Leprechaun"
-                    className="w-full h-full object-cover object-top"
-                    draggable={false}
-                  />
-                </div>
-              </motion.div>
-
-              {/* Правая карточка (следующая) - видна только краем справа */}
-              <motion.div
-                className="absolute right-0 w-[85%] h-[90%] rounded-2xl overflow-hidden border border-zinc-800/30 bg-zinc-900/60 backdrop-blur-sm shadow-xl"
-                initial={{ x: "90%", opacity: 0.4 }}
-                animate={{ x: "85%", opacity: 0.6 }}
-                transition={{ 
-                  type: "spring", 
-                  stiffness: 300, 
-                  damping: 25,
-                  delay: 0.1 
-                }}
+                className="relative w-[90%] h-[95%] rounded-2xl overflow-hidden border border-zinc-800/50 bg-zinc-900/80 backdrop-blur-sm shadow-2xl"
+                animate={controls}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.2}
+                onDragEnd={handleDragEnd}
                 style={{
                   zIndex: 10,
-                  boxShadow: "0 15px 30px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+                  boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(16, 185, 129, 0.15)",
+                }}
+                whileHover={{ 
+                  scale: 1.005,
+                  boxShadow: "0 30px 60px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(16, 185, 129, 0.2)"
+                }}
+              >
+                {/* Градиентная рамка */}
+                <motion.div 
+                  className="absolute inset-0 rounded-2xl"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%)",
+                  }}
+                  animate={{
+                    opacity: [0.3, 0.5, 0.3],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+                
+                {/* Изображение */}
+                <img
+                  src={screens[index]}
+                  alt="Текущий интерфейс Leprechaun"
+                  className="w-full h-full object-cover object-top"
+                  draggable={false}
+                />
+              </motion.div>
+
+              {/* Правая карточка (следующая) - виден только краешек */}
+              <motion.div
+                className="absolute right-0 w-[20%] h-[88%] rounded-r-2xl overflow-hidden border-r border-y border-zinc-800/40 bg-zinc-900/60 backdrop-blur-sm cursor-pointer"
+                animate={{ 
+                  x: ["85%", "88%"], 
+                  opacity: [0.5, 0.6],
+                  scale: [0.96, 0.98]
+                }}
+                transition={{ 
+                  duration: 2,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  ease: "easeInOut"
+                }}
+                style={{
+                  zIndex: 5,
+                  boxShadow: "inset -8px 0 12px -8px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05)",
                 }}
                 onClick={goToNext}
+                whileHover={{ 
+                  x: "86%", 
+                  opacity: 0.7,
+                  scale: 0.99 
+                }}
+                whileTap={{ scale: 0.97 }}
               >
                 <div className="relative w-full h-full">
-                  <div className="absolute inset-0 bg-gradient-to-l from-zinc-900/80 to-transparent z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-l from-zinc-900/90 via-zinc-900/50 to-transparent z-10" />
                   <img
                     src={screens[nextIndex]}
                     alt="Следующий интерфейс"
-                    className="w-full h-full object-cover object-top"
+                    className="w-full h-full object-cover object-top scale-105 translate-x-4"
                     draggable={false}
                   />
                 </div>
               </motion.div>
 
-              {/* Стрелки для навигации - минималистичные и видимые */}
+              {/* Минималистичные стрелки - только иконки */}
               <button
                 onClick={goToPrev}
-                className="absolute -left-16 top-1/2 transform -translate-y-1/2 z-30 w-12 h-12 flex items-center justify-center group"
+                className="absolute -left-6 md:-left-8 top-1/2 transform -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center group focus:outline-none"
                 aria-label="Предыдущий слайд"
+                disabled={isAnimating}
               >
-                <div className="w-10 h-10 rounded-full bg-zinc-900/90 backdrop-blur-sm border border-zinc-700/50 flex items-center justify-center group-hover:bg-zinc-800/90 group-hover:border-emerald-500/30 transition-all duration-300 shadow-lg">
+                <div className="relative">
                   <svg 
-                    className="w-5 h-5 text-zinc-300 group-hover:text-emerald-400 transition-colors" 
+                    className="w-6 h-6 text-zinc-400 group-hover:text-emerald-400 transition-colors duration-300" 
                     fill="none" 
                     stroke="currentColor" 
                     viewBox="0 0 24 24"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                    <path 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      strokeWidth={2.5} 
+                      d="M15 19l-7-7 7-7" 
+                    />
                   </svg>
+                  <motion.div 
+                    className="absolute inset-0 rounded-full bg-emerald-500/0 group-hover:bg-emerald-500/10 blur-sm"
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
                 </div>
-                <div className="absolute inset-0 rounded-full bg-emerald-500/10 blur-md group-hover:bg-emerald-500/20 transition-all duration-300" />
               </button>
               
               <button
                 onClick={goToNext}
-                className="absolute -right-16 top-1/2 transform -translate-y-1/2 z-30 w-12 h-12 flex items-center justify-center group"
+                className="absolute -right-6 md:-right-8 top-1/2 transform -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center group focus:outline-none"
                 aria-label="Следующий слайд"
+                disabled={isAnimating}
               >
-                <div className="w-10 h-10 rounded-full bg-zinc-900/90 backdrop-blur-sm border border-zinc-700/50 flex items-center justify-center group-hover:bg-zinc-800/90 group-hover:border-emerald-500/30 transition-all duration-300 shadow-lg">
+                <div className="relative">
                   <svg 
-                    className="w-5 h-5 text-zinc-300 group-hover:text-emerald-400 transition-colors" 
+                    className="w-6 h-6 text-zinc-400 group-hover:text-emerald-400 transition-colors duration-300" 
                     fill="none" 
                     stroke="currentColor" 
                     viewBox="0 0 24 24"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                    <path 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      strokeWidth={2.5} 
+                      d="M9 5l7 7-7 7" 
+                    />
                   </svg>
+                  <motion.div 
+                    className="absolute inset-0 rounded-full bg-emerald-500/0 group-hover:bg-emerald-500/10 blur-sm"
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
                 </div>
-                <div className="absolute inset-0 rounded-full bg-emerald-500/10 blur-md group-hover:bg-emerald-500/20 transition-all duration-300" />
               </button>
             </div>
           </>
         )}
-      </div>
-
-      {/* Подпись под каруселью */}
-      <div className="mt-8 text-center">
-        <p className="text-sm text-zinc-400">
-          Перетащите или используйте стрелки для просмотра интерфейсов
-        </p>
       </div>
 
       {/* Тень под компонентом */}
