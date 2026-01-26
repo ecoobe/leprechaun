@@ -9,10 +9,10 @@ const screens = [
   "/screens/stats.png",
 ];
 
-const SLIDE_DURATION = 0.9;
+const SLIDE_DURATION = 1.2; // более плавно
 const AUTO_DELAY = 6000;
 
-export function HeroShowcase() {
+export default function HeroShowcase() {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
 
@@ -30,43 +30,25 @@ export function HeroShowcase() {
 
   return (
     <div className="relative w-full max-w-xl mx-auto">
-      {/* glow */}
       <div className="absolute inset-0 rounded-3xl bg-emerald-500/10 blur-3xl pointer-events-none" />
 
       <div className="relative h-[420px] overflow-visible">
         <div className="relative w-full h-full flex items-center justify-center">
           <AnimatePresence initial={false} custom={direction}>
-            {/* PREVIOUS */}
-            <Slide
-              key={`prev-${prevIndex}`}
-              src={screens[prevIndex]}
-              position="left"
-            />
-
-            {/* ACTIVE */}
+            <Slide key={`prev-${prevIndex}`} src={screens[prevIndex]} position="left" />
             <Slide
               key={`active-${index}`}
               src={screens[index]}
               position="center"
               direction={direction}
             />
-
-            {/* NEXT */}
-            <Slide
-              key={`next-${nextIndex}`}
-              src={screens[nextIndex]}
-              position="right"
-            />
+            <Slide key={`next-${nextIndex}`} src={screens[nextIndex]} position="right" />
           </AnimatePresence>
         </div>
       </div>
     </div>
   );
 }
-
-/* ----------------------------- */
-/* Slide component               */
-/* ----------------------------- */
 
 function Slide({
   src,
@@ -79,9 +61,9 @@ function Slide({
 }) {
   const variants = {
     left: {
-      x: "-38%",
-      scale: 0.92,
-      opacity: 0.45,
+      x: "-8%", // 👈 только слегка выглядывает
+      scale: 0.94,
+      opacity: 0.5,
       zIndex: 1,
     },
     center: {
@@ -91,26 +73,26 @@ function Slide({
       zIndex: 5,
     },
     right: {
-      x: "38%",
-      scale: 0.92,
-      opacity: 0.45,
+      x: "8%", // 👈 только слегка выглядывает
+      scale: 0.94,
+      opacity: 0.5,
       zIndex: 1,
     },
     enter: (dir: 1 | -1) => ({
-      x: dir === 1 ? "38%" : "-38%",
-      scale: 0.92,
+      x: dir === 1 ? "8%" : "-8%",
+      scale: 0.94,
       opacity: 0,
     }),
     exit: (dir: 1 | -1) => ({
-      x: dir === 1 ? "-38%" : "38%",
-      scale: 0.92,
+      x: dir === 1 ? "-8%" : "8%",
+      scale: 0.94,
       opacity: 0,
     }),
   };
 
   return (
     <motion.div
-      className="absolute w-[88%] h-full rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
+      className="absolute w-[90%] h-full rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
       custom={direction}
       variants={variants}
       initial={position === "center" ? "enter" : position}
@@ -118,7 +100,7 @@ function Slide({
       exit="exit"
       transition={{
         duration: SLIDE_DURATION,
-        ease: [0.22, 1, 0.36, 1],
+        ease: [0.16, 1, 0.3, 1], // ultra smooth (material-like)
       }}
       style={{ willChange: "transform" }}
     >
