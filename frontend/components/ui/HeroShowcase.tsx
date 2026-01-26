@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const screens = [
@@ -11,70 +11,87 @@ const screens = [
 
 export function HeroShowcase() {
   const [index, setIndex] = useState(0);
-  const [isReady, setIsReady] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [direction, setDirection] = useState<1 | -1>(1);
 
-  // контролируем "готовность"
   useEffect(() => {
-    const readyTimeout = setTimeout(() => {
-      setIsReady(true);
-    }, 600); // даём UI стабилизироваться
-
-    return () => clearTimeout(readyTimeout);
+    const timeout = setTimeout(() => setReady(true), 600);
+    return () => clearTimeout(timeout);
   }, []);
 
-  // автопрокрутка ТОЛЬКО когда готовы
   useEffect(() => {
-    if (!isReady) return;
+    if (!ready) return;
 
     const id = setInterval(() => {
-      setIndex((i) => (i + 1) % screens.length);
-    }, 6000); // медленнее и спокойнее
+      next();
+    }, 6000);
 
     return () => clearInterval(id);
-  }, [isReady]);
+  }, [ready]);
+
+  const next = () => {
+    setDirection(1);
+    setIndex((i) => (i + 1) % screens.length);
+  };
+
+  const prev = () => {
+    setDirection(-1);
+    setIndex((i) => (i - 1 + screens.length) % screens.length);
+  };
 
   return (
-    <div className="relative w-full max-w-xl">
+    <div className="relative w-full max-w-xl group">
+      {/* Glow */}
       <div className="absolute inset-0 rounded-3xl bg-emerald-500/10 blur-3xl" />
 
-      <div className="relative h-[420px]">
-        {!isReady && <HeroLoader />}
+      {/* Stack preview */}
+      <div className="relative h-[320px]">
+        {screens.map((src, i) => {
+          const offset = (i - index + screens.length) % screens.length;
 
-        {isReady &&
-          screens.map((src, i) => {
-            const position =
-              (i - index + screens.length) % screens.length;
+          if (offset > 2) return null;
 
-            if (position > 2) return null;
-
-            return (
-              <motion.div
-                key={src}
-                className="absolute inset-0 rounded-3xl border border-zinc-800 bg-zinc-900/60 backdrop-blur overflow-hidden"
-                initial={false}
-                animate={{
-                  x: position * 48,
-                  scale: 1 - position * 0.07,
-                  opacity: 1 - position * 0.28,
-                }}
-                transition={{
-                  duration: 1.2, // 🔥 плавно
-                  ease: [0.16, 1, 0.3, 1], // ultra-smooth
-                }}
-                style={{
-                  zIndex: 10 - position,
-                }}
-              >
-                <img
-                  src={src}
-                  alt="Leprechaun preview"
-                  className="w-full h-full object-cover"
-                  draggable={false}
-                />
-              </motion.div>
-            );
-          })}
+          return (
+            <motion.img
+              key={src}
+              src={src}
+              alt="Leprechaun preview"
+              className="absolute inset-0 w-full rounded-3xl border border-zinc-800 bg-zinc-900 object-cover"
+              style={{ zIndex: 10 - offset }}
+              initial={false}
+              animate={{
+                x: offset === 0 ? 0 : offset * 24,
+                scale: offset === 0 ? 1 : 0.96,
+                opacity: offset === 0 ? 1 : 0.4,
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 120,
+                damping: 18,
+                mass: 0.9,
+              }}
+            />
+          );
+        })}
       </div>
+
+      {/* Navigation arrows */}
+      {ready && (
+        <>
+          <button
+            onClick={prev}
+            className="absolute left-2 top-1/2 -translate-y-1/2 text-zinc-400 opacity-0 group-hover:opacity-100 transition hover:text-zinc-100"
+          >
+            &lt;
+          </button>
+          <button
+            onClick={next}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 opacity-0 group-hover:opacity-100 transition hover:text-zinc-100"
+          >
+            &gt;
+          </button>
+        </>
+      )}
     </div>
   );
 }
