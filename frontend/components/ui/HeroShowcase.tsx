@@ -30,6 +30,7 @@ export function HeroShowcase() {
 
   const next = () =>
     setIndex((i) => (i + 1) % screens.length);
+
   const prev = () =>
     setIndex((i) => (i - 1 + screens.length) % screens.length);
 
@@ -38,31 +39,37 @@ export function HeroShowcase() {
       {/* glow */}
       <div className="absolute inset-0 rounded-3xl bg-emerald-500/10 blur-3xl" />
 
-      <div className="relative h-[420px] overflow-visible">
+      <div className="relative h-[420px]">
         {!ready && <HeroLoader />}
 
         {ready &&
           screens.map((src, i) => {
             const offset =
-              (i - index + screens.length) % screens.length;
+              i === index
+                ? 0
+                : i === (index - 1 + screens.length) % screens.length
+                ? -1
+                : i === (index + 1) % screens.length
+                ? 1
+                : 99;
 
-            if (offset > 2) return null;
+            if (Math.abs(offset) > 1) return null;
 
             return (
               <motion.div
                 key={src}
                 className="absolute inset-0 rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
                 animate={{
-                  x: offset * 56,
-                  scale: 1 - offset * 0.06,
-                  opacity: 1 - offset * 0.28,
+                  x: offset * 36,
+                  scale: offset === 0 ? 1 : 0.96,
+                  opacity: offset === 0 ? 1 : 0.55,
                 }}
                 transition={{
-                  duration: 2.8,
+                  duration: 3.2,
                   ease: [0.22, 1, 0.36, 1],
                 }}
                 style={{
-                  zIndex: 10 - offset,
+                  zIndex: offset === 0 ? 10 : 5,
                 }}
               >
                 <img
@@ -74,21 +81,21 @@ export function HeroShowcase() {
             );
           })}
 
-        {/* arrows */}
+        {/* controls */}
         {ready && (
           <>
             <button
               onClick={prev}
-              className="absolute left-[-28px] top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-200 transition"
+              className="absolute left-[-44px] top-1/2 -translate-y-1/2 h-9 w-9 rounded-full border border-zinc-700 bg-zinc-900/70 text-zinc-300 hover:bg-zinc-800 transition"
             >
-              &lt;
+              ‹
             </button>
 
             <button
               onClick={next}
-              className="absolute right-[-28px] top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-200 transition"
+              className="absolute right-[-44px] top-1/2 -translate-y-1/2 h-9 w-9 rounded-full border border-zinc-700 bg-zinc-900/70 text-zinc-300 hover:bg-zinc-800 transition"
             >
-              &gt;
+              ›
             </button>
           </>
         )}
