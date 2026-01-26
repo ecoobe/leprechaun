@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Header } from "@/components/ui/Header";
 import { SupportButton } from "@/components/ui/SupportButton";
 import { Testimonials } from "@/components/ui/Testimonials";
+import { HeroShowcase } from "@/components/ui/HeroShowcase";
 
 
 // FAQ Item Component
@@ -80,52 +81,47 @@ export default function HomePage() {
 
       <main className="relative min-h-screen overflow-x-hidden text-zinc-100">
         {/* Hero Section */}
-        <section className="mx-auto max-w-6xl px-6 py-32">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-col items-start"
-          >
-            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
-              Leprechaun
-              <span className="block text-lg font-normal text-emerald-400 mt-2">
-                Твой финансовый помощник
-              </span>
-            </h1>
-            
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="mt-6 max-w-2xl text-lg text-zinc-300"
-            >
-              Никогда больше не пропускайте платежи по кредитным картам и кредитам. 
-              Все ваши финансовые обязательства в одном месте с умными напоминаниями 
-              в Telegram.
-            </motion.p>
+        <section className="relative w-full py-32">
+  <div className="mx-auto max-w-7xl px-6 grid gap-16 lg:grid-cols-2 items-center">
+    
+    {/* LEFT */}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
+        Leprechaun
+        <span className="block text-lg font-normal text-emerald-400 mt-2">
+          Твой финансовый помощник
+        </span>
+      </h1>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-10 flex gap-4"
-            >
-              <Link
-                href="#faq"
-                className="rounded-2xl bg-emerald-500 px-6 py-3 text-sm font-medium text-zinc-950 transition hover:bg-emerald-400"
-              >
-                Узнать больше
-              </Link>
-              <Link
-                href="#faq"
-                className="rounded-2xl border border-zinc-700 px-6 py-3 text-sm font-medium text-zinc-100 transition hover:bg-zinc-800"
-              >
-                Как начать?
-              </Link>
-            </motion.div>
-          </motion.div>
-        </section>
+      <p className="mt-6 max-w-xl text-lg text-zinc-300">
+        Спокойствие в финансах. Мы следим за платежами, напоминаем вовремя
+        и помогаем держать всё под контролем.
+      </p>
+
+      <div className="mt-10 flex gap-4">
+        <Link
+          href="#faq"
+          className="rounded-2xl bg-emerald-500 px-6 py-3 text-sm font-medium text-zinc-950 hover:bg-emerald-400 transition"
+        >
+          Узнать больше
+        </Link>
+        <Link
+          href="#faq"
+          className="rounded-2xl border border-zinc-700 px-6 py-3 text-sm font-medium hover:bg-zinc-800 transition"
+        >
+          Как начать?
+        </Link>
+      </div>
+    </motion.div>
+
+    {/* RIGHT */}
+    <HeroShowcase />
+  </div>
+</section>
 
         {/* Value Proposition */}
         <section className="relative z-10 mx-auto max-w-6xl px-6 py-24">

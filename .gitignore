@@ -33,4 +33,9 @@ go.work.sum
 
 # Secrets
 nginx/auth/*.htpasswd
+
+#Frontend
 **/node_modules
+
+#macOS
+.DS_Store
