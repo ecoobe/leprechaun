@@ -67,39 +67,66 @@ function Slide({
       className="absolute w-[90%] h-full rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
       initial={{
         opacity: 0,
-        scale: 0.92,
-        x: position === -1 ? "-10%" : position === 1 ? "10%" : "0%",
+        scale: 0.9,
+        x: position === -1 ? "-12%" : position === 1 ? "12%" : "0%",
+        rotateY: position === -1 ? 6 : position === 1 ? -6 : 0,
       }}
       animate={{
         x: isCenter ? "0%" : position === -1 ? "-6%" : "6%",
-        scale: isCenter ? 1 : 0.95,
+        scale: isCenter ? 1 : 0.96,
         opacity: isCenter ? 1 : 0.55,
+        rotateY: isCenter ? 0 : position === -1 ? 2.5 : -2.5,
         zIndex: isCenter ? 5 : 1,
       }}
       transition={{
         x: {
           type: "spring",
-          stiffness: 120,
-          damping: 20,
-          mass: 0.9,
+          stiffness: 70,     // 👈 мягче
+          damping: 28,       // 👈 гасим дёрганье
+          mass: 1.4,         // 👈 «тяжёлая» карточка
+        },
+        rotateY: {
+          type: "spring",
+          stiffness: 60,
+          damping: 22,
         },
         scale: {
-          duration: 1.2,
+          duration: 1.4,
           ease: "easeOut",
         },
         opacity: {
-          duration: 1.1,
+          duration: 1.3,
           ease: "easeOut",
-          delay: 0.05, // 👈 убирает вспышку
+          delay: 0.08, // 👈 полностью убирает вспышку
         },
       }}
-      style={{ willChange: "transform, opacity" }}
+      style={{
+        transformStyle: "preserve-3d",
+        willChange: "transform, opacity",
+      }}
     >
-      <img
+      {/* ПАРАЛЛАКС */}
+      <motion.img
         src={src}
         alt=""
         draggable={false}
         className="w-full h-full object-cover select-none"
+        animate={{
+          x: isCenter ? "0%" : position === -1 ? "3%" : "-3%",
+          scale: isCenter ? 1.03 : 1,
+        }}
+        transition={{
+          x: {
+            type: "spring",
+            stiffness: 50,
+            damping: 30,
+            mass: 1.2,
+          },
+          scale: {
+            duration: 1.6,
+            ease: "easeOut",
+          },
+        }}
       />
     </motion.div>
   );
