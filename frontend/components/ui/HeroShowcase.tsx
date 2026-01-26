@@ -10,7 +10,7 @@ const screens = [
 ];
 
 const AUTO_DELAY = 6000;
-const DURATION = 1.8;
+const BASE_DURATION = 1.8;
 
 /* ---------------- utils ---------------- */
 
@@ -39,41 +39,48 @@ function useImagesLoaded(srcs: string[]) {
 
 /* ---------------- component ---------------- */
 
+type Phase = "idle" | "boot" | "run";
+
 export default function HeroShowcase() {
   const imagesReady = useImagesLoaded(screens);
 
   const [active, setActive] = useState(0);
-  const [hasStarted, setHasStarted] = useState(false);
+  const [phase, setPhase] = useState<Phase>("idle");
 
-  // прогрев без анимации
+  // 🟢 мягкий запуск
   useEffect(() => {
     if (!imagesReady) return;
 
-    const warmup = setTimeout(() => {
+    const boot = setTimeout(() => {
+      setPhase("boot");
       setActive((i) => (i + 1) % screens.length);
-      setHasStarted(true);
-    }, 120);
 
-    return () => clearTimeout(warmup);
+      // после первого перехода — нормальный режим
+      setTimeout(() => {
+        setPhase("run");
+      }, BASE_DURATION * 1000);
+    }, 160); // 2–3 кадра тишины
+
+    return () => clearTimeout(boot);
   }, [imagesReady]);
 
-  // автоплей
+  // 🟢 обычный автоплей
   useEffect(() => {
-    if (!imagesReady || !hasStarted) return;
+    if (phase !== "run") return;
 
     const id = setInterval(() => {
       setActive((i) => (i + 1) % screens.length);
     }, AUTO_DELAY);
 
     return () => clearInterval(id);
-  }, [imagesReady, hasStarted]);
+  }, [phase]);
 
   return (
     <motion.div
       className="relative w-full max-w-xl mx-auto"
       initial={{ opacity: 0 }}
       animate={{ opacity: imagesReady ? 1 : 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      transition={{ duration: 1, ease: "easeOut" }}
     >
       <div className="absolute inset-0 rounded-3xl bg-emerald-500/10 blur-3xl pointer-events-none" />
 
@@ -88,7 +95,7 @@ export default function HeroShowcase() {
               key={src}
               src={src}
               position={position}
-              hasStarted={hasStarted}
+              phase={phase}
             />
           );
         })}
@@ -102,13 +109,18 @@ export default function HeroShowcase() {
 function Slide({
   src,
   position,
-  hasStarted,
+  phase,
 }: {
   src: string;
   position: -1 | 0 | 1;
-  hasStarted: boolean;
+  phase: "idle" | "boot" | "run";
 }) {
   const isCenter = position === 0;
+
+  const duration =
+    phase === "boot"
+      ? BASE_DURATION * 2.2 // 🔥 супер-мягкий старт
+      : BASE_DURATION;
 
   return (
     <motion.div
@@ -121,28 +133,24 @@ function Slide({
         opacity: isCenter ? 1 : 0.55,
         zIndex: isCenter ? 5 : 1,
       }}
-      transition={
-        hasStarted
-          ? {
-              x: {
-                duration: DURATION,
-                ease: [0.22, 0.65, 0.32, 1],
-              },
-              scale: {
-                duration: DURATION + 0.15,
-                ease: "easeOut",
-              },
-              rotateY: {
-                duration: DURATION + 0.25,
-                ease: "easeOut",
-              },
-              opacity: {
-                duration: DURATION + 0.4,
-                ease: "easeOut",
-              },
-            }
-          : { duration: 0 }
-      }
+      transition={{
+        x: {
+          duration,
+          ease: [0.16, 0.84, 0.44, 1], // 🧈 buttery
+        },
+        scale: {
+          duration: duration + 0.2,
+          ease: "easeOut",
+        },
+        rotateY: {
+          duration: duration + 0.3,
+          ease: "easeOut",
+        },
+        opacity: {
+          duration: duration + 0.6,
+          ease: "easeOut",
+        },
+      }}
       style={{
         transformStyle: "preserve-3d",
         willChange: "transform",
@@ -155,14 +163,10 @@ function Slide({
         className="w-full h-full object-cover select-none"
         initial={false}
         animate={{ scale: isCenter ? 1.015 : 1 }}
-        transition={
-          hasStarted
-            ? {
-                duration: DURATION + 0.3,
-                ease: "easeOut",
-              }
-            : { duration: 0 }
-        }
+        transition={{
+          duration: duration + 0.4,
+          ease: "easeOut",
+        }}
       />
     </motion.div>
   );
