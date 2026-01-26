@@ -26,7 +26,6 @@ function useImagesLoaded(srcs: string[]) {
       img.onload = img.onerror = () => {
         count++;
         if (count === srcs.length) {
-          // даём браузеру 1 кадр «устаканиться»
           requestAnimationFrame(() => {
             setLoaded(true);
           });
@@ -46,19 +45,19 @@ export default function HeroShowcase() {
   const [active, setActive] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
 
-  // 🔹 Невидимый прогрев: первый сдвиг без анимации
+  // прогрев без анимации
   useEffect(() => {
     if (!imagesReady) return;
 
     const warmup = setTimeout(() => {
       setActive((i) => (i + 1) % screens.length);
       setHasStarted(true);
-    }, 120); // чуть больше 1 кадра — максимально мягко
+    }, 120);
 
     return () => clearTimeout(warmup);
   }, [imagesReady]);
 
-  // 🔹 Основной автоплей — только после прогрева
+  // автоплей
   useEffect(() => {
     if (!imagesReady || !hasStarted) return;
 
@@ -111,44 +110,55 @@ function Slide({
 }) {
   const isCenter = position === 0;
 
-  const state = {
-    x: isCenter ? "0%" : position === -1 ? "-7%" : "7%",
-    scale: isCenter ? 1 : 0.96,
-    opacity: isCenter ? 1 : 0.55,
-    rotateY: isCenter ? 0 : position === -1 ? 2 : -2,
-    zIndex: isCenter ? 5 : 1,
-  };
-
   return (
     <motion.div
       className="absolute w-[90%] h-full rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
-      initial={false} // 👈 никогда не анимируем mount
-      animate={state}
+      initial={false}
+      animate={{
+        x: isCenter ? "0%" : position === -1 ? "-7%" : "7%",
+        scale: isCenter ? 1 : 0.96,
+        rotateY: isCenter ? 0 : position === -1 ? 2 : -2,
+        opacity: isCenter ? 1 : 0.55,
+        zIndex: isCenter ? 5 : 1,
+      }}
       transition={
         hasStarted
           ? {
-              duration: DURATION,
-              ease: [0.22, 0.61, 0.36, 1],
+              x: {
+                duration: DURATION,
+                ease: [0.22, 0.65, 0.32, 1],
+              },
+              scale: {
+                duration: DURATION + 0.15,
+                ease: "easeOut",
+              },
+              rotateY: {
+                duration: DURATION + 0.25,
+                ease: "easeOut",
+              },
+              opacity: {
+                duration: DURATION + 0.4,
+                ease: "easeOut",
+              },
             }
-          : { duration: 0 } // 👈 первый переход мгновенный
+          : { duration: 0 }
       }
       style={{
         transformStyle: "preserve-3d",
         willChange: "transform",
       }}
     >
-      {/* картинка без «плавания» */}
       <motion.img
         src={src}
         alt=""
         draggable={false}
         className="w-full h-full object-cover select-none"
         initial={false}
-        animate={{ scale: isCenter ? 1.01 : 1 }}
+        animate={{ scale: isCenter ? 1.015 : 1 }}
         transition={
           hasStarted
             ? {
-                duration: DURATION + 0.2,
+                duration: DURATION + 0.3,
                 ease: "easeOut",
               }
             : { duration: 0 }
