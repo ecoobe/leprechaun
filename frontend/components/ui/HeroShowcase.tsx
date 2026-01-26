@@ -34,7 +34,7 @@ export function HeroShowcase() {
 
   return (
     <div className="relative w-full max-w-xl">
-      {/* Glow */}
+      {/* glow */}
       <div className="absolute inset-0 rounded-3xl bg-emerald-500/10 blur-3xl" />
 
       <div className="relative h-[420px]">
@@ -42,28 +42,65 @@ export function HeroShowcase() {
 
         {ready && (
           <>
-            {/* third card */}
-            <div className="absolute inset-0 translate-x-12 scale-[0.9] opacity-20 rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden" />
+            {/* third card (barely visible) */}
+            <motion.div
+              className="absolute inset-0 rounded-3xl border border-zinc-800 bg-zinc-900"
+              animate={{
+                x: 48,
+                scale: 0.9,
+                opacity: 0.18,
+              }}
+              transition={{
+                duration: 6,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            />
 
             {/* second card */}
-            <div className="absolute inset-0 translate-x-6 scale-[0.95] opacity-40 rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden">
+            <motion.div
+              className="absolute inset-0 rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
+              animate={{
+                x: 24,
+                scale: 0.95,
+                opacity: 0.4,
+              }}
+              transition={{
+                duration: 6,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
               <img
                 src={next}
                 className="w-full h-full object-cover"
                 draggable={false}
               />
-            </div>
+            </motion.div>
 
             {/* active card */}
             <motion.div
               key={current}
               className="absolute inset-0 rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
-              initial={{ x: -40, opacity: 0.6 }}
-              animate={{ x: 0, opacity: 1 }}
+              initial={false}
+              animate={{
+                x: 0,
+                scale: 1,
+                opacity: 1,
+              }}
               transition={{
-  duration: 4.5,          // ← вот здесь магия
-  ease: [0.22, 1, 0.36, 1],
-}}
+                x: {
+                  duration: 5.5,
+                  ease: [0.22, 1, 0.36, 1],
+                },
+                scale: {
+                  duration: 5.5,
+                  ease: [0.22, 1, 0.36, 1],
+                },
+                opacity: {
+                  duration: 3.2,
+                  ease: "easeOut",
+                  delay: 0.6, // 💎 убирает вспышку
+                },
+              }}
             >
               <img
                 src={current}
@@ -84,7 +121,11 @@ function HeroLoader() {
       <motion.div
         className="h-10 w-10 rounded-full border-2 border-emerald-500/30 border-t-emerald-500"
         animate={{ rotate: 360 }}
-        transition={{ duration: 1.4, repeat: Infinity, ease: "linear" }}
+        transition={{
+          duration: 1.6,
+          repeat: Infinity,
+          ease: "linear",
+        }}
       />
     </div>
   );
