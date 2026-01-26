@@ -9,8 +9,8 @@ const screens = [
   "/screens/stats.png",
 ];
 
-const SLIDE_DURATION = 1.8; // Увеличенная длительность для плавности
-const AUTO_DELAY = 7000; // Увеличенная задержка
+const SLIDE_DURATION = 1.2; // более плавно
+const AUTO_DELAY = 6000;
 
 export default function HeroShowcase() {
   const [index, setIndex] = useState(0);
@@ -61,9 +61,9 @@ function Slide({
 }) {
   const variants = {
     left: {
-      x: "-32%",
-      scale: 0.88,
-      opacity: 0.6,
+      x: "-8%", // 👈 только слегка выглядывает
+      scale: 0.94,
+      opacity: 0.5,
       zIndex: 1,
     },
     center: {
@@ -73,26 +73,26 @@ function Slide({
       zIndex: 5,
     },
     right: {
-      x: "32%",
-      scale: 0.88,
-      opacity: 0.6,
+      x: "8%", // 👈 только слегка выглядывает
+      scale: 0.94,
+      opacity: 0.5,
       zIndex: 1,
     },
     enter: (dir: 1 | -1) => ({
-      x: dir === 1 ? "100%" : "-100%",
-      scale: 0.9,
+      x: dir === 1 ? "8%" : "-8%",
+      scale: 0.94,
       opacity: 0,
     }),
     exit: (dir: 1 | -1) => ({
-      x: dir === 1 ? "-100%" : "100%",
-      scale: 0.9,
+      x: dir === 1 ? "-8%" : "8%",
+      scale: 0.94,
       opacity: 0,
     }),
   };
 
   return (
     <motion.div
-      className="absolute w-[85%] h-full rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
+      className="absolute w-[90%] h-full rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
       custom={direction}
       variants={variants}
       initial={position === "center" ? "enter" : position}
@@ -100,7 +100,7 @@ function Slide({
       exit="exit"
       transition={{
         duration: SLIDE_DURATION,
-        ease: [0.25, 0.46, 0.45, 0.94], // Более плавная кривая
+        ease: [0.16, 1, 0.3, 1], // ultra smooth (material-like)
       }}
       style={{ willChange: "transform" }}
     >
