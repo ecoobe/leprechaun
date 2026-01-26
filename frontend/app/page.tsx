@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Header } from "@/components/ui/Header";
 import { SupportButton } from "@/components/ui/SupportButton";
 import { Testimonials } from "@/components/ui/Testimonials";
-import { HeroShowcase } from "@/components/ui/HeroShowcase";
+import HeroShowcase from "@/components/ui/HeroShowcase";
 
 
 // FAQ Item Component
