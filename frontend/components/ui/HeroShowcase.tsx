@@ -26,6 +26,7 @@ function useImagesLoaded(srcs: string[]) {
       img.onload = img.onerror = () => {
         count++;
         if (count === srcs.length) {
+          // даём браузеру 1 кадр «устаканиться»
           requestAnimationFrame(() => {
             setLoaded(true);
           });
@@ -41,17 +42,32 @@ function useImagesLoaded(srcs: string[]) {
 
 export default function HeroShowcase() {
   const imagesReady = useImagesLoaded(screens);
-  const [active, setActive] = useState(0);
 
+  const [active, setActive] = useState(0);
+  const [hasStarted, setHasStarted] = useState(false);
+
+  // 🔹 Невидимый прогрев: первый сдвиг без анимации
   useEffect(() => {
     if (!imagesReady) return;
+
+    const warmup = setTimeout(() => {
+      setActive((i) => (i + 1) % screens.length);
+      setHasStarted(true);
+    }, 120); // чуть больше 1 кадра — максимально мягко
+
+    return () => clearTimeout(warmup);
+  }, [imagesReady]);
+
+  // 🔹 Основной автоплей — только после прогрева
+  useEffect(() => {
+    if (!imagesReady || !hasStarted) return;
 
     const id = setInterval(() => {
       setActive((i) => (i + 1) % screens.length);
     }, AUTO_DELAY);
 
     return () => clearInterval(id);
-  }, [imagesReady]);
+  }, [imagesReady, hasStarted]);
 
   return (
     <motion.div
@@ -73,7 +89,7 @@ export default function HeroShowcase() {
               key={src}
               src={src}
               position={position}
-              ready={imagesReady}
+              hasStarted={hasStarted}
             />
           );
         })}
@@ -82,14 +98,16 @@ export default function HeroShowcase() {
   );
 }
 
+/* ---------------- slide ---------------- */
+
 function Slide({
   src,
   position,
-  ready,
+  hasStarted,
 }: {
   src: string;
   position: -1 | 0 | 1;
-  ready: boolean;
+  hasStarted: boolean;
 }) {
   const isCenter = position === 0;
 
@@ -104,28 +122,37 @@ function Slide({
   return (
     <motion.div
       className="absolute w-[90%] h-full rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
-      initial={ready ? state : false} // 👈 старт = текущему состоянию
+      initial={false} // 👈 никогда не анимируем mount
       animate={state}
-      transition={{
-        duration: DURATION,
-        ease: [0.22, 0.61, 0.36, 1],
-      }}
+      transition={
+        hasStarted
+          ? {
+              duration: DURATION,
+              ease: [0.22, 0.61, 0.36, 1],
+            }
+          : { duration: 0 } // 👈 первый переход мгновенный
+      }
       style={{
         transformStyle: "preserve-3d",
         willChange: "transform",
       }}
     >
+      {/* картинка без «плавания» */}
       <motion.img
         src={src}
         alt=""
         draggable={false}
         className="w-full h-full object-cover select-none"
-        initial={{ scale: 1 }}
+        initial={false}
         animate={{ scale: isCenter ? 1.01 : 1 }}
-        transition={{
-          duration: DURATION + 0.2,
-          ease: "easeOut",
-        }}
+        transition={
+          hasStarted
+            ? {
+                duration: DURATION + 0.2,
+                ease: "easeOut",
+              }
+            : { duration: 0 }
+        }
       />
     </motion.div>
   );
