@@ -9,9 +9,9 @@ const screens = [
   "/screens/stats.png",
 ];
 
-const OFFSET = 48; // насколько выглядывают задние карточки
-const SCALE_BG = 0.96;
-const OPACITY_BG = 0.45;
+const CARD_WIDTH = 360;
+const CARD_GAP = 24;
+const AUTO_DELAY = 7000;
 
 export function HeroShowcase() {
   const [index, setIndex] = useState(0);
@@ -27,89 +27,72 @@ export function HeroShowcase() {
 
     const id = setInterval(() => {
       setIndex((i) => (i + 1) % screens.length);
-    }, 7000);
+    }, AUTO_DELAY);
 
     return () => clearInterval(id);
   }, [ready]);
 
-  const prev = screens[(index - 1 + screens.length) % screens.length];
-  const current = screens[index];
-  const next = screens[(index + 1) % screens.length];
+  const offset =
+    -(index * (CARD_WIDTH + CARD_GAP)) +
+    CARD_WIDTH + CARD_GAP;
 
   return (
-    <div className="relative w-full max-w-xl">
+    <div className="relative w-full max-w-3xl mx-auto">
       {/* glow */}
       <div className="absolute inset-0 rounded-3xl bg-emerald-500/10 blur-3xl" />
 
-      <div className="relative h-[420px] overflow-hidden">
+      <div className="relative h-[420px] overflow-visible">
         {!ready && <HeroLoader />}
 
         {ready && (
-          <>
-            {/* PREVIOUS (left peek) */}
-            <motion.div
-              className="absolute inset-0 rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
-              style={{ zIndex: 1 }}
-              animate={{
-                x: -OFFSET,
-                scale: SCALE_BG,
-                opacity: OPACITY_BG,
-              }}
-              transition={transition}
-            >
-              <img
-                src={prev}
-                className="w-full h-full object-cover"
-                draggable={false}
-              />
-            </motion.div>
+          <motion.div
+            className="absolute left-1/2 top-1/2 flex items-center"
+            style={{
+              transform: "translate(-50%, -50%)",
+              gap: CARD_GAP,
+            }}
+            animate={{ x: offset }}
+            transition={{
+              duration: 2.8,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
+            {screens.map((src, i) => {
+              const isActive = i === index;
 
-            {/* NEXT (right peek) */}
-            <motion.div
-              className="absolute inset-0 rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
-              style={{ zIndex: 1 }}
-              animate={{
-                x: OFFSET,
-                scale: SCALE_BG,
-                opacity: OPACITY_BG,
-              }}
-              transition={transition}
-            >
-              <img
-                src={next}
-                className="w-full h-full object-cover"
-                draggable={false}
-              />
-            </motion.div>
-
-            {/* ACTIVE */}
-            <motion.div
-              className="absolute inset-0 rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
-              style={{ zIndex: 2 }}
-              animate={{
-                x: 0,
-                scale: 1,
-                opacity: 1,
-              }}
-              transition={transition}
-            >
-              <img
-                src={current}
-                className="w-full h-full object-cover"
-                draggable={false}
-              />
-            </motion.div>
-          </>
+              return (
+                <div
+                  key={src}
+                  className="relative"
+                  style={{ width: CARD_WIDTH }}
+                >
+                  <motion.div
+                    animate={{
+                      scale: isActive ? 1 : 0.94,
+                      opacity: isActive ? 1 : 0.45,
+                    }}
+                    transition={{
+                      duration: 1.6,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden shadow-xl"
+                  >
+                    <img
+                      src={src}
+                      alt="preview"
+                      className="w-full h-[420px] object-cover"
+                      draggable={false}
+                    />
+                  </motion.div>
+                </div>
+              );
+            })}
+          </motion.div>
         )}
       </div>
     </div>
   );
 }
-
-const transition = {
-  duration: 2.6,
-  ease: [0.22, 1, 0.36, 1], // мягкая "живая" кривая
-};
 
 function HeroLoader() {
   return (
