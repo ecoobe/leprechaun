@@ -9,20 +9,15 @@ const screens = [
   "/screens/stats.png",
 ];
 
-const SLIDE_DURATION = 1.6;
 const AUTO_DELAY = 6000;
+const SLIDE_DURATION = 1.6;
 
 export default function HeroShowcase() {
-  const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState<1 | -1>(1);
-
-  const prevIndex = (index - 1 + screens.length) % screens.length;
-  const nextIndex = (index + 1) % screens.length;
+  const [active, setActive] = useState(0);
 
   useEffect(() => {
     const id = setInterval(() => {
-      setDirection(1);
-      setIndex((i) => (i + 1) % screens.length);
+      setActive((i) => (i + 1) % screens.length);
     }, AUTO_DELAY);
 
     return () => clearInterval(id);
@@ -30,15 +25,29 @@ export default function HeroShowcase() {
 
   return (
     <div className="relative w-full max-w-xl mx-auto">
-      {/* мягкое свечение */}
       <div className="absolute inset-0 rounded-3xl bg-emerald-500/10 blur-3xl pointer-events-none" />
 
-      <div className="relative h-[420px]">
-        <div className="relative w-full h-full flex items-center justify-center overflow-visible">
-          <Slide src={screens[prevIndex]} position="left" />
-          <Slide src={screens[index]} position="center" />
-          <Slide src={screens[nextIndex]} position="right" />
-        </div>
+      <div className="relative h-[420px] overflow-visible flex items-center justify-center">
+        {screens.map((src, i) => {
+          const offset =
+            ((i - active + screens.length) % screens.length);
+
+          // нормализуем: 0 = center, 1 = right, last = left
+          const position =
+            offset === 0
+              ? 0
+              : offset === 1
+              ? 1
+              : -1;
+
+          return (
+            <Slide
+              key={src}
+              src={src}
+              position={position}
+            />
+          );
+        })}
       </div>
     </div>
   );
@@ -49,38 +58,20 @@ function Slide({
   position,
 }: {
   src: string;
-  position: "left" | "center" | "right";
+  position: -1 | 0 | 1;
 }) {
-  const variants = {
-    left: {
-      x: "-6%",
-      scale: 0.95,
-      opacity: 0.55,
-      zIndex: 1,
-    },
-    center: {
-      x: "0%",
-      scale: 1,
-      opacity: 1,
-      zIndex: 5,
-    },
-    right: {
-      x: "6%",
-      scale: 0.95,
-      opacity: 0.55,
-      zIndex: 1,
-    },
-  };
-
   return (
     <motion.div
       className="absolute w-[90%] h-full rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
-      variants={variants}
-      animate={position}
-      initial={false}
+      animate={{
+        x: position === 0 ? "0%" : position === -1 ? "-6%" : "6%",
+        scale: position === 0 ? 1 : 0.95,
+        opacity: position === 0 ? 1 : 0.55,
+        zIndex: position === 0 ? 5 : 1,
+      }}
       transition={{
         duration: SLIDE_DURATION,
-        ease: [0.22, 1, 0.36, 1], // ultra-smooth (easeOutCubic++)
+        ease: [0.22, 1, 0.36, 1],
       }}
       style={{ willChange: "transform" }}
     >
