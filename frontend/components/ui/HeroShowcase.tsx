@@ -61,9 +61,9 @@ export function HeroShowcase() {
               initial={{ x: -40, opacity: 0.6 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{
-                duration: 1.6,
-                ease: [0.22, 1, 0.36, 1], // максимально мягкая кривая
-              }}
+  duration: 4.5,          // ← вот здесь магия
+  ease: [0.22, 1, 0.36, 1],
+}}
             >
               <img
                 src={current}
