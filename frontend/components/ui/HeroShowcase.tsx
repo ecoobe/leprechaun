@@ -9,7 +9,7 @@ const screens = [
   "/screens/stats.png",
 ];
 
-const SLIDE_DURATION = 1.2; // более плавно
+const SLIDE_DURATION = 1.5; // Немного увеличил для плавности
 const AUTO_DELAY = 6000;
 
 export default function HeroShowcase() {
@@ -61,7 +61,7 @@ function Slide({
 }) {
   const variants = {
     left: {
-      x: "-8%", // 👈 только слегка выглядывает
+      x: "-8%",
       scale: 0.94,
       opacity: 0.5,
       zIndex: 1,
@@ -73,7 +73,7 @@ function Slide({
       zIndex: 5,
     },
     right: {
-      x: "8%", // 👈 только слегка выглядывает
+      x: "8%",
       scale: 0.94,
       opacity: 0.5,
       zIndex: 1,
@@ -100,7 +100,7 @@ function Slide({
       exit="exit"
       transition={{
         duration: SLIDE_DURATION,
-        ease: [0.16, 1, 0.3, 1], // ultra smooth (material-like)
+        ease: [0.25, 0.46, 0.45, 0.94], // Более плавная кривая без рывков
       }}
       style={{ willChange: "transform" }}
     >
