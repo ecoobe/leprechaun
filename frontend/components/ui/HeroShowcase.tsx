@@ -60,20 +60,40 @@ function Slide({
   src: string;
   position: -1 | 0 | 1;
 }) {
+  const isCenter = position === 0;
+
   return (
     <motion.div
       className="absolute w-[90%] h-full rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
+      initial={{
+        opacity: 0,
+        scale: 0.92,
+        x: position === -1 ? "-10%" : position === 1 ? "10%" : "0%",
+      }}
       animate={{
-        x: position === 0 ? "0%" : position === -1 ? "-6%" : "6%",
-        scale: position === 0 ? 1 : 0.95,
-        opacity: position === 0 ? 1 : 0.55,
-        zIndex: position === 0 ? 5 : 1,
+        x: isCenter ? "0%" : position === -1 ? "-6%" : "6%",
+        scale: isCenter ? 1 : 0.95,
+        opacity: isCenter ? 1 : 0.55,
+        zIndex: isCenter ? 5 : 1,
       }}
       transition={{
-        duration: SLIDE_DURATION,
-        ease: [0.22, 1, 0.36, 1],
+        x: {
+          type: "spring",
+          stiffness: 120,
+          damping: 20,
+          mass: 0.9,
+        },
+        scale: {
+          duration: 1.2,
+          ease: "easeOut",
+        },
+        opacity: {
+          duration: 1.1,
+          ease: "easeOut",
+          delay: 0.05, // 👈 убирает вспышку
+        },
       }}
-      style={{ willChange: "transform" }}
+      style={{ willChange: "transform, opacity" }}
     >
       <img
         src={src}
