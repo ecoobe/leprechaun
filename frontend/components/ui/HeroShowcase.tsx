@@ -13,18 +13,22 @@ export function HeroShowcase() {
   const [index, setIndex] = useState(0);
   const [isReady, setIsReady] = useState(false);
 
+  // Автоперелистывание
   useEffect(() => {
-    // Простая предзагрузка
-    const loadImages = () => {
-      screens.forEach(src => {
-        new Image().src = src;
-      });
-      setIsReady(true);
-    };
-    loadImages();
+    const interval = setInterval(() => {
+      setIndex(prev => (prev + 1) % screens.length);
+    }, 4000);
+    return () => clearInterval(interval);
   }, []);
 
-  // Плавное переключение
+  // Предзагрузка
+  useEffect(() => {
+    screens.forEach(src => {
+      new Image().src = src;
+    });
+    setIsReady(true);
+  }, []);
+
   const goToNext = () => {
     setIndex(prev => (prev + 1) % screens.length);
   };
@@ -35,7 +39,7 @@ export function HeroShowcase() {
 
   if (!isReady) {
     return (
-      <div className="relative w-full max-w-2xl mx-auto h-[420px] rounded-2xl bg-zinc-900/50 border border-zinc-800/50 animate-pulse" />
+      <div className="relative w-full max-w-2xl mx-auto h-[420px] rounded-2xl bg-zinc-900/50 border border-zinc-800/50" />
     );
   }
 
@@ -43,46 +47,43 @@ export function HeroShowcase() {
   const nextIndex = (index + 1) % screens.length;
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto">
-      {/* Основная карточка */}
-      <div className="relative h-[420px]">
-        {/* Задние карточки - видно только края 5% */}
-        <motion.div
-          className="absolute left-0 top-1/2 -translate-y-1/2 w-[5%] h-[95%] rounded-l-2xl overflow-hidden border-l border-y border-zinc-800/30 bg-zinc-900/80 z-10"
-          initial={false}
-          animate={{ opacity: 0.8 }}
-          transition={{ duration: 0.3 }}
-        >
-          <img
-            src={screens[prevIndex]}
-            alt="Предыдущий"
-            className="w-full h-full object-cover object-left"
-          />
-        </motion.div>
+    <div className="relative w-full max-w-2xl mx-auto px-12">
+      {/* Контейнер карусели */}
+      <div className="relative h-[420px] overflow-hidden">
+        
+        {/* Задние карточки (видны на 5% с каждой стороны) */}
+        <div className="absolute inset-0 flex items-center">
+          {/* Левая задняя карточка */}
+          <div className="absolute left-0 w-[5%] h-[85%] rounded-l-xl overflow-hidden z-10">
+            <div className="w-full h-full bg-gradient-to-r from-zinc-900 to-transparent absolute z-10" />
+            <img
+              src={screens[prevIndex]}
+              alt="Предыдущий"
+              className="w-full h-full object-cover object-left"
+            />
+          </div>
 
-        <motion.div
-          className="absolute right-0 top-1/2 -translate-y-1/2 w-[5%] h-[95%] rounded-r-2xl overflow-hidden border-r border-y border-zinc-800/30 bg-zinc-900/80 z-10"
-          initial={false}
-          animate={{ opacity: 0.8 }}
-          transition={{ duration: 0.3 }}
-        >
-          <img
-            src={screens[nextIndex]}
-            alt="Следующий"
-            className="w-full h-full object-cover object-right"
-          />
-        </motion.div>
+          {/* Правая задняя карточка */}
+          <div className="absolute right-0 w-[5%] h-[85%] rounded-r-xl overflow-hidden z-10">
+            <div className="w-full h-full bg-gradient-to-l from-zinc-900 to-transparent absolute z-10" />
+            <img
+              src={screens[nextIndex]}
+              alt="Следующий"
+              className="w-full h-full object-cover object-right"
+            />
+          </div>
+        </div>
 
         {/* Основная карточка */}
         <motion.div
           key={index}
-          className="absolute inset-0 rounded-2xl overflow-hidden border border-zinc-800/50 bg-zinc-900/90 backdrop-blur-sm z-20"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
+          className="absolute inset-0 rounded-2xl overflow-hidden border border-zinc-800/50 bg-zinc-900/90 z-20"
+          initial={{ x: 300, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: -300, opacity: 0 }}
           transition={{
-            duration: 0.5,
-            ease: [0.4, 0, 0.2, 1], // Плавный ease
+            duration: 0.7,
+            ease: "easeInOut"
           }}
         >
           <img
@@ -92,10 +93,10 @@ export function HeroShowcase() {
           />
         </motion.div>
 
-        {/* Минималистичные стрелки */}
+        {/* Стрелки */}
         <button
           onClick={goToPrev}
-          className="absolute -left-6 top-1/2 -translate-y-1/2 z-30 w-8 h-8 text-zinc-400 hover:text-emerald-400 transition-colors"
+          className="absolute -left-10 top-1/2 -translate-y-1/2 z-30 w-8 h-8 text-zinc-400 hover:text-emerald-400 transition-colors"
           aria-label="Предыдущий"
         >
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,7 +106,7 @@ export function HeroShowcase() {
 
         <button
           onClick={goToNext}
-          className="absolute -right-6 top-1/2 -translate-y-1/2 z-30 w-8 h-8 text-zinc-400 hover:text-emerald-400 transition-colors"
+          className="absolute -right-10 top-1/2 -translate-y-1/2 z-30 w-8 h-8 text-zinc-400 hover:text-emerald-400 transition-colors"
           aria-label="Следующий"
         >
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -114,18 +115,18 @@ export function HeroShowcase() {
         </button>
 
         {/* Индикаторы */}
-        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+        <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2">
           {screens.map((_, i) => (
             <button
               key={i}
               onClick={() => setIndex(i)}
-              className="w-2 h-2 rounded-full bg-zinc-700 hover:bg-zinc-500 transition-colors"
+              className="relative w-2 h-2 rounded-full bg-zinc-700 hover:bg-zinc-500 transition-colors"
             >
               {i === index && (
                 <motion.div
-                  className="w-2 h-2 rounded-full bg-emerald-500"
+                  className="absolute inset-0 rounded-full bg-emerald-500"
                   layoutId="activeDot"
-                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                  transition={{ duration: 0.3 }}
                 />
               )}
             </button>
