@@ -12,19 +12,17 @@ const screens = [
 export function HeroShowcase() {
   const [index, setIndex] = useState(0);
   const [isReady, setIsReady] = useState(false);
-  const [direction, setDirection] = useState(1); // 1 = вперед, -1 = назад
+  const [direction, setDirection] = useState(1);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Предзагрузка изображений с правильным созданием Image
+  // Предзагрузка изображений
   useEffect(() => {
-    // Проверяем, что мы на клиенте
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     const preloadImages = async () => {
       const promises = screens.map((src) => {
         return new Promise((resolve, reject) => {
-          // Создаем Image правильно для браузера
-          const img = new window.Image(); // Используем window.Image
+          const img = new window.Image();
           img.src = src;
           img.onload = () => resolve(true);
           img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
@@ -33,18 +31,17 @@ export function HeroShowcase() {
 
       try {
         await Promise.all(promises);
-        // Даём дополнительное время для стабилизации рендера
         setTimeout(() => setIsReady(true), 300);
       } catch (error) {
         console.error("Failed to preload images:", error);
-        setIsReady(true); // Все равно продолжаем
+        setIsReady(true);
       }
     };
 
     preloadImages();
   }, []);
 
-  // Плавное переключение с учетом направления
+  // Функции навигации
   const goToNext = useCallback(() => {
     setDirection(1);
     setIndex((prev) => (prev + 1) % screens.length);
@@ -55,19 +52,16 @@ export function HeroShowcase() {
     setIndex((prev) => (prev - 1 + screens.length) % screens.length);
   }, []);
 
-  // Автопрокрутка с паузой при наведении
+  // Автопрокрутка
   useEffect(() => {
     if (!isReady) return;
 
-    const startInterval = () => {
-      intervalRef.current = setInterval(goToNext, 5000);
-    };
-
-    startInterval();
+    intervalRef.current = setInterval(goToNext, 5000);
 
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+        intervalRef.current = null;
       }
     };
   }, [isReady, goToNext]);
@@ -85,67 +79,42 @@ export function HeroShowcase() {
     }
   };
 
-  const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 100 : -100,
-      opacity: 0,
-      scale: 0.95,
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1,
-      scale: 1,
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? 100 : -100,
-      opacity: 0,
-      scale: 0.95,
-    }),
-  };
-
-  const swipeConfidenceThreshold = 10000;
-  const swipePower = (offset: number, velocity: number) => {
-    return Math.abs(offset) * velocity;
-  };
-
-  const handleDragEnd = (e: any, { offset, velocity }: any) => {
-    const swipe = swipePower(offset.x, velocity.x);
-
-    if (swipe < -swipeConfidenceThreshold) {
-      goToNext();
-    } else if (swipe > swipeConfidenceThreshold) {
-      goToPrev();
-    }
+  // Варианты анимации для карточек
+  const getCardStyle = (cardIndex: number) => {
+    const diff = cardIndex - index;
+    const absDiff = Math.abs(diff);
+    
+    if (absDiff > 1) return { display: "none" };
+    
+    return {
+      x: diff * 40, // Сдвиг для задних карточек
+      scale: 1 - absDiff * 0.1, // Уменьшение масштаба
+      opacity: 1 - absDiff * 0.3, // Прозрачность
+      zIndex: 10 - absDiff, // Z-index
+      pointerEvents: absDiff === 0 ? "auto" as const : "none" as const, // Кликабельность только для основной
+    };
   };
 
   return (
     <div 
-      className="relative w-full max-w-xl mx-auto"
+      className="relative w-full max-w-2xl mx-auto"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       {/* Фоновое свечение */}
       <motion.div 
         className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-500/5 to-indigo-500/5 blur-3xl"
-        animate={{
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
+        animate={{ opacity: [0.3, 0.5, 0.3] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* Контейнер */}
+      {/* Контейнер для карточек */}
       <div className="relative h-[420px] rounded-3xl overflow-hidden">
         {!isReady ? (
           <HeroLoader />
         ) : (
           <>
-            {/* Индикаторы */}
+            {/* Индикаторы прогресса */}
             <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-30 flex gap-2">
               {screens.map((_, i) => (
                 <button
@@ -169,79 +138,111 @@ export function HeroShowcase() {
               ))}
             </div>
 
-            {/* Основная карусель */}
+            {/* Карточки с анимацией */}
             <div className="relative w-full h-full">
-              <AnimatePresence initial={false} custom={direction} mode="wait">
-                <motion.div
-                  key={index}
-                  custom={direction}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{
-                    x: { type: "spring", stiffness: 300, damping: 30 },
-                    opacity: { duration: 0.4 },
-                    scale: { duration: 0.4 },
-                  }}
-                  drag="x"
-                  dragConstraints={{ left: 0, right: 0 }}
-                  dragElastic={0.5}
-                  onDragEnd={handleDragEnd}
-                  className="absolute inset-0 rounded-2xl overflow-hidden border border-zinc-800/50 bg-zinc-900/80 backdrop-blur-sm shadow-2xl"
-                  style={{
-                    boxShadow: "0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(16, 185, 129, 0.1)",
-                  }}
-                >
-                  <div className="relative w-full h-full">
+              {screens.map((src, i) => {
+                const style = getCardStyle(i);
+                if (style.display === "none") return null;
+
+                return (
+                  <motion.div
+                    key={`${src}-${i}`}
+                    className="absolute inset-0 rounded-2xl overflow-hidden border border-zinc-800/50 bg-zinc-900/80 backdrop-blur-sm shadow-2xl"
+                    initial={false}
+                    animate={{
+                      x: style.x,
+                      scale: style.scale,
+                      opacity: style.opacity,
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 30,
+                      opacity: { duration: 0.3 },
+                    }}
+                    style={{
+                      zIndex: style.zIndex,
+                      pointerEvents: style.pointerEvents,
+                      boxShadow: "0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(16, 185, 129, 0.1)",
+                    }}
+                    onClick={() => {
+                      if (i !== index) {
+                        setDirection(i > index ? 1 : -1);
+                        setIndex(i);
+                      }
+                    }}
+                  >
                     {/* Градиентная рамка */}
                     <motion.div 
                       className="absolute inset-0 rounded-2xl"
                       style={{
-                        background: "linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%)",
+                        background: i === index 
+                          ? "linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%)"
+                          : "linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(139, 92, 246, 0.02) 100%)",
                       }}
                       animate={{
-                        opacity: [0.3, 0.5, 0.3],
+                        opacity: i === index ? [0.3, 0.5, 0.3] : 0.2,
                       }}
-                      transition={{
+                      transition={i === index ? {
                         duration: 3,
                         repeat: Infinity,
                         ease: "easeInOut",
-                      }}
+                      } : { duration: 0.3 }}
                     />
                     
                     {/* Изображение */}
                     <img
-                      src={screens[index]}
+                      src={src}
                       alt="Интерфейс Leprechaun"
                       className="w-full h-full object-cover object-top"
                       draggable={false}
                       loading="eager"
                     />
-                  </div>
-                </motion.div>
-              </AnimatePresence>
 
-              {/* Кнопки навигации */}
-              <button
-                onClick={goToPrev}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 flex items-center justify-center hover:bg-zinc-800/90 transition-all duration-300 group"
-                aria-label="Предыдущий слайд"
-              >
-                <svg className="w-5 h-5 text-zinc-400 group-hover:text-emerald-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-              
-              <button
-                onClick={goToNext}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 flex items-center justify-center hover:bg-zinc-800/90 transition-all duration-300 group"
-                aria-label="Следующий слайд"
-              >
-                <svg className="w-5 h-5 text-zinc-400 group-hover:text-emerald-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
+                    {/* Наложение на задние карточки для улучшения видимости */}
+                    {i !== index && (
+                      <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px]" />
+                    )}
+                  </motion.div>
+                );
+              })}
+
+              {/* Минималистичные стрелки за краями */}
+              <div className="absolute inset-y-0 left-0 right-0 z-20 flex items-center justify-between pointer-events-none">
+                {/* Левая стрелка */}
+                <button
+                  onClick={goToPrev}
+                  className="relative -left-12 w-8 h-8 flex items-center justify-center pointer-events-auto group"
+                  aria-label="Предыдущий слайд"
+                >
+                  <div className="absolute inset-0 rounded-full bg-zinc-900/30 backdrop-blur-sm group-hover:bg-zinc-900/50 transition-all duration-300" />
+                  <svg 
+                    className="w-5 h-5 text-zinc-400 group-hover:text-emerald-400 transition-colors relative z-10" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+
+                {/* Правая стрелка */}
+                <button
+                  onClick={goToNext}
+                  className="relative -right-12 w-8 h-8 flex items-center justify-center pointer-events-auto group"
+                  aria-label="Следующий слайд"
+                >
+                  <div className="absolute inset-0 rounded-full bg-zinc-900/30 backdrop-blur-sm group-hover:bg-zinc-900/50 transition-all duration-300" />
+                  <svg 
+                    className="w-5 h-5 text-zinc-400 group-hover:text-emerald-400 transition-colors relative z-10" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </>
         )}
@@ -250,14 +251,8 @@ export function HeroShowcase() {
       {/* Тень под компонентом */}
       <motion.div 
         className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-11/12 h-8 bg-emerald-500/10 blur-xl rounded-full"
-        animate={{
-          opacity: [0.1, 0.2, 0.1],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
+        animate={{ opacity: [0.1, 0.2, 0.1] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
       />
     </div>
   );
