@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const screens = [
@@ -9,7 +9,7 @@ const screens = [
   "/screens/stats.png",
 ];
 
-const SLIDE_DURATION = 1.5; // Немного увеличил для плавности
+const SLIDE_DURATION = 1.6;
 const AUTO_DELAY = 6000;
 
 export default function HeroShowcase() {
@@ -30,20 +30,14 @@ export default function HeroShowcase() {
 
   return (
     <div className="relative w-full max-w-xl mx-auto">
+      {/* мягкое свечение */}
       <div className="absolute inset-0 rounded-3xl bg-emerald-500/10 blur-3xl pointer-events-none" />
 
-      <div className="relative h-[420px] overflow-visible">
-        <div className="relative w-full h-full flex items-center justify-center">
-          <AnimatePresence initial={false} custom={direction}>
-            <Slide key={`prev-${prevIndex}`} src={screens[prevIndex]} position="left" />
-            <Slide
-              key={`active-${index}`}
-              src={screens[index]}
-              position="center"
-              direction={direction}
-            />
-            <Slide key={`next-${nextIndex}`} src={screens[nextIndex]} position="right" />
-          </AnimatePresence>
+      <div className="relative h-[420px]">
+        <div className="relative w-full h-full flex items-center justify-center overflow-visible">
+          <Slide src={screens[prevIndex]} position="left" />
+          <Slide src={screens[index]} position="center" />
+          <Slide src={screens[nextIndex]} position="right" />
         </div>
       </div>
     </div>
@@ -53,17 +47,15 @@ export default function HeroShowcase() {
 function Slide({
   src,
   position,
-  direction,
 }: {
   src: string;
   position: "left" | "center" | "right";
-  direction?: 1 | -1;
 }) {
   const variants = {
     left: {
-      x: "-8%",
-      scale: 0.94,
-      opacity: 0.5,
+      x: "-6%",
+      scale: 0.95,
+      opacity: 0.55,
       zIndex: 1,
     },
     center: {
@@ -73,34 +65,22 @@ function Slide({
       zIndex: 5,
     },
     right: {
-      x: "8%",
-      scale: 0.94,
-      opacity: 0.5,
+      x: "6%",
+      scale: 0.95,
+      opacity: 0.55,
       zIndex: 1,
     },
-    enter: (dir: 1 | -1) => ({
-      x: dir === 1 ? "8%" : "-8%",
-      scale: 0.94,
-      opacity: 0,
-    }),
-    exit: (dir: 1 | -1) => ({
-      x: dir === 1 ? "-8%" : "8%",
-      scale: 0.94,
-      opacity: 0,
-    }),
   };
 
   return (
     <motion.div
       className="absolute w-[90%] h-full rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
-      custom={direction}
       variants={variants}
-      initial={position === "center" ? "enter" : position}
       animate={position}
-      exit="exit"
+      initial={false}
       transition={{
         duration: SLIDE_DURATION,
-        ease: [0.25, 0.46, 0.45, 0.94], // Более плавная кривая без рывков
+        ease: [0.22, 1, 0.36, 1], // ultra-smooth (easeOutCubic++)
       }}
       style={{ willChange: "transform" }}
     >
