@@ -22,92 +22,74 @@ export function HeroShowcase() {
     if (!ready) return;
 
     const id = setInterval(() => {
-      setIndex((i) => (i + 1) % screens.length);
-    }, 6500);
+      next();
+    }, 7000);
 
     return () => clearInterval(id);
-  }, [ready]);
+  }, [ready, index]);
 
-  const current = screens[index];
-  const next = screens[(index + 1) % screens.length];
-  const afterNext = screens[(index + 2) % screens.length];
+  const next = () =>
+    setIndex((i) => (i + 1) % screens.length);
+  const prev = () =>
+    setIndex((i) => (i - 1 + screens.length) % screens.length);
 
   return (
     <div className="relative w-full max-w-xl">
       {/* glow */}
       <div className="absolute inset-0 rounded-3xl bg-emerald-500/10 blur-3xl" />
 
-      <div className="relative h-[420px]">
+      <div className="relative h-[420px] overflow-visible">
         {!ready && <HeroLoader />}
 
+        {ready &&
+          screens.map((src, i) => {
+            const offset =
+              (i - index + screens.length) % screens.length;
+
+            if (offset > 2) return null;
+
+            return (
+              <motion.div
+                key={src}
+                className="absolute inset-0 rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
+                animate={{
+                  x: offset * 56,
+                  scale: 1 - offset * 0.06,
+                  opacity: 1 - offset * 0.28,
+                }}
+                transition={{
+                  duration: 2.8,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                style={{
+                  zIndex: 10 - offset,
+                }}
+              >
+                <img
+                  src={src}
+                  className="w-full h-full object-cover"
+                  draggable={false}
+                />
+              </motion.div>
+            );
+          })}
+
+        {/* arrows */}
         {ready && (
           <>
-            {/* third card (barely visible) */}
-            <motion.div
-              className="absolute inset-0 rounded-3xl border border-zinc-800 bg-zinc-900"
-              animate={{
-                x: 48,
-                scale: 0.9,
-                opacity: 0.18,
-              }}
-              transition={{
-                duration: 6,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-            />
-
-            {/* second card */}
-            <motion.div
-              className="absolute inset-0 rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
-              animate={{
-                x: 24,
-                scale: 0.95,
-                opacity: 0.4,
-              }}
-              transition={{
-                duration: 6,
-                ease: [0.22, 1, 0.36, 1],
-              }}
+            <button
+              onClick={prev}
+              className="absolute left-[-28px] top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-200 transition"
             >
-              <img
-                src={next}
-                className="w-full h-full object-cover"
-                draggable={false}
-              />
-            </motion.div>
+              &lt;
+            </button>
 
-            {/* active card */}
-            <motion.div
-              key={current}
-              className="absolute inset-0 rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
-              initial={false}
-              animate={{
-                x: 0,
-                scale: 1,
-                opacity: 1,
-              }}
-              transition={{
-                x: {
-                  duration: 5.5,
-                  ease: [0.22, 1, 0.36, 1],
-                },
-                scale: {
-                  duration: 5.5,
-                  ease: [0.22, 1, 0.36, 1],
-                },
-                opacity: {
-                  duration: 3.2,
-                  ease: "easeOut",
-                  delay: 0.6, // 💎 убирает вспышку
-                },
-              }}
+            <button
+              onClick={next}
+              className="absolute right-[-28px] top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-200 transition"
             >
-              <img
-                src={current}
-                className="w-full h-full object-cover"
-                draggable={false}
-              />
-            </motion.div>
+              &gt;
+            </button>
           </>
         )}
       </div>
@@ -121,11 +103,7 @@ function HeroLoader() {
       <motion.div
         className="h-10 w-10 rounded-full border-2 border-emerald-500/30 border-t-emerald-500"
         animate={{ rotate: 360 }}
-        transition={{
-          duration: 1.6,
-          repeat: Infinity,
-          ease: "linear",
-        }}
+        transition={{ duration: 1.6, repeat: Infinity, ease: "linear" }}
       />
     </div>
   );
