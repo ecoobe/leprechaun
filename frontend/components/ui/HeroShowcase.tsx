@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useAnimationControls } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const screens = [
@@ -10,7 +10,7 @@ const screens = [
 ];
 
 const AUTO_DELAY = 6000;
-const DURATION = 1.6;
+const BASE_DURATION = 1.8;
 
 /* ---------------- utils ---------------- */
 
@@ -26,7 +26,9 @@ function useImagesLoaded(srcs: string[]) {
       img.onload = img.onerror = () => {
         count++;
         if (count === srcs.length) {
-          requestAnimationFrame(() => setLoaded(true));
+          requestAnimationFrame(() => {
+            setLoaded(true);
+          });
         }
       };
     });
@@ -37,95 +39,135 @@ function useImagesLoaded(srcs: string[]) {
 
 /* ---------------- component ---------------- */
 
+type Phase = "idle" | "boot" | "run";
+
 export default function HeroShowcase() {
-  const ready = useImagesLoaded(screens);
-  const controls = useAnimationControls();
+  const imagesReady = useImagesLoaded(screens);
 
-  const [index, setIndex] = useState(0);
+  const [active, setActive] = useState(0);
+  const [phase, setPhase] = useState<Phase>("idle");
 
-  const prev = (index - 1 + screens.length) % screens.length;
-  const next = (index + 1) % screens.length;
-
-  // стартовое положение — БЕЗ анимации
+  // 🟢 мягкий запуск
   useEffect(() => {
-    if (!ready) return;
+    if (!imagesReady) return;
 
-    controls.set({ x: "-100%" });
+    const boot = setTimeout(() => {
+      setPhase("boot");
+      setActive((i) => (i + 1) % screens.length);
 
-    const id = setInterval(async () => {
-      await controls.start({
-        x: "-200%",
-        transition: {
-          duration: DURATION,
-          ease: [0.22, 0.61, 0.36, 1],
-        },
-      });
+      // после первого перехода — нормальный режим
+      setTimeout(() => {
+        setPhase("run");
+      }, BASE_DURATION * 1000);
+    }, 160); // 2–3 кадра тишины
 
-      // после слайда — мгновенно возвращаемся
-      controls.set({ x: "-100%" });
-      setIndex((i) => (i + 1) % screens.length);
+    return () => clearTimeout(boot);
+  }, [imagesReady]);
+
+  // 🟢 обычный автоплей
+  useEffect(() => {
+    if (phase !== "run") return;
+
+    const id = setInterval(() => {
+      setActive((i) => (i + 1) % screens.length);
     }, AUTO_DELAY);
 
     return () => clearInterval(id);
-  }, [ready]);
+  }, [phase]);
 
   return (
-    <div className="relative w-full max-w-xl mx-auto">
-      {/* glow */}
+    <motion.div
+      className="relative w-full max-w-xl mx-auto"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: imagesReady ? 1 : 0 }}
+      transition={{ duration: 1, ease: "easeOut" }}
+    >
       <div className="absolute inset-0 rounded-3xl bg-emerald-500/10 blur-3xl pointer-events-none" />
 
-      {/* viewport */}
-      <div className="relative h-[420px] overflow-hidden rounded-3xl">
-        {/* track */}
-        <motion.div
-          className="flex h-full"
-          animate={controls}
-          style={{ width: "300%" }}
-        >
-          <Card src={screens[prev]} />
-          <Card src={screens[index]} active />
-          <Card src={screens[next]} />
-        </motion.div>
+      <div className="relative h-[420px] flex items-center justify-center">
+        {screens.map((src, i) => {
+          const offset = (i - active + screens.length) % screens.length;
+          const position =
+            offset === 0 ? 0 : offset === 1 ? 1 : -1;
 
-        {/* gradient masks */}
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-zinc-950 to-transparent" />
-          <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-zinc-950 to-transparent" />
-        </div>
+          return (
+            <Slide
+              key={src}
+              src={src}
+              position={position}
+              phase={phase}
+            />
+          );
+        })}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
-/* ---------------- card ---------------- */
+/* ---------------- slide ---------------- */
 
-function Card({ src, active = false }: { src: string; active?: boolean }) {
+function Slide({
+  src,
+  position,
+  phase,
+}: {
+  src: string;
+  position: -1 | 0 | 1;
+  phase: "idle" | "boot" | "run";
+}) {
+  const isCenter = position === 0;
+
+  const duration =
+    phase === "boot"
+      ? BASE_DURATION * 2.2 // 🔥 супер-мягкий старт
+      : BASE_DURATION;
+
   return (
-    <div className="flex w-full items-center justify-center">
-      <motion.div
-        className="
-          w-[90%] h-full
-          rounded-3xl
-          border border-zinc-800
-          bg-zinc-900
-          overflow-hidden
-        "
-        animate={{
-          scale: active ? 1 : 0.94,
-          opacity: active ? 1 : 0.6,
-        }}
+    <motion.div
+      className="absolute w-[90%] h-full rounded-3xl border border-zinc-800 bg-zinc-900 overflow-hidden"
+      initial={false}
+      animate={{
+        x: isCenter ? "0%" : position === -1 ? "-7%" : "7%",
+        scale: isCenter ? 1 : 0.96,
+        rotateY: isCenter ? 0 : position === -1 ? 2 : -2,
+        opacity: isCenter ? 1 : 0.55,
+        zIndex: isCenter ? 5 : 1,
+      }}
+      transition={{
+        x: {
+          duration,
+          ease: [0.16, 0.84, 0.44, 1], // 🧈 buttery
+        },
+        scale: {
+          duration: duration + 0.2,
+          ease: "easeOut",
+        },
+        rotateY: {
+          duration: duration + 0.3,
+          ease: "easeOut",
+        },
+        opacity: {
+          duration: duration + 0.6,
+          ease: "easeOut",
+        },
+      }}
+      style={{
+        transformStyle: "preserve-3d",
+        willChange: "transform",
+      }}
+    >
+      <motion.img
+        src={src}
+        alt=""
+        draggable={false}
+        className="w-full h-full object-cover select-none"
+        initial={false}
+        animate={{ scale: isCenter ? 1.015 : 1 }}
         transition={{
-          duration: DURATION,
+          duration: duration + 0.4,
           ease: "easeOut",
         }}
-      >
-        <img
-          src={src}
-          alt=""
-          draggable={false}
-          className="w-full h-full object-cover select-none"
-        />
-      </motion.div>
-    </div>
+      />
+    </motion.div>
   );
 }
