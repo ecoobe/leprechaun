@@ -9,19 +9,19 @@ export function Header() {
         <div className="mx-auto max-w-6xl h-20 flex items-center justify-between">
           
           {/* Logo */}
-          <span className="font-bold text-2xl sm:text-3xl text-emerald-400">
+          <span className="font-semibold text-2xl sm:text-3xl text-emerald-400">
             Leprechaun
           </span>
 
           {/* Navigation */}
-          <nav className="hidden md:flex items-center gap-8 text-base sm:text-lg text-zinc-400">
-            <Link href="#how" className="hover:text-zinc-100 transition">
+          <nav className="hidden md:flex items-center gap-8 text-base sm:text-lg font-medium text-zinc-400">
+            <Link href="#how" className="hover:text-zinc-100 transition font-medium">
               Как работает
             </Link>
-            <Link href="#reviews" className="hover:text-zinc-100 transition">
+            <Link href="#reviews" className="hover:text-zinc-100 transition font-medium">
               Отзывы
             </Link>
-            <Link href="#faq" className="hover:text-zinc-100 transition">
+            <Link href="#faq" className="hover:text-zinc-100 transition font-medium">
               FAQ
             </Link>
           </nav>

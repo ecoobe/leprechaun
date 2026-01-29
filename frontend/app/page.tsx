@@ -18,7 +18,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between px-8 py-6 text-left"
       >
-        <span className="text-lg sm:text-xl font-semibold tracking-tight">
+        <span className="text-lg sm:text-xl font-medium tracking-tight">
           {question}
         </span>
         <span className="text-zinc-500 text-lg">{open ? "−" : "+"}</span>
@@ -91,9 +91,17 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <h1 className="text-5xl sm:text-7xl font-bold tracking-tight leading-tight">
+              <h1 className="text-5xl sm:text-7xl font-semibold tracking-tight leading-tight">
                 Лепрекон
-                <span className="block text-2xl sm:text-3xl font-semibold tracking-tight leading-snug text-emerald-400 mt-3">
+                <span className="
+                  block
+                  text-2xl sm:text-3xl
+                  font-medium
+                  tracking-tight
+                  leading-snug
+                  text-emerald-400
+                  mt-3
+                ">.
                   Спокойствие в финансах
                 </span>
               </h1>
