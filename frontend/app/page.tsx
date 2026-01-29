@@ -132,6 +132,9 @@ export default function HomePage() {
 
         {/* Value Proposition */}
         <section className="relative z-10 mx-auto max-w-6xl px-6 py-32">
+          <h2 className="mb-12 text-4xl sm:text-5xl font-bold tracking-tight text-left">
+            Как это работает
+          </h2>
           <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
             <div className="rounded-3xl border border-zinc-800 bg-zinc-900/60 p-8 backdrop-blur">
               <div className="text-emerald-400 text-xl sm:text-2xl font-semibold mb-3">
@@ -162,7 +165,12 @@ export default function HomePage() {
         </section>
 
         {/* Testimonials Section */}
-        <Testimonials />
+        <section className="relative z-10 mx-auto max-w-6xl px-6 py-32">
+          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-left mb-12">
+            Отзывы
+          </h2>
+          <Testimonials />
+        </section>
 
         {/* FAQ Section */}
         <section id="faq" className="relative z-10 mx-auto max-w-4xl px-6 py-32">
