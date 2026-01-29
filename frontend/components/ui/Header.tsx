@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export function Header() {
   return (
@@ -27,13 +28,14 @@ export function Header() {
           </nav>
 
           {/* CTA */}
-          <Link
-            href="https://t.me/your_channel"
-            target="_blank"
-            className="rounded-xl bg-emerald-500 px-5 py-3 text-base sm:text-lg font-medium text-zinc-950 hover:bg-emerald-400 transition"
+          <Button
+            asChild
+            className="bg-emerald-500 text-zinc-950 hover:bg-emerald-400"
           >
-            Войти
-          </Link>
+            <Link href="https://t.me/your_channel" target="_blank">
+              Войти
+            </Link>
+          </Button>
 
         </div>
       </div>
