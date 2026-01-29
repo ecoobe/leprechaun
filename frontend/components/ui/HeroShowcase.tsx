@@ -6,10 +6,10 @@ import { motion, useScroll, useTransform } from "framer-motion";
 export function HeroShowcase() {
   const { scrollY } = useScroll();
 
-  // Рука уезжает влево при скролле
+  // Анимация смещения руки
   const handX = useTransform(scrollY, [0, 300], [0, -60]);
 
-  // Шляпа наклоняется при скролле
+  // Поворот шляпы
   const hatRotate = useTransform(scrollY, [0, 300], [0, -12]);
 
   return (
@@ -18,7 +18,7 @@ export function HeroShowcase() {
 
         {/* HAND — рука под шляпой */}
         <motion.div
-          style={{ x: handX, scale: 1.5 }} // Масштабируем прямо motion.div
+          style={{ x: handX }}
           className="
             absolute
             bottom-[-10px]     
@@ -30,22 +30,22 @@ export function HeroShowcase() {
           <Image
             src="/hand.png"
             alt="Leprechaun hand"
-            width={220}
-            height={140}
+            width={330}   // увеличили, чтобы соответствовало scale-150
+            height={210}  // пропорционально
             priority
           />
         </motion.div>
 
         {/* HAT — шляпа сверху */}
         <motion.div
-          style={{ rotate: hatRotate, scale: 1.5 }} // Масштаб шляпы на том же уровне
+          style={{ rotate: hatRotate }}
           className="relative z-10 origin-bottom-left"
         >
           <Image
             src="/hat.png"
             alt="Leprechaun hat"
-            width={320}
-            height={220}
+            width={480}   // увеличили, чтобы соответствовало scale-150
+            height={330}  // пропорционально
             priority
           />
         </motion.div>
