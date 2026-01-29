@@ -6,20 +6,21 @@ import { motion, useScroll, useTransform } from "framer-motion";
 export function HeroShowcase() {
   const { scrollY } = useScroll();
 
+  // Рука уезжает влево при скролле
   const handX = useTransform(scrollY, [0, 300], [0, -60]);
+
+  // Шляпа наклоняется при скролле
   const hatRotate = useTransform(scrollY, [0, 300], [0, -12]);
 
-  // Единый scale для обоих объектов
-  const scale = 1.5;
-
   return (
-    <section className="relative w-full flex items-center justify-center overflow-hidden">
-      <div className="relative">
+    <section className="relative w-full flex items-center justify-center">
+      {/* SCALE CONTAINER — увеличивает объекты как в статике */}
+      <div className="relative scale-150">
 
-        {/* HAND */}
+        {/* HAND — под шляпой */}
         <motion.div
-          style={{ x: handX, scale }}
-          className="absolute bottom-[-10px] left-[69%] -translate-x-1/2 z-0 origin-bottom-left"
+          style={{ x: handX }} // только параллакс по X
+          className="absolute bottom-[-10px] left-[69%] -translate-x-1/2 z-0"
         >
           <Image
             src="/hand.png"
@@ -30,9 +31,9 @@ export function HeroShowcase() {
           />
         </motion.div>
 
-        {/* HAT */}
+        {/* HAT — сверху */}
         <motion.div
-          style={{ rotate: hatRotate, scale }}
+          style={{ rotate: hatRotate }} // только поворот при скролле
           className="relative z-10 origin-bottom-left"
         >
           <Image
