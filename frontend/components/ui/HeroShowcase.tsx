@@ -12,17 +12,16 @@ export function HeroShowcase() {
   const hatRotate = useTransform(scrollY, [0, 300], [0, 12]);
 
   return (
-    <section className="relative w-full flex items-center justify-center overflow-hidden">
-      {/* SCALE CONTAINER с паддингом снизу для видимости руки */}
-      <div className="relative scale-150 pb-10">
-
+    <section className="relative w-full flex items-center justify-center overflow-visible">
+      {/* SCALE CONTAINER */}
+      <div className="relative scale-150" style={{ paddingBottom: '60px' }}>
         {/* HAND — под шляпой */}
         <motion.img
           src="/hand.png"
           alt="Leprechaun hand"
           width={220}
           height={140}
-          className="absolute bottom-0 left-[69%] -translate-x-1/2 z-0"
+          className="absolute bottom-[-20px] left-[69%] -translate-x-1/2 z-0"
           style={{
             x: handX,
             originX: 0.5,
@@ -30,7 +29,7 @@ export function HeroShowcase() {
           }}
         />
 
-        {/* HAT — сверху */}
+        {/* HAT — сверху, опускаем вниз */}
         <motion.img
           src="/hat.png"
           alt="Leprechaun hat"
@@ -40,10 +39,10 @@ export function HeroShowcase() {
           style={{
             rotate: hatRotate,
             originX: 0,
-            originY: 1
+            originY: 1,
+            marginBottom: '-20px' // смещаем вниз, чтобы опустить шляпу
           }}
         />
-
       </div>
     </section>
   );
