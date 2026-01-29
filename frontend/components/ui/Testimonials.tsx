@@ -14,13 +14,13 @@ function Row({ reverse = false }: { reverse?: boolean }) {
   return (
     <div className="relative overflow-hidden">
       <motion.div
-        className="flex gap-6 w-max"
+        className="flex gap-8 w-max"
         animate={{
-          x: reverse ? [0, -1200] : [-1200, 0],
+          x: reverse ? [0, -1400] : [-1400, 0],
         }}
         transition={{
           repeat: Infinity,
-          duration: 45,
+          duration: 50,
           ease: "linear",
         }}
       >
@@ -28,19 +28,19 @@ function Row({ reverse = false }: { reverse?: boolean }) {
           <div
             key={i}
             className="
-              min-w-[300px]
-              rounded-2xl
+              min-w-[350px] sm:min-w-[400px]
+              rounded-3xl
               border border-zinc-800
               bg-zinc-900/70
-              p-5
+              p-8 sm:p-10
               backdrop-blur
-              shadow-lg
+              shadow-xl
             "
           >
-            <p className="text-sm text-zinc-300 leading-relaxed">
+            <p className="text-base sm:text-lg leading-relaxed text-zinc-300 font-sans">
               “{r.text}”
             </p>
-            <div className="mt-4 text-xs text-zinc-500">
+            <div className="mt-6 text-sm sm:text-base text-zinc-400 font-semibold">
               {r.name}
             </div>
           </div>
@@ -49,8 +49,8 @@ function Row({ reverse = false }: { reverse?: boolean }) {
 
       {/* Градиентная маска по краям */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-zinc-950 to-transparent" />
-        <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-zinc-950 to-transparent" />
+        <div className="absolute left-0 top-0 h-full w-32 sm:w-48 bg-gradient-to-r from-zinc-950 to-transparent" />
+        <div className="absolute right-0 top-0 h-full w-32 sm:w-48 bg-gradient-to-l from-zinc-950 to-transparent" />
       </div>
     </div>
   );
@@ -60,17 +60,17 @@ export function Testimonials() {
   return (
     <section
       id="reviews"
-      className="relative z-10 w-full py-28"
+      className="relative z-10 w-full py-36 sm:py-44"
     >
       {/* Внутренний контейнер только для заголовка */}
       <div className="mx-auto max-w-6xl px-6">
-        <h2 className="mb-10 text-2xl font-semibold">
+        <h2 className="mb-12 text-3xl sm:text-4xl font-bold font-sans tracking-tight">
           Отзывы
         </h2>
       </div>
 
       {/* Ряды на всю ширину */}
-      <div className="space-y-8">
+      <div className="space-y-12 sm:space-y-16">
         <Row />
         <Row reverse />
       </div>
