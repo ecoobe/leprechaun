@@ -8,13 +8,13 @@ export function HeroShowcase() {
   // Параллакс: рука уезжает влево
   const handX = useTransform(scrollY, [0, 300], [0, -60]);
 
-  // Параллакс: шляпа наклоняется
-  const hatRotate = useTransform(scrollY, [0, 300], [0, -12]);
+  // Параллакс: шляпа наклоняется по часовой стрелке
+  const hatRotate = useTransform(scrollY, [0, 300], [0, 12]);
 
   return (
     <section className="relative w-full flex items-center justify-center overflow-hidden">
-      {/* Контейнер с scale-150 — увеличивает объекты пропорционально */}
-      <div className="relative scale-150">
+      {/* SCALE CONTAINER с паддингом снизу для видимости руки */}
+      <div className="relative scale-150 pb-10">
 
         {/* HAND — под шляпой */}
         <motion.img
@@ -22,11 +22,11 @@ export function HeroShowcase() {
           alt="Leprechaun hand"
           width={220}
           height={140}
-          className="absolute bottom-[-10px] left-[69%] -translate-x-1/2 z-0"
+          className="absolute bottom-0 left-[69%] -translate-x-1/2 z-0"
           style={{
-            x: handX,            // параллакс по X
-            originX: 0.5,        // transform-origin по центру X
-            originY: 1           // transform-origin снизу
+            x: handX,
+            originX: 0.5,
+            originY: 1
           }}
         />
 
@@ -38,7 +38,7 @@ export function HeroShowcase() {
           height={220}
           className="relative z-10 origin-bottom-left"
           style={{
-            rotate: hatRotate,   // наклон при скролле
+            rotate: hatRotate,
             originX: 0,
             originY: 1
           }}
