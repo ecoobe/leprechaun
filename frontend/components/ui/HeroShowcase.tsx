@@ -13,8 +13,15 @@ export function HeroShowcase() {
 
   return (
     <section className="relative w-full flex items-center justify-center overflow-visible">
-      {/* SCALE CONTAINER */}
-      <div className="relative scale-150" style={{ paddingBottom: '60px' }}>
+      {/* SCALE CONTAINER — сохраняем scale-150 для правильного размера руки */}
+      <div
+        className="relative scale-150"
+        style={{
+          paddingBottom: '60px',
+          transformStyle: 'preserve-3d', // hint для GPU
+          backfaceVisibility: 'hidden', // hint для GPU на iOS
+        }}
+      >
         {/* HAND — под шляпой */}
         <motion.img
           src="/hand.png"
@@ -26,11 +33,12 @@ export function HeroShowcase() {
             x: handX,
             originX: 0.5,
             originY: 1,
-            willChange: 'transform' // добавляем для GPU ускорения на мобильных
+            willChange: 'transform',
+            transform: 'translate3d(0,0,0)', // принудительное включение GPU
           }}
         />
 
-        {/* HAT — сверху, опускаем вниз */}
+        {/* HAT — сверху, опущена */}
         <motion.img
           src="/hat.png"
           alt="Leprechaun hat"
@@ -41,8 +49,9 @@ export function HeroShowcase() {
             rotate: hatRotate,
             originX: 0,
             originY: 1,
-            marginBottom: '-45px', // смещаем вниз, чтобы опустить шляпу
-            willChange: 'transform' // добавляем для GPU ускорения
+            marginBottom: '-45px',
+            willChange: 'transform',
+            transform: 'translate3d(0,0,0)', // принудительное включение GPU
           }}
         />
       </div>
