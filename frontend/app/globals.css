@@ -76,6 +76,11 @@
 
 @layer base {
   html {
-    font-family: var(--font-sans), system-ui, sans-serif;
+    font-family:
+      var(--font-sans),
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
   }
 }
