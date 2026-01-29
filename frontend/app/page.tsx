@@ -101,8 +101,7 @@ export default function HomePage() {
                   leading-snug
                   text-emerald-400
                   mt-3
-                ">.
-                  Спокойствие в финансах
+                ">Спокойствие в финансах
                 </span>
               </h1>
 
