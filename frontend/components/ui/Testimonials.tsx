@@ -25,8 +25,9 @@ function Row({ reverse = false }: { reverse?: boolean }) {
         }}
       >
         {[...reviews, ...reviews].map((r, i) => (
-          <div
+          <motion.div
             key={i}
+            whileHover={{ scale: 1.05 }}
             className="
               min-w-[350px] sm:min-w-[400px]
               rounded-3xl
@@ -35,6 +36,7 @@ function Row({ reverse = false }: { reverse?: boolean }) {
               p-8 sm:p-10
               backdrop-blur
               shadow-xl
+              transition-transform duration-300
             "
           >
             <p className="text-base sm:text-lg leading-relaxed text-zinc-300 font-sans">
@@ -43,7 +45,7 @@ function Row({ reverse = false }: { reverse?: boolean }) {
             <div className="mt-6 text-sm sm:text-base text-zinc-400 font-semibold">
               {r.name}
             </div>
-          </div>
+          </motion.div>
         ))}
       </motion.div>
 

@@ -5,18 +5,16 @@ import Link from "next/link";
 export function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur border-b border-zinc-800 bg-zinc-950/70">
-      
-      {/* Внутренний контейнер */}
       <div className="w-full px-6">
-        <div className="mx-auto max-w-6xl h-16 flex items-center justify-between">
+        <div className="mx-auto max-w-6xl h-20 flex items-center justify-between">
           
           {/* Logo */}
-          <span className="font-bold text-xl text-emerald-400">
+          <span className="font-bold text-2xl sm:text-3xl text-emerald-400">
             Leprechaun
           </span>
 
           {/* Navigation */}
-          <nav className="hidden md:flex items-center gap-6 text-sm text-zinc-400">
+          <nav className="hidden md:flex items-center gap-8 text-base sm:text-lg text-zinc-400">
             <Link href="#how" className="hover:text-zinc-100 transition">
               Как работает
             </Link>
@@ -32,7 +30,7 @@ export function Header() {
           <Link
             href="https://t.me/your_channel"
             target="_blank"
-            className="rounded-xl bg-emerald-500 px-4 py-2 text-sm font-medium text-zinc-950 hover:bg-emerald-400 transition"
+            className="rounded-xl bg-emerald-500 px-5 py-3 text-base sm:text-lg font-medium text-zinc-950 hover:bg-emerald-400 transition"
           >
             Войти
           </Link>
