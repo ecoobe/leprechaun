@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
-const plusJakarta = Plus_Jakarta_Sans({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-sans",
@@ -21,8 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ru" className={`${plusJakarta.variable} scroll-smooth`}>
-      <body className="min-h-screen bg-zinc-950 text-zinc-100 font-sans antialiased">
+    <html lang="ru" className={`${spaceGrotesk.variable} scroll-smooth`}>
+      <body className="min-h-screen bg-zinc-950 text-zinc-100 antialiased">
         {children}
       </body>
     </html>
