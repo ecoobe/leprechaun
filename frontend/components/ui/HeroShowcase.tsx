@@ -21,7 +21,7 @@ export function HeroShowcase() {
           alt="Leprechaun hand"
           width={220}
           height={140}
-          className="absolute bottom-[10px] left-[69%] -translate-x-1/2 z-0"
+          className="absolute bottom-[10px] left-[65%] -translate-x-1/2 z-0"
           style={{
             x: handX,
             originX: 0.5,
