@@ -13,28 +13,45 @@ export function HeroShowcase() {
 
   return (
     <section className="relative w-full flex items-center justify-center overflow-visible">
-      {/* SCALE CONTAINER — сохраняем scale-150 для правильного размера руки */}
-      <div
-        className="relative scale-150"
-        style={{
-          paddingBottom: '60px',
-          transformStyle: 'preserve-3d', // hint для GPU
-          backfaceVisibility: 'hidden', // hint для GPU на iOS
-        }}
-      >
+      {/* SCALE CONTAINER */}
+      <div className="relative scale-150" style={{ paddingBottom: '60px' }}>
+        
+        {/* Тень под рукой */}
+        <div
+          className="absolute bottom-[0px] left-[69%] -translate-x-1/2 z-[-1] rounded-full"
+          style={{
+            width: '150px',
+            height: '30px',
+            background: 'rgba(0,0,0,0.25)',
+            filter: 'blur(12px)',
+            transform: 'scaleX(1.2)',
+          }}
+        />
+
+        {/* Glow позади шляпы */}
+        <div
+          className="absolute inset-0 z-[-2] rounded-full"
+          style={{
+            width: '400px',
+            height: '400px',
+            background: 'radial-gradient(circle, rgba(0,188,124,0.3) 0%, rgba(0,0,0,0) 70%)',
+            filter: 'blur(80px)',
+            bottom: '50px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+          }}
+        />
+
         {/* HAND — под шляпой */}
         <motion.img
           src="/hand.png"
           alt="Leprechaun hand"
           width={220}
           height={140}
-          className="absolute bottom-[10px] left-[69%] -translate-x-1/2 z-0"
+          className="absolute bottom-[10px] left-[69%] -translate-x-1/2 z-0 origin-bottom"
           style={{
             x: handX,
-            originX: 0.5,
-            originY: 1,
-            willChange: 'transform',
-            transform: 'translate3d(0,0,0)', // принудительное включение GPU
+            willChange: 'transform', // GPU hint
           }}
         />
 
@@ -47,13 +64,11 @@ export function HeroShowcase() {
           className="relative z-10 origin-bottom-left"
           style={{
             rotate: hatRotate,
-            originX: 0,
-            originY: 1,
             marginBottom: '-45px',
-            willChange: 'transform',
-            transform: 'translate3d(0,0,0)', // принудительное включение GPU
+            willChange: 'transform', // GPU hint
           }}
         />
+
       </div>
     </section>
   );
