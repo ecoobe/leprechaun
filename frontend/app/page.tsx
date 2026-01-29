@@ -162,12 +162,7 @@ export default function HomePage() {
         </section>
 
         {/* Testimonials Section */}
-        <section className="relative z-10 mx-auto max-w-6xl px-6 py-32">
-          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-left mb-12">
-            Отзывы
-          </h2>
-          <Testimonials />
-        </section>
+        <Testimonials />
 
         {/* FAQ Section */}
         <section id="faq" className="relative z-10 mx-auto max-w-4xl px-6 py-32">
@@ -178,7 +173,9 @@ export default function HomePage() {
             viewport={{ once: true, amount: 0.3 }}
             className="text-left"
           >
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">FAQs</h2>
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
+              FAQs
+            </h2>
             <p className="mt-3 text-lg sm:text-xl text-zinc-400 leading-relaxed">
               Частые вопросы
             </p>

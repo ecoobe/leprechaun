@@ -12,7 +12,7 @@ const reviews = [
 
 function Row({ reverse = false }: { reverse?: boolean }) {
   return (
-    <div className="relative overflow-visible py-4"> {/* overflow-visible и padding сверху/снизу */}
+    <div className="relative overflow-visible py-4">
       <motion.div
         className="flex gap-8 w-max"
         animate={{
@@ -48,12 +48,6 @@ function Row({ reverse = false }: { reverse?: boolean }) {
           </motion.div>
         ))}
       </motion.div>
-
-      {/* Градиентная маска по краям */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-0 top-0 h-full w-32 sm:w-48 bg-gradient-to-r from-zinc-950 to-transparent" />
-        <div className="absolute right-0 top-0 h-full w-32 sm:w-48 bg-gradient-to-l from-zinc-950 to-transparent" />
-      </div>
     </div>
   );
 }
@@ -61,12 +55,6 @@ function Row({ reverse = false }: { reverse?: boolean }) {
 export function Testimonials() {
   return (
     <section id="reviews" className="relative z-10 w-full py-36 sm:py-44">
-      <div className="mx-auto max-w-6xl px-6">
-        <h2 className="mb-12 text-3xl sm:text-4xl font-bold tracking-tight font-sans">
-          Отзывы
-        </h2>
-      </div>
-
       <div className="space-y-12 sm:space-y-16">
         <Row />
         <Row reverse />
