@@ -20,11 +20,11 @@ export function HeroShowcase() {
         <div
           className="absolute z-[-1] rounded-full"
           style={{
-            width: '150px',
-            height: '30px',
+            width: '220px',
+            height: '50px',
             background: 'rgba(0,0,0,0.25)',
             filter: 'blur(12px)',
-            transform: 'translate(-40px, -40px) scaleX(1.2)', // сдвиг выше и левее
+            transform: 'translate(-100px, -40px) scaleX(1.2)', // сдвиг выше и левее
             bottom: '0px',
             left: '69%',
           }}
