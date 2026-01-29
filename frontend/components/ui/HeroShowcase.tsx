@@ -24,7 +24,7 @@ export function HeroShowcase() {
             height: '50px',
             background: 'rgba(0,0,0,0.25)',
             filter: 'blur(12px)',
-            transform: 'translate(-100px, -40px) scaleX(1.2)', // сдвиг выше и левее
+            transform: 'translate(-200px, -40px) scaleX(1.2)', // сдвиг выше и левее
             bottom: '0px',
             left: '69%',
           }}
