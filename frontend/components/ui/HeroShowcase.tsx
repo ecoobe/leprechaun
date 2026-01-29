@@ -13,49 +13,38 @@ export function HeroShowcase() {
 
   return (
     <section className="relative w-full flex items-center justify-center overflow-visible">
-      {/* SCALE CONTAINER — масштабирует всю композицию, рука и шляпа будут правильного размера */}
-      <div
-        className="relative scale-150"
-        style={{ paddingBottom: '60px' }}
-      >
-
+      {/* SCALE CONTAINER */}
+      <div className="relative scale-150" style={{ paddingBottom: '60px' }}>
         {/* HAND — под шляпой */}
-        <motion.div
+        <motion.img
+          src="/hand.png"
+          alt="Leprechaun hand"
+          width={220}
+          height={140}
+          className="absolute bottom-[10px] left-[69%] -translate-x-1/2 z-0"
           style={{
             x: handX,
             originX: 0.5,
             originY: 1,
-            willChange: 'transform' // ускорение на GPU
+            willChange: 'transform' // добавляем для GPU ускорения на мобильных
           }}
-          className="absolute bottom-[10px] left-[69%] -translate-x-1/2 z-0"
-        >
-          <img
-            src="/hand.png"
-            alt="Leprechaun hand"
-            width={220}
-            height={140}
-          />
-        </motion.div>
+        />
 
-        {/* HAT — сверху, опущена */}
-        <motion.div
+        {/* HAT — сверху, опускаем вниз */}
+        <motion.img
+          src="/hat.png"
+          alt="Leprechaun hat"
+          width={320}
+          height={220}
+          className="relative z-10 origin-bottom-left"
           style={{
             rotate: hatRotate,
             originX: 0,
             originY: 1,
-            marginBottom: '-45px',
-            willChange: 'transform' // ускорение на GPU
+            marginBottom: '-45px', // смещаем вниз, чтобы опустить шляпу
+            willChange: 'transform' // добавляем для GPU ускорения
           }}
-          className="relative z-10"
-        >
-          <img
-            src="/hat.png"
-            alt="Leprechaun hat"
-            width={320}
-            height={220}
-          />
-        </motion.div>
-
+        />
       </div>
     </section>
   );
