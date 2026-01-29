@@ -13,10 +13,10 @@ export function HeroShowcase() {
 
   return (
     <section className="relative w-full flex items-center justify-center overflow-visible">
-      {/* SCALE CONTAINER с горизонтальным отражением */}
+      {/* Контейнер с масштабом 1.5 и горизонтальным отражением */}
       <div
-        className="relative scale-150 scale-x-[-1]"
-        style={{ paddingBottom: '60px' }}
+        className="relative"
+        style={{ transform: 'scaleX(-1) scale(1.5)', paddingBottom: '60px' }}
       >
 
         {/* HAND — под шляпой */}
