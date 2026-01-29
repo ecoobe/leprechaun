@@ -18,7 +18,7 @@ export function HeroShowcase() {
           className="
             absolute
             bottom-[-10px]
-            left-[68%]
+            left-[69%]
             -translate-x-1/2
             z-0
           "
