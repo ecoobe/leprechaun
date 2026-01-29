@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin", "cyrillic"],
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -22,7 +23,7 @@ export default function RootLayout({
   return (
     <html
       lang="ru"
-      className={`${inter.variable} scroll-smooth`}
+      className={`${jakarta.variable} scroll-smooth`}
     >
       <body
         className="
