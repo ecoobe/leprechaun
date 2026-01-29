@@ -13,12 +13,8 @@ export function HeroShowcase() {
 
   return (
     <section className="relative w-full flex items-center justify-center overflow-visible">
-      {/* SCALE CONTAINER с отражением по вертикали (сверху вниз) */}
-      <div
-  className="relative scale-150"
-  style={{ paddingBottom: '60px', transform: 'scaleY(-1)' }} // теперь корректно
->
-
+      {/* SCALE CONTAINER */}
+      <div className="relative scale-150" style={{ paddingBottom: '60px' }}>
         {/* HAND — под шляпой */}
         <motion.img
           src="/hand.png"
@@ -33,7 +29,7 @@ export function HeroShowcase() {
           }}
         />
 
-        {/* HAT — сверху, опущена */}
+        {/* HAT — сверху, опускаем вниз */}
         <motion.img
           src="/hat.png"
           alt="Leprechaun hat"
@@ -44,10 +40,9 @@ export function HeroShowcase() {
             rotate: hatRotate,
             originX: 0,
             originY: 1,
-            marginBottom: '-45px'
+            marginBottom: '-45px' // смещаем вниз, чтобы опустить шляпу
           }}
         />
-
       </div>
     </section>
   );
