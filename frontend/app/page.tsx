@@ -82,7 +82,7 @@ export default function HomePage() {
       <main className="relative min-h-screen overflow-x-hidden text-zinc-100">
         {/* Hero Section */}
         <section className="relative w-full py-32">
-  <div className="mx-auto max-w-7xl px-6 grid gap-16 lg:grid-cols-2 items-center">
+  <div className="mx-auto w-full px-12 grid gap-20 lg:grid-cols-2 items-center"> // тут поменял
     
     {/* LEFT */}
     <motion.div
@@ -124,7 +124,7 @@ export default function HomePage() {
 </section>
 
         {/* Value Proposition */}
-        <section className="relative z-10 mx-auto max-w-6xl px-6 py-24">
+        <section className="relative z-10 w-full px-0 py-32"> // тут тоже поменял
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 backdrop-blur">
               <div className="text-emerald-400 text-lg font-semibold mb-2">📅 Умные напоминания</div>

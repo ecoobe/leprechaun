@@ -30,7 +30,7 @@ export function Header() {
           target="_blank"
           className="rounded-xl bg-emerald-500 px-4 py-2 text-sm font-medium text-zinc-950 hover:bg-emerald-400 transition"
         >
-          Присоединиться
+          Войти
         </Link>
       </div>
     </header>
