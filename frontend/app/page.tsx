@@ -8,7 +8,7 @@ import { Header } from "@/components/ui/Header";
 import { SupportButton } from "@/components/ui/SupportButton";
 import { Testimonials } from "@/components/ui/Testimonials";
 import { HeroShowcase } from "@/components/ui/HeroShowcase";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 
 // FAQ Item
 function FAQItem({
