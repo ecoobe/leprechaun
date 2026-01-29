@@ -63,7 +63,7 @@ export function Testimonials() {
       className="relative z-10 mx-auto max-w-6xl px-6 py-28"
     >
       <h2 className="mb-10 text-2xl font-semibold">
-        Пользователи о Leprechaun
+        Отзывы
       </h2>
 
       <div className="space-y-8">

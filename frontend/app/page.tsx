@@ -93,13 +93,13 @@ export default function HomePage() {
       <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
         Лепрекон
         <span className="block text-lg font-normal text-emerald-400 mt-2">
-          Напомнит, даже если ты забудешь
+          Спокойствие в финансах
         </span>
       </h1>
 
       <p className="mt-6 max-w-xl text-lg text-zinc-300">
-        Спокойствие в финансах. Лепрекон следит за твоей кармой в банках, напоминая вовремя
-        о платежах и помогая держать всё под контролем.
+        Лепрекон следит за твоей кармой в банках, напоминая вовремя
+        о платежах и помогая держать всё под контролем
       </p>
 
       <div className="mt-10 flex gap-4">
