@@ -1,57 +1,67 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
-const HAT_SRC = "/hat.png";
+export default function HeroHatParallax() {
+  const ref = useRef<HTMLDivElement>(null);
 
-/* preload */
-function useImageReady(src: string) {
-  const [ready, setReady] = useState(false);
+  // 📜 прогресс скролла секции
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
 
-  useEffect(() => {
-    const img = new Image();
-    img.src = src;
-    img.onload = img.onerror = () => {
-      requestAnimationFrame(() => setReady(true));
-    };
-  }, [src]);
+  /* ---------------- hand ---------------- */
 
-  return ready;
-}
+  const handY = useTransform(scrollYProgress, [0, 0.6], [0, 140]);
+  const handScale = useTransform(scrollYProgress, [0, 0.6], [1, 0.85]);
+  const handOpacity = useTransform(scrollYProgress, [0.5, 0.75], [1, 0]);
 
-export default function HeroHat() {
-  const ready = useImageReady(HAT_SRC);
+  /* ---------------- hat ---------------- */
 
-  if (!ready) return null; // вообще ничего не рендерим до загрузки
+  const hatY = useTransform(scrollYProgress, [0, 0.6], [0, 40]);
+  const hatRotate = useTransform(scrollYProgress, [0, 0.6], [-6, -14]);
+  const hatScale = useTransform(scrollYProgress, [0, 0.6], [1, 1.05]);
 
   return (
-    <div className="relative w-full max-w-xl mx-auto h-[420px] flex items-center justify-center">
-      {/* glow */}
-      <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-3xl pointer-events-none" />
+    <section
+      ref={ref}
+      className="relative h-[140vh] bg-gradient-to-b from-zinc-950 to-zinc-900 overflow-hidden"
+    >
+      {/* сцена */}
+      <div className="sticky top-[20vh] h-[420px] flex items-center justify-center">
+        <div className="relative w-[420px] h-[420px]">
 
-      <motion.img
-        src={HAT_SRC}
-        alt="Leprechaun hat"
-        draggable={false}
-        initial={false}
-        animate={{
-          y: [0, -10, 0],
-          rotateZ: [0, 1.2, 0],
-          scale: [1, 1.015, 1],
-        }}
-        transition={{
-          duration: 8,
-          ease: "easeInOut",
-          repeat: Infinity,
-        }}
-        className="
-          relative
-          w-[320px]
-          select-none
-          will-change-transform
-        "
-      />
-    </div>
+          {/* 🖐 РУКА */}
+          <motion.img
+            src="/hand.png"
+            alt=""
+            draggable={false}
+            className="absolute bottom-0 left-1/2 w-[340px] -translate-x-1/2 select-none"
+            style={{
+              y: handY,
+              scale: handScale,
+              opacity: handOpacity,
+              zIndex: 10,
+            }}
+          />
+
+          {/* 🎩 ШЛЯПА */}
+          <motion.img
+            src="/hat.png"
+            alt=""
+            draggable={false}
+            className="absolute top-0 left-1/2 w-[380px] -translate-x-1/2 select-none"
+            style={{
+              y: hatY,
+              rotateZ: hatRotate,
+              scale: hatScale,
+              zIndex: 20,
+            }}
+          />
+        </div>
+      </div>
+    </section>
   );
 }
