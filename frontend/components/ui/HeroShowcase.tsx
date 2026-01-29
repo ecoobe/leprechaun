@@ -4,21 +4,21 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 export function HeroShowcase() {
-  const { scrollYProgress } = useScroll();
+  const { scrollY } = useScroll();
 
-  // Рука: уходит ВЛЕВО под шляпу
-  const handX = useTransform(scrollYProgress, [0, 0.4], ["-50%", "-75%"]);
+  // HAND — уходит влево при скролле
+  const handX = useTransform(scrollY, [0, 300], [0, -60]);
 
-  // Шляпа: накрывает руку
-  const hatRotate = useTransform(scrollYProgress, [0, 0.4], ["0deg", "-12deg"]);
+  // HAT — поворот "накрывающий"
+  const hatRotate = useTransform(scrollY, [0, 300], [0, -12]);
 
   return (
-    <section className="relative w-full flex items-center justify-center h-[400px]">
+    <section className="relative w-full flex items-center justify-center overflow-hidden">
       <div className="relative scale-150">
 
         {/* HAND */}
         <motion.div
-          style={{ left: handX }}
+          style={{ x: handX }}
           className="absolute bottom-[20px] left-[69%] -translate-x-1/2 z-0"
         >
           <Image
