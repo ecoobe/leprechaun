@@ -92,7 +92,7 @@ export default function HomePage() {
     >
       <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
         Лепрекон
-        <span className="block text-lg font-normal text-emerald-400 mt-2">
+        <span className="block text-lg font-semibold tracking-tight leading-snug text-emerald-400 mt-2">
           Спокойствие в финансах
         </span>
       </h1>
