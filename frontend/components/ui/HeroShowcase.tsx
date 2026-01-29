@@ -14,26 +14,26 @@ export function HeroShowcase() {
 
   return (
     <section className="relative w-full flex items-center justify-center">
-      {/* SCALE CONTAINER — увеличивает объекты как в статике */}
+      {/* SCALE CONTAINER — увеличивает объекты */}
       <div className="relative scale-150">
 
         {/* HAND — под шляпой */}
         <motion.div
-          style={{ x: handX }} // только параллакс по X
+          style={{ x: handX }}
           className="absolute bottom-[-10px] left-[69%] -translate-x-1/2 z-0"
         >
           <Image
             src="/hand.png"
             alt="Leprechaun hand"
-            width={220}
-            height={140}
+            width={300}   // сделали больше
+            height={200}  // сделали пропорционально
             priority
           />
         </motion.div>
 
         {/* HAT — сверху */}
         <motion.div
-          style={{ rotate: hatRotate }} // только поворот при скролле
+          style={{ rotate: hatRotate }}
           className="relative z-10 origin-bottom-left"
         >
           <Image
