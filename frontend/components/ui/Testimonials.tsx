@@ -60,12 +60,16 @@ export function Testimonials() {
   return (
     <section
       id="reviews"
-      className="relative z-10 mx-auto max-w-6xl px-6 py-28"
+      className="relative z-10 w-full py-28"
     >
-      <h2 className="mb-10 text-2xl font-semibold">
-        Отзывы
-      </h2>
+      {/* Внутренний контейнер только для заголовка */}
+      <div className="mx-auto max-w-6xl px-6">
+        <h2 className="mb-10 text-2xl font-semibold">
+          Отзывы
+        </h2>
+      </div>
 
+      {/* Ряды на всю ширину */}
       <div className="space-y-8">
         <Row />
         <Row reverse />
