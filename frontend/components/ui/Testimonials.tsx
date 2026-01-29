@@ -62,7 +62,7 @@ export function Testimonials() {
       id="reviews"
       className="relative z-10 mx-auto max-w-6xl px-6 py-28"
     >
-      <h2 className="mb-14 px-12 text-3xl font-semibold"> // тут поменял
+      <h2 className="mb-10 text-2xl font-semibold">
         Отзывы
       </h2>
 
