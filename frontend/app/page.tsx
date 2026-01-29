@@ -97,10 +97,11 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
+              className="text-left"
             >
-              <h1 className="text-5xl sm:text-7xl font-semibold tracking-tight leading-tight">
+              <h1 className="text-6xl sm:text-8xl font-semibold tracking-tight leading-tight">
                 Лепрекон
-                <span className="block text-2xl sm:text-3xl font-medium tracking-tight leading-snug text-emerald-400 mt-3">
+                <span className="block text-3xl sm:text-4xl font-medium tracking-tight leading-snug text-emerald-400 mt-3">
                   Спокойствие в финансах
                 </span>
               </h1>
@@ -160,7 +161,13 @@ export default function HomePage() {
           </div>
         </section>
 
-        <Testimonials />
+        {/* Testimonials Section */}
+        <section className="relative z-10 mx-auto max-w-6xl px-6 py-32">
+          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-left mb-12">
+            Отзывы
+          </h2>
+          <Testimonials />
+        </section>
 
         {/* FAQ Section */}
         <section id="faq" className="relative z-10 mx-auto max-w-4xl px-6 py-32">
@@ -169,8 +176,9 @@ export default function HomePage() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true, amount: 0.3 }}
+            className="text-left"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">FAQs</h2>
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">FAQs</h2>
             <p className="mt-3 text-lg sm:text-xl text-zinc-400 leading-relaxed">
               Частые вопросы
             </p>
@@ -188,7 +196,7 @@ export default function HomePage() {
           <div className="rounded-3xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-950 p-10 text-center">
             <h3 className="text-2xl sm:text-3xl font-bold">Готовы начать?</h3>
             <p className="mt-4 text-lg sm:text-xl text-zinc-400 leading-relaxed">
-              Пользователей, уже ввзявших свои финансы под контроль
+              Пользователей, уже взявших свои финансы под контроль
             </p>
             <div className="mt-8">
               <div className="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-6 py-3 text-base sm:text-lg text-emerald-400">
