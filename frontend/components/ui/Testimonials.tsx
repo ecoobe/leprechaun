@@ -12,7 +12,7 @@ const reviews = [
 
 function Row({ reverse = false }: { reverse?: boolean }) {
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-visible py-4"> {/* overflow-visible и padding сверху/снизу */}
       <motion.div
         className="flex gap-8 w-max"
         animate={{
@@ -27,7 +27,7 @@ function Row({ reverse = false }: { reverse?: boolean }) {
         {[...reviews, ...reviews].map((r, i) => (
           <motion.div
             key={i}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.08 }}
             className="
               min-w-[350px] sm:min-w-[400px]
               rounded-3xl
@@ -39,10 +39,10 @@ function Row({ reverse = false }: { reverse?: boolean }) {
               transition-transform duration-300
             "
           >
-            <p className="text-base sm:text-lg leading-relaxed text-zinc-300 font-sans">
+            <p className="text-base sm:text-lg leading-relaxed text-zinc-300 font-sans font-normal">
               “{r.text}”
             </p>
-            <div className="mt-6 text-sm sm:text-base text-zinc-400 font-semibold">
+            <div className="mt-6 text-sm sm:text-base text-zinc-400 font-medium">
               {r.name}
             </div>
           </motion.div>
@@ -60,18 +60,13 @@ function Row({ reverse = false }: { reverse?: boolean }) {
 
 export function Testimonials() {
   return (
-    <section
-      id="reviews"
-      className="relative z-10 w-full py-36 sm:py-44"
-    >
-      {/* Внутренний контейнер только для заголовка */}
+    <section id="reviews" className="relative z-10 w-full py-36 sm:py-44">
       <div className="mx-auto max-w-6xl px-6">
-        <h2 className="mb-12 text-3xl sm:text-4xl font-bold font-sans tracking-tight">
+        <h2 className="mb-12 text-3xl sm:text-4xl font-bold tracking-tight font-sans">
           Отзывы
         </h2>
       </div>
 
-      {/* Ряды на всю ширину */}
       <div className="space-y-12 sm:space-y-16">
         <Row />
         <Row reverse />
