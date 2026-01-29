@@ -19,7 +19,7 @@ export function HeroShowcase() {
         {/* HAND */}
         <motion.div
           style={{ x: handX }}
-          className="absolute bottom-[20px] left-[69%] -translate-x-1/2 z-0"
+          className="absolute bottom-[-10px] left-[69%] -translate-x-1/2 z-0"
         >
           <Image
             src="/hand.png"
