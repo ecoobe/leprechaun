@@ -1,36 +1,28 @@
-<section className="relative h-screen flex items-center justify-center bg-neutral-950">
-  <div className="relative w-[420px] h-[320px]">
+"use client";
 
-    {/* 🖐 РУКА */}
-    <img
-      src="/hand.png"
-      alt=""
-      draggable={false}
-      className="
-        absolute
-        bottom-0
-        left-1/2
-        -translate-x-1/2
-        w-[340px]
-        z-10
-        select-none
-      "
-    />
+import Image from "next/image";
 
-    {/* 🎩 ШЛЯПА */}
-    <img
-      src="/hat.png"
-      alt=""
-      draggable={false}
-      className="
-        absolute
-        top-0
-        left-1/2
-        -translate-x-1/2
-        w-[380px]
-        z-20
-        select-none
-      "
-    />
-  </div>
-</section>
+export function HeroShowcase() {
+  return (
+    <section className="relative w-full h-[400px] flex items-center justify-center">
+      <div className="relative">
+        <Image
+          src="/hat.png"
+          alt="Hat"
+          width={300}
+          height={200}
+          priority
+        />
+
+        <Image
+          src="/hand.png"
+          alt="Hand"
+          width={200}
+          height={120}
+          className="absolute bottom-[-10px] left-1/2 -translate-x-1/2"
+          priority
+        />
+      </div>
+    </section>
+  );
+}
