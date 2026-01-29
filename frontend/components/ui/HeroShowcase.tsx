@@ -13,10 +13,13 @@ export function HeroShowcase() {
 
   return (
     <section className="relative w-full flex items-center justify-center overflow-visible">
-      {/* SCALE CONTAINER с отражением по вертикали */}
-      <div className="relative scale-150 scale-y-[-1]" style={{ paddingBottom: '60px' }}>
+      {/* SCALE CONTAINER с отражением по вертикали (сверху вниз) */}
+      <div
+  className="relative scale-150"
+  style={{ paddingBottom: '60px', transform: 'scaleY(-1)' }} // теперь корректно
+>
 
-        {/* HAND — под шляпой, отражена */}
+        {/* HAND — под шляпой */}
         <motion.img
           src="/hand.png"
           alt="Leprechaun hand"
@@ -30,7 +33,7 @@ export function HeroShowcase() {
           }}
         />
 
-        {/* HAT — сверху, опущена, отражена */}
+        {/* HAT — сверху, опущена */}
         <motion.img
           src="/hat.png"
           alt="Leprechaun hat"
