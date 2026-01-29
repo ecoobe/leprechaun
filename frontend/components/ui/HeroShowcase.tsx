@@ -16,20 +16,6 @@ export function HeroShowcase() {
       {/* SCALE CONTAINER */}
       <div className="relative scale-150" style={{ paddingBottom: '60px' }}>
 
-        {/* Тень под рукой, сдвинута выше и левее */}
-        <div
-          className="absolute z-[-1] rounded-full"
-          style={{
-            width: '220px',
-            height: '50px',
-            background: 'rgba(0,0,0,0.25)',
-            filter: 'blur(12px)',
-            transform: 'translate(-200px, -40px) scaleX(1.2)', // сдвиг выше и левее
-            bottom: '0px',
-            left: '69%',
-          }}
-        />
-
         {/* HAND — под шляпой */}
         <motion.img
           src="/hand.png"
