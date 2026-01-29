@@ -15,30 +15,18 @@ export function HeroShowcase() {
     <section className="relative w-full flex items-center justify-center overflow-visible">
       {/* SCALE CONTAINER */}
       <div className="relative scale-150" style={{ paddingBottom: '60px' }}>
-        
-        {/* Тень под рукой */}
+
+        {/* Тень под рукой, сдвинута выше и левее */}
         <div
-          className="absolute bottom-[0px] left-[69%] -translate-x-1/2 z-[-1] rounded-full"
+          className="absolute z-[-1] rounded-full"
           style={{
             width: '150px',
             height: '30px',
             background: 'rgba(0,0,0,0.25)',
             filter: 'blur(12px)',
-            transform: 'translate(-20px, -10px) scaleX(1.2)',
-          }}
-        />
-
-        {/* Glow позади шляпы */}
-        <div
-          className="absolute inset-0 z-[-2] rounded-full"
-          style={{
-            width: '400px',
-            height: '400px',
-            background: 'radial-gradient(circle, rgba(0,188,124,0.3) 0%, rgba(0,0,0,0) 70%)',
-            filter: 'blur(80px)',
-            bottom: '50px',
-            left: '50%',
-            transform: 'translateX(-50%)',
+            transform: 'translate(-40px, -40px) scaleX(1.2)', // сдвиг выше и левее
+            bottom: '0px',
+            left: '69%',
           }}
         />
 
@@ -51,7 +39,7 @@ export function HeroShowcase() {
           className="absolute bottom-[10px] left-[69%] -translate-x-1/2 z-0 origin-bottom"
           style={{
             x: handX,
-            willChange: 'transform', // GPU hint
+            willChange: 'transform',
           }}
         />
 
@@ -65,7 +53,7 @@ export function HeroShowcase() {
           style={{
             rotate: hatRotate,
             marginBottom: '-45px',
-            willChange: 'transform', // GPU hint
+            willChange: 'transform',
           }}
         />
 
