@@ -2,43 +2,41 @@
 
 import { motion } from "framer-motion";
 
-const reviews = [
-  { name: "Алексей", text: "Наконец-то перестал пропускать платежи по карте." },
-  { name: "Мария", text: "Очень спокойно, когда всё собрано в одном месте." },
-  { name: "Илья", text: "Telegram-напоминания — гениально просто." },
-  { name: "Ольга", text: "Жду AI-помощника, идея огонь." },
-  { name: "Дмитрий", text: "Минимализм и польза, без воды." },
+const items = [
+  { text: "Очень спокойно, когда всё под контролем.", author: "Мария" },
+  { text: "Telegram-напоминания — гениально просто.", author: "Илья" },
+  { text: "Жду AI-помощника, идея огонь.", author: "Ольга" },
+  { text: "Перестал забывать про платежи.", author: "Андрей" },
 ];
-
-function Row({ reverse = false }: { reverse?: boolean }) {
-  return (
-    <div className="overflow-hidden">
-      <motion.div
-        className="flex gap-8 w-max"
-        animate={{ x: reverse ? [0, -1200] : [-1200, 0] }}
-        transition={{ repeat: Infinity, duration: 45, ease: "linear" }}
-      >
-        {[...reviews, ...reviews].map((r, i) => (
-          <div
-            key={i}
-            className="min-w-[360px] rounded-3xl border border-zinc-800 bg-zinc-900/60 p-8 backdrop-blur"
-          >
-            <p className="text-lg text-zinc-300 leading-relaxed">
-              “{r.text}”
-            </p>
-            <div className="mt-5 text-sm text-zinc-400">{r.name}</div>
-          </div>
-        ))}
-      </motion.div>
-    </div>
-  );
-}
 
 export function Testimonials() {
   return (
-    <div className="space-y-10">
-      <Row />
-      <Row reverse />
-    </div>
+    <section className="py-32 relative overflow-hidden">
+      <div className="mx-auto max-w-6xl px-6">
+        <h2 className="text-4xl sm:text-5xl font-bold mb-12">Отзывы</h2>
+      </div>
+
+      <div className="relative">
+        {/* Fade edges */}
+        <div className="pointer-events-none absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-zinc-950 to-transparent z-10" />
+        <div className="pointer-events-none absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-zinc-950 to-transparent z-10" />
+
+        <motion.div
+          className="flex gap-6 px-6"
+          animate={{ x: [0, -600] }}
+          transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
+        >
+          {[...items, ...items].map((item, i) => (
+            <div
+              key={i}
+              className="min-w-[320px] rounded-3xl border border-zinc-800 bg-zinc-900/60 p-6"
+            >
+              <p className="text-zinc-300 mb-4">“{item.text}”</p>
+              <div className="text-sm text-zinc-500">{item.author}</div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
   );
 }
