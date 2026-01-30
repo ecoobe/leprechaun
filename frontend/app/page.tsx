@@ -63,6 +63,20 @@ export default function HomePage() {
   return (
     <>
       <Header />
+	  {/* Background Scene */}
+      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        {/* Hero glow */}
+        <div className="absolute top-[-20%] left-[-15%] h-[40rem] w-[40rem] rounded-full bg-emerald-500/10 blur-[160px]" />
+      
+        {/* How it works transition */}
+        <div className="absolute top-[40%] right-[-20%] h-[36rem] w-[36rem] rounded-full bg-emerald-400/5 blur-[160px]" />
+      
+        {/* Reviews depth */}
+        <div className="absolute top-[65%] left-[-20%] h-[42rem] w-[42rem] rounded-full bg-zinc-700/10 blur-[180px]" />
+      
+        {/* FAQ calm fade */}
+        <div className="absolute bottom-[-20%] right-[-20%] h-[40rem] w-[40rem] rounded-full bg-zinc-800/20 blur-[200px]" />
+      </div>
 
       <main className="text-zinc-100 overflow-x-hidden">
         {/* HERO */}
