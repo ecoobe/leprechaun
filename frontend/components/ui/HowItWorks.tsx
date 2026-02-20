@@ -70,7 +70,7 @@ export default function HowItWorks() {
               whileInView={{ opacity: 1, y: 0 }}
               whileHover={{ y: -8, scale: 1.02 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
               className="
                 rounded-3xl
                 border
