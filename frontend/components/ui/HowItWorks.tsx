@@ -42,20 +42,21 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-100 px-6 py-32">
-      <div className="mx-auto max-w-[1400px]">
+    <section className="relative py-32 px-6">
+      <div className="mx-auto max-w-7xl">
 
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-24"
+          className="mb-20 text-left"
         >
-          <h1 className="text-5xl sm:text-6xl font-semibold tracking-tight">
+          <h2 className="text-5xl sm:text-6xl font-semibold tracking-tight">
             Как это работает
-          </h1>
-          <p className="mt-4 text-xl text-zinc-400">
+          </h2>
+          <p className="mt-4 text-xl text-zinc-400 max-w-2xl">
             Три шага к финансовому спокойствию
           </p>
         </motion.div>
@@ -67,8 +68,9 @@ export default function HowItWorks() {
               key={step.title}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
+              whileHover={{ y: -8, scale: 1.02 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.15 }}
+              transition={{ duration: 0.4 }}
               className="
                 rounded-3xl
                 border
@@ -76,9 +78,11 @@ export default function HowItWorks() {
                 bg-zinc-900/60
                 backdrop-blur
                 p-10
-                hover:border-emerald-500/40
                 transition-all
                 duration-300
+                hover:border-emerald-500/40
+                hover:shadow-xl
+                hover:shadow-emerald-500/10
               "
             >
               {/* Icon */}
@@ -112,7 +116,8 @@ export default function HowItWorks() {
             </motion.div>
           ))}
         </div>
+
       </div>
-    </main>
+    </section>
   );
 }
