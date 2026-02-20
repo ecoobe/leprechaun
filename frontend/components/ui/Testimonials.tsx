@@ -3,58 +3,58 @@
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 
+/* =========================
+   Testimonials Data
+========================= */
+
 const testimonials = [
   {
     name: "Алексей Петров",
-    role: "Предприниматель",
     text: "Leprechaun помог мне забыть о просроченных платежах. Теперь всё под контролем.",
     rating: 5,
   },
   {
     name: "Мария Иванова",
-    role: "Дизайнер",
     text: "Простой и удобный интерфейс. Telegram-уведомления приходят вовремя.",
     rating: 5,
   },
   {
     name: "Дмитрий Соколов",
-    role: "IT-специалист",
     text: "Отличное решение для тех, у кого несколько кредитных карт.",
     rating: 5,
   },
   {
     name: "Елена Смирнова",
-    role: "Маркетолог",
     text: "Больше не переплачиваю проценты. Спасибо за напоминания!",
     rating: 5,
   },
   {
     name: "Игорь Козлов",
-    role: "Финансовый аналитик",
     text: "Удобный инструмент для управления финансовыми обязательствами.",
     rating: 5,
   },
   {
     name: "Анна Волкова",
-    role: "Менеджер проектов",
     text: "Интуитивно понятный сервис. Рекомендую друзьям.",
     rating: 5,
   },
   {
     name: "Сергей Новиков",
-    role: "Разработчик",
     text: "Минимализм и максимум пользы. Именно то, что нужно.",
     rating: 5,
   },
   {
     name: "Ольга Морозова",
-    role: "Консультант",
     text: "Leprechaun стал моим надёжным финансовым помощником.",
     rating: 5,
   },
 ];
 
-function TestimonialCard({ testimonial }: any) {
+/* =========================
+   Card Component
+========================= */
+
+function TestimonialCard({ testimonial }: { testimonial: any }) {
   return (
     <div className="flex-shrink-0 w-[340px] mx-4">
       <div
@@ -93,23 +93,25 @@ function TestimonialCard({ testimonial }: any) {
           <p className="font-semibold text-zinc-100">
             {testimonial.name}
           </p>
-          <p className="text-sm text-zinc-400">
-            {testimonial.role}
-          </p>
         </div>
       </div>
     </div>
   );
 }
 
+/* =========================
+   Main Component
+========================= */
+
 export function Testimonials() {
   const firstRow = testimonials.slice(0, 4);
   const secondRow = testimonials.slice(4, 8);
 
   return (
-    <section className="relative py-32 overflow-hidden">
+    <section className="relative w-full py-32 overflow-hidden">
+
       {/* Header */}
-      <div className="mx-auto max-w-7xl px-6 mb-20 text-left">
+      <div className="w-full px-6 mb-20 text-left">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -126,13 +128,14 @@ export function Testimonials() {
       </div>
 
       {/* First row */}
-      <div className="relative mb-8">
+      <div className="relative w-full mb-8">
         <motion.div
           animate={{ x: ["0%", "-50%"] }}
           transition={{
-            duration: 28,
+            duration: 60,
             repeat: Infinity,
             ease: "linear",
+            repeatType: "loop",
           }}
           className="flex w-max"
         >
@@ -143,13 +146,14 @@ export function Testimonials() {
       </div>
 
       {/* Second row */}
-      <div className="relative">
+      <div className="relative w-full">
         <motion.div
           animate={{ x: ["-50%", "0%"] }}
           transition={{
-            duration: 28,
+            duration: 60,
             repeat: Infinity,
             ease: "linear",
+            repeatType: "loop",
           }}
           className="flex w-max"
         >
@@ -158,6 +162,7 @@ export function Testimonials() {
           ))}
         </motion.div>
       </div>
+
     </section>
   );
 }

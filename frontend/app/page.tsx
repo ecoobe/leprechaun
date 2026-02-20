@@ -190,13 +190,8 @@ export default function HomePage() {
         <HowItWorks />
 
         {/* ================= TESTIMONIALS ================= */}
-        <section className="relative z-10 mx-auto max-w-6xl px-6 py-32">
-          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-left mb-12">
-            Отзывы
-          </h2>
-          <Testimonials />
-        </section>
-
+		<Testimonials />
+		
         {/* ================= FAQ ================= */}
         <section
           id="faq"
