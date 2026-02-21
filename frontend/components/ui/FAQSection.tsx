@@ -40,78 +40,20 @@ const faqItems = [
 ];
 
 /* =========================
-   FAQ Item
-========================= */
-function FAQItem({
-  question,
-  answer,
-}: {
-  question: string;
-  answer: string;
-}) {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <motion.div
-      layout
-      transition={{ type: "spring", stiffness: 260, damping: 22 }}
-      className={`
-        border border-zinc-800
-        bg-zinc-900/60
-        backdrop-blur
-        transition-all duration-300
-        hover:border-emerald-500/40
-        hover:shadow-xl
-        hover:shadow-emerald-500/10
-        ${open ? "rounded-3xl" : "rounded-full"}
-      `}
-    >
-      <button
-        onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between px-10 py-7 text-left"
-      >
-        <span className="text-lg sm:text-xl font-medium tracking-tight">
-          {question}
-        </span>
-
-        <motion.span
-          animate={{ rotate: open ? 45 : 0 }}
-          transition={{ duration: 0.2 }}
-          className="text-zinc-500 text-xl"
-        >
-          +
-        </motion.span>
-      </button>
-
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            layout
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden"
-          >
-            <div className="px-10 pb-8 text-base sm:text-lg text-zinc-300 leading-relaxed">
-              {answer}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
-  );
-}
-
-/* =========================
    FAQ Section
 ========================= */
 export function FAQSection() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const toggle = (index: number) => {
+    setOpenIndex((prev) => (prev === index ? null : index));
+  };
+
   return (
     <section className="relative py-32 px-6">
       <div className="mx-auto max-w-7xl">
 
-        {/* Header — выровнен как в HowItWorks */}
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -129,13 +71,61 @@ export function FAQSection() {
 
         {/* Items */}
         <div className="space-y-6">
-          {faqItems.map((item, index) => (
-            <FAQItem
-              key={index}
-              question={item.question}
-              answer={item.answer}
-            />
-          ))}
+          {faqItems.map((item, index) => {
+            const isOpen = openIndex === index;
+
+            return (
+              <div
+                key={index}
+                className={`
+                  border border-zinc-800
+                  bg-zinc-900/60
+                  backdrop-blur
+                  transition-all duration-300
+                  hover:border-emerald-500/40
+                  hover:shadow-xl
+                  hover:shadow-emerald-500/10
+                  ${isOpen ? "rounded-3xl" : "rounded-full"}
+                `}
+              >
+                <button
+                  onClick={() => toggle(index)}
+                  className="flex w-full items-center justify-between px-10 py-7 text-left"
+                >
+                  <span className="text-lg sm:text-xl font-medium tracking-tight">
+                    {item.question}
+                  </span>
+
+                  <motion.span
+                    animate={{ rotate: isOpen ? 45 : 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="text-zinc-500 text-xl"
+                  >
+                    +
+                  </motion.span>
+                </button>
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{
+                        height: { duration: 0.35, ease: "easeInOut" },
+                        opacity: { duration: 0.2 },
+                      }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-10 pb-8 text-base sm:text-lg text-zinc-300 leading-relaxed">
+                        {item.answer}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
         </div>
 
       </div>
