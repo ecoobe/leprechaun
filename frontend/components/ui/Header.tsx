@@ -23,18 +23,22 @@ export function Header() {
         "
       >
         {/* LOGO */}
-        <Link
-          href="/#hero"
-          className="
-            text-2xl
-            tracking-tight
-            text-white
-            hover:opacity-80
-            transition-opacity
-            font-atelas
-          "
-        >
-          Leprechaun
+        <Link href="/#hero" className="flex items-center gap-4 group">
+          <span
+            className="
+              text-2xl
+              font-atelas
+              tracking-tight
+              bg-gradient-to-r
+              from-emerald-400
+              via-green-400
+              to-teal-400
+              bg-clip-text
+              text-transparent
+            "
+          >
+            Leprechaun
+          </span>
         </Link>
 
         {/* Navigation */}

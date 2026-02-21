@@ -37,6 +37,16 @@
   --radius-2xl: calc(var(--radius) + 8px);
 }
 
+/* app/globals.css */
+
+@font-face {
+  font-family: "Atelas";
+  src: url("/fonts/atelas-2.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ---------- Design tokens ---------- */
 :root {
   --radius: 0.625rem;
@@ -82,11 +92,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@font-face {
-  font-family: "Atelas";
-  src: url("/fonts/Atelas-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
