@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export function CTASection() {
   return (
@@ -23,15 +25,15 @@ export function CTASection() {
               overflow-hidden
             "
           >
-            {/* subtle inner gradient */}
+            {/* subtle gradient layer */}
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-indigo-500/5" />
 
             <div className="relative grid gap-16 p-14 lg:grid-cols-2 lg:items-center">
 
-              {/* Left side — text */}
+              {/* LEFT */}
               <div>
                 <p className="text-sm tracking-widest uppercase text-zinc-500">
-                  Начните прямо сейчас
+                  Полностью бесплатно навсегда
                 </p>
 
                 <h3 className="mt-6 text-5xl font-semibold tracking-tight leading-tight">
@@ -40,44 +42,56 @@ export function CTASection() {
                 </h3>
 
                 <p className="mt-6 text-xl text-zinc-400 leading-relaxed max-w-xl">
-                  Присоединяйтесь к пользователям, которые уже систематизировали 
+                  Присоединяйтесь к пользователям, которые уже систематизировали
                   свои платежи и перестали переживать о сроках.
                   Всё просто. Без сложностей. Без скрытых условий.
                 </p>
 
-                <div className="mt-10 flex flex-col sm:flex-row gap-5">
+                <div className="mt-10 flex flex-wrap gap-5">
 
                   {/* Primary */}
-                  <button
+                  <Button
+                    asChild
                     className="
                       rounded-full
-                      bg-emerald-500
-                      px-8 py-4
-                      text-lg font-medium
-                      text-black
-                      transition-all duration-300
-                      hover:bg-emerald-400
-                      hover:translate-y-[-2px]
+                      px-6 py-4
+                      bg-gradient-to-r
+                      from-emerald-500
+                      via-green-500
+                      to-teal-500
+                      text-white
+                      shadow-md
+                      transition-all
+                      duration-300
+                      hover:scale-105
+                      hover:shadow-lg
                     "
                   >
-                    Попробовать бесплатно
-                  </button>
+                    <Link href="https://t.me/your_channel" target="_blank">
+                      Начать
+                    </Link>
+                  </Button>
 
                   {/* Secondary */}
-                  <button
+                  <Button
+                    asChild
                     className="
                       rounded-full
+                      px-6 py-4
                       border border-zinc-700
-                      px-8 py-4
-                      text-lg font-medium
-                      text-zinc-300
-                      transition-all duration-300
-                      hover:border-zinc-500
-                      hover:bg-zinc-800/60
+                      bg-zinc-900/60
+                      backdrop-blur
+                      text-zinc-200
+                      transition-all
+                      duration-300
+                      hover:bg-zinc-800
+                      hover:border-zinc-600
                     "
                   >
-                    Узнать больше
-                  </button>
+                    <Link href="/how-it-works">
+                      Узнать больше
+                    </Link>
+                  </Button>
 
                 </div>
 
@@ -86,7 +100,7 @@ export function CTASection() {
                 </p>
               </div>
 
-              {/* Right side — visual accent block */}
+              {/* RIGHT visual */}
               <div className="relative hidden lg:block">
 
                 <div className="
@@ -124,24 +138,20 @@ export function CTASection() {
 
       {/* ================= FOOTER ================= */}
       <footer className="relative z-10 border-t border-zinc-800 px-6 py-20">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-8">
 
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-
-            <div>
-              <div className="text-zinc-300 text-lg font-medium">
-                Leprechaun
-              </div>
-              <div className="mt-3 text-sm text-zinc-600 max-w-md">
-                Финансовый помощник, который помогает держать обязательства под контролем
-                и принимать более осознанные решения.
-              </div>
+          <div>
+            <div className="text-zinc-300 text-lg font-medium">
+              Leprechaun
             </div>
-
-            <div className="text-sm text-zinc-600">
-              © {new Date().getFullYear()} Leprechaun. Все права защищены.
+            <div className="mt-3 text-sm text-zinc-600 max-w-md">
+              Финансовый помощник, который помогает держать обязательства под контролем
+              и принимать более осознанные решения.
             </div>
+          </div>
 
+          <div className="text-sm text-zinc-600">
+            © {new Date().getFullYear()} Leprechaun. Все права защищены.
           </div>
 
         </div>
