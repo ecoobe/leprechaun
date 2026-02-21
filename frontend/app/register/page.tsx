@@ -34,7 +34,7 @@ export default function RegisterPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
           className="w-full max-w-md bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-3xl p-10 shadow-xl"
         >
           {/* Header + Step Dots */}
@@ -42,15 +42,15 @@ export default function RegisterPage() {
             <div className="flex justify-center items-center gap-3 mb-4">
               {/* Первая точка */}
               <motion.div
-                animate={step === 1 ? { scale: [1, 1.6, 1] } : { scale: 1 }}
-                transition={{ repeat: step === 1 ? Infinity : 0, duration: 1.2, ease: "easeInOut" }}
-                className={`w-2 h-2 rounded-full ${step > 1 ? "bg-emerald-500" : "bg-emerald-400"}`}
+                animate={step === 1 ? { scale: [1, 1.5, 1], boxShadow: ["0 0 0px #00bc7c", "0 0 8px #00bc7c", "0 0 0px #00bc7c"] } : { scale: 1, boxShadow: "0 0 0px #00bc7c" }}
+                transition={{ repeat: step === 1 ? Infinity : 0, duration: 1.5, ease: "easeInOut" }}
+                className={`w-2 h-2 rounded-full ${step > 1 ? "bg-emerald-500" : "bg-emerald-500"}`}
               />
               {/* Вторая точка */}
               <motion.div
-                animate={step === 2 ? { scale: [1, 1.6, 1] } : { scale: 1 }}
-                transition={{ repeat: step === 2 ? Infinity : 0, duration: 1.2, ease: "easeInOut" }}
-                className={`w-2 h-2 rounded-full ${step === 2 ? "bg-emerald-400" : "bg-zinc-600"}`}
+                animate={step === 2 ? { scale: [1, 1.5, 1], boxShadow: ["0 0 0px #00bc7c", "0 0 8px #00bc7c", "0 0 0px #00bc7c"] } : { scale: 1, boxShadow: "0 0 0px #00bc7c" }}
+                transition={{ repeat: step === 2 ? Infinity : 0, duration: 1.5, ease: "easeInOut" }}
+                className={`w-2 h-2 rounded-full ${step === 2 ? "bg-emerald-500" : "bg-zinc-600"}`}
               />
             </div>
 
@@ -70,7 +70,7 @@ export default function RegisterPage() {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
               >
                 {/* Email */}
                 <div className="mb-6">
@@ -137,7 +137,7 @@ export default function RegisterPage() {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
               >
                 {/* Code */}
                 <div className="mb-6">
