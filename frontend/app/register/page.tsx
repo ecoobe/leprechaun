@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,12 @@ export default function RegisterPage() {
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+
+  const stepVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -20 },
+  };
 
   return (
     <>
@@ -31,32 +37,23 @@ export default function RegisterPage() {
           transition={{ duration: 0.6 }}
           className="w-full max-w-md bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-3xl p-10 shadow-xl"
         >
-
           {/* Header + Step Dots */}
           <div className="mb-8 text-center">
-            {/* Две точки прогресса */}
             <div className="flex justify-center items-center gap-3 mb-4">
               {/* Первая точка */}
               <motion.div
-                animate={step === 1 ? { scale: [1, 1.4, 1] } : { scale: 1 }}
-                transition={{ repeat: step === 1 ? Infinity : 0, duration: 1.2 }}
-                className={`
-                  w-4 h-4 rounded-full
-                  ${step > 1 ? "bg-emerald-500" : "bg-zinc-600"}
-                `}
+                animate={step === 1 ? { scale: [1, 1.6, 1] } : { scale: 1 }}
+                transition={{ repeat: step === 1 ? Infinity : 0, duration: 1.2, ease: "easeInOut" }}
+                className={`w-2 h-2 rounded-full ${step > 1 ? "bg-emerald-500" : "bg-emerald-400"}`}
               />
               {/* Вторая точка */}
               <motion.div
-                animate={step === 2 ? { scale: [1, 1.4, 1] } : { scale: 1 }}
-                transition={{ repeat: step === 2 ? Infinity : 0, duration: 1.2 }}
-                className={`
-                  w-4 h-4 rounded-full
-                  ${step === 2 ? "bg-emerald-500" : "bg-zinc-600"}
-                `}
+                animate={step === 2 ? { scale: [1, 1.6, 1] } : { scale: 1 }}
+                transition={{ repeat: step === 2 ? Infinity : 0, duration: 1.2, ease: "easeInOut" }}
+                className={`w-2 h-2 rounded-full ${step === 2 ? "bg-emerald-400" : "bg-zinc-600"}`}
               />
             </div>
 
-            {/* Заголовок и описание */}
             <h1 className="text-4xl font-semibold tracking-tight">
               Создать аккаунт
             </h1>
@@ -65,163 +62,180 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          {/* ================= Step 1 ================= */}
-          {step === 1 && (
-            <>
-              <div className="mb-6">
-                <label className="block text-sm text-zinc-400 mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+          <AnimatePresence mode="wait">
+            {step === 1 && (
+              <motion.div
+                key="step1"
+                variants={stepVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={{ duration: 0.4 }}
+              >
+                {/* Email */}
+                <div className="mb-6">
+                  <label className="block text-sm text-zinc-400 mb-2">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="
+                      w-full
+                      rounded-xl
+                      bg-zinc-800/60
+                      border border-zinc-700
+                      px-4 py-3
+                      text-white
+                      placeholder:text-zinc-500
+                      focus:outline-none
+                      focus:ring-2 focus:ring-emerald-500
+                      transition-all
+                    "
+                    placeholder="you@example.com"
+                  />
+                </div>
+
+                <Button
                   className="
                     w-full
-                    rounded-xl
-                    bg-zinc-800/60
-                    border border-zinc-700
-                    px-4 py-3
+                    rounded-full
+                    py-3
+                    bg-gradient-to-r
+                    from-emerald-500
+                    via-green-500
+                    to-teal-500
                     text-white
-                    placeholder:text-zinc-500
-                    focus:outline-none
-                    focus:ring-2 focus:ring-emerald-500
+                    shadow-md
+                    hover:scale-105
+                    hover:shadow-lg
                     transition-all
+                    duration-300
                   "
-                  placeholder="you@example.com"
-                />
-              </div>
-
-              <Button
-                className="
-                  w-full
-                  rounded-full
-                  py-3
-                  bg-gradient-to-r
-                  from-emerald-500
-                  via-green-500
-                  to-teal-500
-                  text-white
-                  shadow-md
-                  hover:scale-105
-                  hover:shadow-lg
-                  transition-all
-                  duration-300
-                "
-                onClick={() => setStep(2)}
-              >
-                Получить код
-              </Button>
-
-              <p className="mt-4 text-center text-sm text-zinc-400">
-                Уже есть аккаунт?{" "}
-                <Link
-                  href="/login"
-                  className="text-emerald-400 hover:underline"
+                  onClick={() => setStep(2)}
                 >
-                  Войти
-                </Link>
-              </p>
-            </>
-          )}
+                  Получить код
+                </Button>
 
-          {/* ================= Step 2 ================= */}
-          {step === 2 && (
-            <>
-              <div className="mb-6">
-                <label className="block text-sm text-zinc-400 mb-2">
-                  Код из письма
-                </label>
-                <input
-                  type="text"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  className="
-                    w-full
-                    rounded-xl
-                    bg-zinc-800/60
-                    border border-zinc-700
-                    px-4 py-3
-                    text-white
-                    placeholder:text-zinc-500
-                    focus:outline-none
-                    focus:ring-2 focus:ring-emerald-500
-                    transition-all
-                  "
-                  placeholder="Введите код"
-                />
-              </div>
+                <p className="mt-4 text-center text-sm text-zinc-400">
+                  Уже есть аккаунт?{" "}
+                  <Link
+                    href="/login"
+                    className="text-emerald-400 hover:underline"
+                  >
+                    Войти
+                  </Link>
+                </p>
+              </motion.div>
+            )}
 
-              <div className="mb-6">
-                <label className="block text-sm text-zinc-400 mb-2">
-                  Пароль
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="
-                    w-full
-                    rounded-xl
-                    bg-zinc-800/60
-                    border border-zinc-700
-                    px-4 py-3
-                    text-white
-                    placeholder:text-zinc-500
-                    focus:outline-none
-                    focus:ring-2 focus:ring-emerald-500
-                    transition-all
-                  "
-                  placeholder="Введите пароль"
-                />
-              </div>
-
-              <div className="mb-6">
-                <label className="block text-sm text-zinc-400 mb-2">
-                  Подтвердите пароль
-                </label>
-                <input
-                  type="password"
-                  value={passwordConfirm}
-                  onChange={(e) => setPasswordConfirm(e.target.value)}
-                  className="
-                    w-full
-                    rounded-xl
-                    bg-zinc-800/60
-                    border border-zinc-700
-                    px-4 py-3
-                    text-white
-                    placeholder:text-zinc-500
-                    focus:outline-none
-                    focus:ring-2 focus:ring-emerald-500
-                    transition-all
-                  "
-                  placeholder="Повторите пароль"
-                />
-              </div>
-
-              <Button
-                className="
-                  w-full
-                  rounded-full
-                  py-3
-                  bg-gradient-to-r
-                  from-emerald-500
-                  via-green-500
-                  to-teal-500
-                  text-white
-                  shadow-md
-                  hover:scale-105
-                  hover:shadow-lg
-                  transition-all
-                  duration-300
-                "
-                onClick={() => alert("Сохранить пользователя и перейти в ЛКП")}
+            {step === 2 && (
+              <motion.div
+                key="step2"
+                variants={stepVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={{ duration: 0.4 }}
               >
-                Сохранить
-              </Button>
-            </>
-          )}
+                {/* Code */}
+                <div className="mb-6">
+                  <label className="block text-sm text-zinc-400 mb-2">
+                    Код из письма
+                  </label>
+                  <input
+                    type="text"
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                    className="
+                      w-full
+                      rounded-xl
+                      bg-zinc-800/60
+                      border border-zinc-700
+                      px-4 py-3
+                      text-white
+                      placeholder:text-zinc-500
+                      focus:outline-none
+                      focus:ring-2 focus:ring-emerald-500
+                      transition-all
+                    "
+                    placeholder="Введите код"
+                  />
+                </div>
+
+                {/* Password */}
+                <div className="mb-6">
+                  <label className="block text-sm text-zinc-400 mb-2">
+                    Пароль
+                  </label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="
+                      w-full
+                      rounded-xl
+                      bg-zinc-800/60
+                      border border-zinc-700
+                      px-4 py-3
+                      text-white
+                      placeholder:text-zinc-500
+                      focus:outline-none
+                      focus:ring-2 focus:ring-emerald-500
+                      transition-all
+                    "
+                    placeholder="Введите пароль"
+                  />
+                </div>
+
+                <div className="mb-6">
+                  <label className="block text-sm text-zinc-400 mb-2">
+                    Подтвердите пароль
+                  </label>
+                  <input
+                    type="password"
+                    value={passwordConfirm}
+                    onChange={(e) => setPasswordConfirm(e.target.value)}
+                    className="
+                      w-full
+                      rounded-xl
+                      bg-zinc-800/60
+                      border border-zinc-700
+                      px-4 py-3
+                      text-white
+                      placeholder:text-zinc-500
+                      focus:outline-none
+                      focus:ring-2 focus:ring-emerald-500
+                      transition-all
+                    "
+                    placeholder="Повторите пароль"
+                  />
+                </div>
+
+                <Button
+                  className="
+                    w-full
+                    rounded-full
+                    py-3
+                    bg-gradient-to-r
+                    from-emerald-500
+                    via-green-500
+                    to-teal-500
+                    text-white
+                    shadow-md
+                    hover:scale-105
+                    hover:shadow-lg
+                    transition-all
+                    duration-300
+                  "
+                  onClick={() => alert("Сохранить пользователя и перейти в ЛКП")}
+                >
+                  Сохранить
+                </Button>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
         </motion.div>
 
