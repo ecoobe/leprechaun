@@ -9,46 +9,14 @@ import { useState } from "react";
 ========================= */
 
 const testimonials = [
-  {
-    name: "Алексей Петров",
-    text: "Leprechaun помог мне забыть о просроченных платежах. Теперь всё под контролем.",
-    rating: 5,
-  },
-  {
-    name: "Мария Иванова",
-    text: "Простой и удобный интерфейс. Telegram-уведомления приходят вовремя.",
-    rating: 5,
-  },
-  {
-    name: "Дмитрий Соколов",
-    text: "Отличное решение для тех, у кого несколько кредитных карт.",
-    rating: 5,
-  },
-  {
-    name: "Елена Смирнова",
-    text: "Больше не переплачиваю проценты. Спасибо за напоминания!",
-    rating: 5,
-  },
-  {
-    name: "Игорь Козлов",
-    text: "Удобный инструмент для управления финансовыми обязательствами.",
-    rating: 5,
-  },
-  {
-    name: "Анна Волкова",
-    text: "Интуитивно понятный сервис. Рекомендую друзьям.",
-    rating: 5,
-  },
-  {
-    name: "Сергей Новиков",
-    text: "Минимализм и максимум пользы. Именно то, что нужно.",
-    rating: 5,
-  },
-  {
-    name: "Ольга Морозова",
-    text: "Leprechaun стал моим надёжным финансовым помощником.",
-    rating: 5,
-  },
+  { name: "Алексей Петров", text: "Leprechaun помог мне забыть о просроченных платежах. Теперь всё под контролем.", rating: 5 },
+  { name: "Мария Иванова", text: "Простой и удобный интерфейс. Telegram-уведомления приходят вовремя.", rating: 5 },
+  { name: "Дмитрий Соколов", text: "Отличное решение для тех, у кого несколько кредитных карт.", rating: 5 },
+  { name: "Елена Смирнова", text: "Больше не переплачиваю проценты. Спасибо за напоминания!", rating: 5 },
+  { name: "Игорь Козлов", text: "Удобный инструмент для управления финансовыми обязательствами.", rating: 5 },
+  { name: "Анна Волкова", text: "Интуитивно понятный сервис. Рекомендую друзьям.", rating: 5 },
+  { name: "Сергей Новиков", text: "Минимализм и максимум пользы. Именно то, что нужно.", rating: 5 },
+  { name: "Ольга Морозова", text: "Leprechaun стал моим надёжным финансовым помощником.", rating: 5 },
 ];
 
 /* =========================
@@ -76,10 +44,7 @@ function TestimonialCard({ testimonial }: { testimonial: any }) {
       >
         <div className="flex gap-1 mb-4">
           {[...Array(testimonial.rating)].map((_, i) => (
-            <Star
-              key={i}
-              className="w-4 h-4 fill-emerald-500 text-emerald-500"
-            />
+            <Star key={i} className="w-4 h-4 fill-emerald-500 text-emerald-500" />
           ))}
         </div>
 
@@ -108,28 +73,32 @@ export function Testimonials() {
   const secondRow = testimonials.slice(4, 8);
 
   return (
-    <section className="relative w-full py-32 overflow-hidden">
+    <section className="relative py-32 px-6">
 
-      {/* Header — выровнен как в HowItWorks */}
-      <div className="mx-auto max-w-[1400px] px-6 mb-20 text-left">
+      {/* Контейнер как в HowItWorks */}
+      <div className="mx-auto max-w-7xl">
+
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
+          className="mb-20 text-left"
         >
-          <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight mb-4">
+          <h2 className="text-5xl sm:text-6xl font-semibold tracking-tight">
             Что говорят пользователи
           </h2>
-          <p className="text-xl text-zinc-400 max-w-2xl">
+          <p className="mt-4 text-xl text-zinc-400 max-w-2xl">
             Уже десятки людей управляют своими финансами спокойнее
           </p>
         </motion.div>
+
       </div>
 
-      {/* Mask wrapper */}
+      {/* Row wrapper с маской */}
       <div
-        className="relative w-full"
+        className="relative w-full pt-4"
         style={{
           maskImage:
             "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
@@ -137,11 +106,12 @@ export function Testimonials() {
             "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
         }}
       >
+
         {/* First row */}
         <div
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
-          className="relative w-full mb-8"
+          className="mb-8"
         >
           <motion.div
             animate={{ x: ["0%", "-50%"] }}
@@ -165,7 +135,6 @@ export function Testimonials() {
         <div
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
-          className="relative w-full"
         >
           <motion.div
             animate={{ x: ["-50%", "0%"] }}
@@ -184,6 +153,7 @@ export function Testimonials() {
             ))}
           </motion.div>
         </div>
+
       </div>
     </section>
   );
