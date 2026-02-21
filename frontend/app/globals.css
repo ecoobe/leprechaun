@@ -1,10 +1,8 @@
 /* frontend/app/globals.css */
-
-/* ---------- Tailwind import ---------- */
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* ---------- Подключение шрифта Atelas ---------- */
+/* шрифт */
 @font-face {
   font-family: "Atelas";
   src: url("/fonts/atelas-2.woff2") format("woff2");
@@ -13,46 +11,23 @@
   font-display: swap;
 }
 
-/* ---------- Переменная для Tailwind ---------- */
 :root {
   --font-sans: "Atelas", system-ui, sans-serif;
-
-  /* Остальные design tokens */
-  --radius: 0.625rem;
-
-  --background: oklch(0.141 0.005 285.823); /* zinc-950 */
+  --background: oklch(0.141 0.005 285.823);
   --foreground: oklch(0.985 0 0);
-
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.985 0 0);
-
-  --primary: oklch(0.92 0.004 286.32);
-  --primary-foreground: oklch(0.21 0.006 285.885);
-
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.552 0.016 285.938);
 }
 
-/* ---------- Base styles ---------- */
-@layer base {
-  html {
-    font-family: var(--font-sans);
-  }
-
-  body {
-    @apply bg-background text-foreground;
-  }
-
-  * {
-    @apply border-border outline-ring/50;
-  }
+/* базовые стили без @apply */
+html {
+  font-family: var(--font-sans);
 }
 
-/* ---------- Tailwind layers ---------- */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* Tailwind layers */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
