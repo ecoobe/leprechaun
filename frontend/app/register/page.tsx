@@ -32,8 +32,31 @@ export default function RegisterPage() {
           className="w-full max-w-md bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-3xl p-10 shadow-xl"
         >
 
-          {/* Header */}
+          {/* Header + Step Dots */}
           <div className="mb-8 text-center">
+            {/* Две точки прогресса */}
+            <div className="flex justify-center items-center gap-3 mb-4">
+              {/* Первая точка */}
+              <motion.div
+                animate={step === 1 ? { scale: [1, 1.4, 1] } : { scale: 1 }}
+                transition={{ repeat: step === 1 ? Infinity : 0, duration: 1.2 }}
+                className={`
+                  w-4 h-4 rounded-full
+                  ${step > 1 ? "bg-emerald-500" : "bg-zinc-600"}
+                `}
+              />
+              {/* Вторая точка */}
+              <motion.div
+                animate={step === 2 ? { scale: [1, 1.4, 1] } : { scale: 1 }}
+                transition={{ repeat: step === 2 ? Infinity : 0, duration: 1.2 }}
+                className={`
+                  w-4 h-4 rounded-full
+                  ${step === 2 ? "bg-emerald-500" : "bg-zinc-600"}
+                `}
+              />
+            </div>
+
+            {/* Заголовок и описание */}
             <h1 className="text-4xl font-semibold tracking-tight">
               Создать аккаунт
             </h1>
@@ -42,9 +65,9 @@ export default function RegisterPage() {
             </p>
           </div>
 
+          {/* ================= Step 1 ================= */}
           {step === 1 && (
             <>
-              {/* Email */}
               <div className="mb-6">
                 <label className="block text-sm text-zinc-400 mb-2">
                   Email
@@ -69,7 +92,6 @@ export default function RegisterPage() {
                 />
               </div>
 
-              {/* Button */}
               <Button
                 className="
                   w-full
@@ -103,9 +125,9 @@ export default function RegisterPage() {
             </>
           )}
 
+          {/* ================= Step 2 ================= */}
           {step === 2 && (
             <>
-              {/* Code */}
               <div className="mb-6">
                 <label className="block text-sm text-zinc-400 mb-2">
                   Код из письма
@@ -130,7 +152,6 @@ export default function RegisterPage() {
                 />
               </div>
 
-              {/* Password */}
               <div className="mb-6">
                 <label className="block text-sm text-zinc-400 mb-2">
                   Пароль
@@ -179,7 +200,6 @@ export default function RegisterPage() {
                 />
               </div>
 
-              {/* Button */}
               <Button
                 className="
                   w-full
