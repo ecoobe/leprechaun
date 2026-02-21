@@ -99,7 +99,7 @@ export function Header() {
             duration-300
           "
         >
-          <Link href="/register" target="_blank">
+          <Link href="/register">
             Войти
           </Link>
         </Button>
