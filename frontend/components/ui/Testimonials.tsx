@@ -1,7 +1,5 @@
 "use client";
 
-<section id="testimonials" className="relative py-36 px-6"></section>
-
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import { useState } from "react";

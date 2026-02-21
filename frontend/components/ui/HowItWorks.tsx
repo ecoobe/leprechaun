@@ -1,7 +1,5 @@
 "use client";
 
-<section id="how-it-works" className="relative py-36 px-6"></section>
-
 import { motion } from "framer-motion";
 import { CreditCard, Bot, Bell } from "lucide-react";
 

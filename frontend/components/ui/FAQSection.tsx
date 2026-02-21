@@ -1,7 +1,5 @@
 "use client";
 
-<section id="faq" className="relative py-36 px-6"></section>
-
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 

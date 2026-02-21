@@ -27,19 +27,30 @@ export default function HomePage() {
       <main className="relative min-h-screen overflow-x-hidden text-zinc-100">
 
         {/* ================= HERO ================= */}
-        <HeroSection />
+		<section id="hero" className="relative py-36 px-6">
+			<HeroSection />
+		</section>
+
 
         {/* ================= HOW IT WORKS ================= */}
-        <HowItWorks />
+		<section id="how-it-works" className="relative py-36 px-6">
+			<HowItWorks />
+		</section>
 
         {/* ================= TESTIMONIALS ================= */}
-        <Testimonials />
+		<section id="testimonials" className="relative py-36 px-6">
+			<Testimonials />
+		</section>
 
         {/* ================= FAQ ================= */}
-        <FAQSection />
+		<section id="faq" className="relative py-36 px-6">
+			<FAQSection />
+		</section>
 
         {/* ================= CTA ================= */}
-        <CTASection />
+		<section id="cta" className="relative py-36 px-6">
+			<CTASection />
+		</section>
 
 		{/* ================= SupportButton ================= */}
         <SupportButton />

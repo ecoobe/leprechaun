@@ -1,7 +1,5 @@
 "use client";
 
-<section id="cta" className="relative py-36 px-6"></section>
-
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
