@@ -24,11 +24,7 @@ export function Header() {
         "
       >
         {/* LOGO */}
-        <Link
-          href="/"
-          className="flex items-center gap-4 group"
-        >
-          {/* Symbol */}
+        <Link href="#hero" className="flex items-center gap-4 group">
           <div
             className="
               w-11 h-11
@@ -50,7 +46,6 @@ export function Header() {
             </span>
           </div>
 
-          {/* Brand text */}
           <span
             className="
               text-2xl
@@ -70,18 +65,24 @@ export function Header() {
 
         {/* Navigation */}
         <div className="hidden md:flex items-center gap-10 text-base font-medium text-zinc-400">
-          <Link href="#how" className="hover:text-white transition-colors">
+          <Link href="#how-it-works" className="hover:text-white transition-colors">
             Как работает
           </Link>
-          <Link href="#reviews" className="hover:text-white transition-colors">
+
+          <Link href="#testimonials" className="hover:text-white transition-colors">
             Отзывы
           </Link>
+
           <Link href="#faq" className="hover:text-white transition-colors">
             FAQ
           </Link>
+
+          <Link href="#cta" className="hover:text-white transition-colors">
+            Начать
+          </Link>
         </div>
 
-        {/* CTA */}
+        {/* CTA Button */}
         <Button
           asChild
           className="
@@ -99,7 +100,7 @@ export function Header() {
             duration-300
           "
         >
-          <Link href="/login">
+          <Link href="/register">
             Войти
           </Link>
         </Button>
