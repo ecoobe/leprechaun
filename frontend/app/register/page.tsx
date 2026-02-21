@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Header } from "@/components/ui/Header";
 
 export default function RegisterPage() {
-  const [step, setStep] = useState<1 | 2>(1);
+  const [expanded, setExpanded] = useState(false);
 
   const dotGradient =
     "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500";
@@ -21,31 +21,20 @@ export default function RegisterPage() {
 
       <Header />
 
-      {/* 👇 ВАЖНО: items-start вместо items-center */}
       <main className="relative min-h-screen flex items-start justify-center px-6 pt-40 pb-24 text-zinc-100">
-        <div
-          className="
-            w-full
-            max-w-md
-            bg-zinc-900/60
-            backdrop-blur-xl
-            border border-zinc-800
-            rounded-3xl
-            p-10
-            shadow-xl
-          "
-        >
+        <div className="w-full max-w-md bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-3xl p-10 shadow-xl">
+
           {/* Header */}
           <div className="mb-10 text-center">
             <div className="flex justify-center items-center gap-3 mb-4">
               <div
                 className={`w-2.5 h-2.5 rounded-full ${
-                  step === 1 ? dotGradient : "bg-emerald-500"
+                  !expanded ? dotGradient : "bg-emerald-500"
                 }`}
               />
               <div
                 className={`w-2.5 h-2.5 rounded-full ${
-                  step === 2 ? dotGradient : "bg-zinc-600"
+                  expanded ? dotGradient : "bg-zinc-600"
                 }`}
               />
             </div>
@@ -56,46 +45,34 @@ export default function RegisterPage() {
           </div>
 
           <div className="space-y-6">
-            {/* STEP 1 */}
-            <AnimatePresence initial={false}>
-              {step === 1 && (
-                <motion.div
-                  key="step1"
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{
-                    height: { duration: 0.45, ease: "easeInOut" },
-                    opacity: { duration: 0.25 },
-                  }}
-                >
-                  {/* 👇 Внутренний wrapper без overflow-hidden */}
-                  <div className="space-y-6">
-                    <div>
-                      <label className="block text-sm text-zinc-400 mb-2">
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        placeholder="you@example.com"
-                        className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                      />
-                    </div>
 
-                    <Button
-                      onClick={() => setStep(2)}
-                      className="w-full rounded-full py-3 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white"
-                    >
-                      Получить код
-                    </Button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {/* EMAIL — всегда виден */}
+            <div>
+              <label className="block text-sm text-zinc-400 mb-2">
+                Email
+              </label>
 
-            {/* STEP 2 */}
+              <motion.input
+                layout
+                type="email"
+                disabled={expanded}
+                placeholder="you@example.com"
+                className={`
+                  w-full rounded-xl px-4 py-3 text-white
+                  border
+                  transition-all duration-300
+                  ${
+                    expanded
+                      ? "bg-zinc-800/40 border-zinc-700 text-zinc-400 cursor-not-allowed"
+                      : "bg-zinc-800/60 border-zinc-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  }
+                `}
+              />
+            </div>
+
+            {/* STEP 2 раскрывается вниз */}
             <AnimatePresence initial={false}>
-              {step === 2 && (
+              {expanded && (
                 <motion.div
                   key="step2"
                   initial={{ height: 0, opacity: 0 }}
@@ -106,7 +83,8 @@ export default function RegisterPage() {
                     opacity: { duration: 0.3 },
                   }}
                 >
-                  <div className="space-y-6">
+                  <div className="space-y-6 pt-2">
+
                     <div>
                       <label className="block text-sm text-zinc-400 mb-2">
                         Код из письма
@@ -140,13 +118,19 @@ export default function RegisterPage() {
                       />
                     </div>
 
-                    <Button className="w-full rounded-full py-3 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white">
-                      Сохранить
-                    </Button>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {/* Кнопка */}
+            <Button
+              onClick={() => setExpanded(true)}
+              className="w-full rounded-full py-3 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white"
+            >
+              {expanded ? "Сохранить" : "Получить код"}
+            </Button>
+
           </div>
         </div>
       </main>
