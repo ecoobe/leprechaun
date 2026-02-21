@@ -100,7 +100,7 @@ export function Header() {
             duration-300
           "
         >
-          <Link href="/register">
+          <Link href="/login">
             Войти
           </Link>
         </Button>
