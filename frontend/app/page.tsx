@@ -1,7 +1,5 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
 import { Header } from "@/components/ui/Header";
 import { SupportButton } from "@/components/ui/SupportButton";
 import { Testimonials } from "@/components/ui/Testimonials";
@@ -26,33 +24,31 @@ export default function HomePage() {
 
       <main className="relative min-h-screen overflow-x-hidden text-zinc-100">
 
-        {/* ================= HERO ================= */}
-		<section id="hero" className="relative py-36 px-6">
-			<HeroSection />
-		</section>
+        {/* HERO */}
+        <div id="hero">
+          <HeroSection />
+        </div>
 
+        {/* HOW IT WORKS */}
+        <div id="how-it-works">
+          <HowItWorks />
+        </div>
 
-        {/* ================= HOW IT WORKS ================= */}
-		<section id="how-it-works" className="relative py-36 px-6">
-			<HowItWorks />
-		</section>
+        {/* TESTIMONIALS */}
+        <div id="testimonials">
+          <Testimonials />
+        </div>
 
-        {/* ================= TESTIMONIALS ================= */}
-		<section id="testimonials" className="relative py-36 px-6">
-			<Testimonials />
-		</section>
+        {/* FAQ */}
+        <div id="faq">
+          <FAQSection />
+        </div>
 
-        {/* ================= FAQ ================= */}
-		<section id="faq" className="relative py-36 px-6">
-			<FAQSection />
-		</section>
+        {/* CTA */}
+        <div id="cta">
+          <CTASection />
+        </div>
 
-        {/* ================= CTA ================= */}
-		<section id="cta" className="relative py-36 px-6">
-			<CTASection />
-		</section>
-
-		{/* ================= SupportButton ================= */}
         <SupportButton />
 
       </main>
