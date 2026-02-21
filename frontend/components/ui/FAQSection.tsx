@@ -52,9 +52,10 @@ function FAQItem({
   const [open, setOpen] = useState(false);
 
   return (
-    <div
-      className="
-        rounded-full
+    <motion.div
+      layout
+      transition={{ type: "spring", stiffness: 260, damping: 22 }}
+      className={`
         border border-zinc-800
         bg-zinc-900/60
         backdrop-blur
@@ -62,7 +63,8 @@ function FAQItem({
         hover:border-emerald-500/40
         hover:shadow-xl
         hover:shadow-emerald-500/10
-      "
+        ${open ? "rounded-3xl" : "rounded-full"}
+      `}
     >
       <button
         onClick={() => setOpen(!open)}
@@ -71,18 +73,24 @@ function FAQItem({
         <span className="text-lg sm:text-xl font-medium tracking-tight">
           {question}
         </span>
-        <span className="text-zinc-500 text-xl">
-          {open ? "−" : "+"}
-        </span>
+
+        <motion.span
+          animate={{ rotate: open ? 45 : 0 }}
+          transition={{ duration: 0.2 }}
+          className="text-zinc-500 text-xl"
+        >
+          +
+        </motion.span>
       </button>
 
       <AnimatePresence initial={false}>
         {open && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+            layout
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
             <div className="px-10 pb-8 text-base sm:text-lg text-zinc-300 leading-relaxed">
@@ -91,7 +99,7 @@ function FAQItem({
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }
 
