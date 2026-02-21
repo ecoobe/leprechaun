@@ -24,7 +24,7 @@ export function Header() {
         "
       >
         {/* LOGO */}
-        <Link href="#hero" className="flex items-center gap-4 group">
+        <a href="#hero" className="flex items-center gap-4 group cursor-pointer">
           <div
             className="
               w-11 h-11
@@ -61,25 +61,25 @@ export function Header() {
           >
             Leprechaun
           </span>
-        </Link>
+        </a>
 
         {/* Navigation */}
         <div className="hidden md:flex items-center gap-10 text-base font-medium text-zinc-400">
-          <Link href="#how-it-works" className="hover:text-white transition-colors">
+          <a href="#how-it-works" className="hover:text-white transition-colors">
             Как работает
-          </Link>
+          </a>
 
-          <Link href="#testimonials" className="hover:text-white transition-colors">
+          <a href="#testimonials" className="hover:text-white transition-colors">
             Отзывы
-          </Link>
+          </a>
 
-          <Link href="#faq" className="hover:text-white transition-colors">
+          <a href="#faq" className="hover:text-white transition-colors">
             FAQ
-          </Link>
+          </a>
 
-          <Link href="#cta" className="hover:text-white transition-colors">
+          <a href="#cta" className="hover:text-white transition-colors">
             Начать
-          </Link>
+          </a>
         </div>
 
         {/* CTA Button */}
