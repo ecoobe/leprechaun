@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/ui/Header";
 
@@ -13,11 +13,15 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
-  const stepVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -20 },
-  };
+  const formRef = useRef<HTMLDivElement>(null);
+  const [formHeight, setFormHeight] = useState<number | undefined>(undefined);
+
+  // Обновляем высоту формы, чтобы окно плавно растягивалось
+  useEffect(() => {
+    if (formRef.current) {
+      setFormHeight(formRef.current.scrollHeight);
+    }
+  }, [step]);
 
   return (
     <>
@@ -31,31 +35,25 @@ export default function RegisterPage() {
 
       <main className="relative min-h-screen flex items-center justify-center px-6 py-24 text-zinc-100">
         <motion.div
+          ref={formRef}
+          style={{ height: formHeight }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeInOut" }}
-          className="w-full max-w-md bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-3xl p-10 shadow-xl"
+          className="w-full max-w-md bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-3xl p-10 shadow-xl overflow-hidden"
         >
           {/* Header + Step Dots */}
           <div className="mb-8 text-center">
             <div className="flex justify-center items-center gap-3 mb-4">
               {/* Первая точка */}
               <motion.div
-                animate={
-                  step === 1
-                    ? { scale: [1, 1.2, 1] }
-                    : { scale: 1 }
-                }
+                animate={step === 1 ? { scale: [1, 1.2, 1] } : { scale: 1 }}
                 transition={{ repeat: step === 1 ? Infinity : 0, duration: 2.5, ease: "easeInOut" }}
                 className={`w-2.5 h-2.5 rounded-full bg-emerald-500`}
               />
               {/* Вторая точка */}
               <motion.div
-                animate={
-                  step === 2
-                    ? { scale: [1, 1.2, 1] }
-                    : { scale: 1 }
-                }
+                animate={step === 2 ? { scale: [1, 1.2, 1] } : { scale: 1 }}
                 transition={{ repeat: step === 2 ? Infinity : 0, duration: 2.5, ease: "easeInOut" }}
                 className={`w-2.5 h-2.5 rounded-full ${step === 2 ? "bg-emerald-500" : "bg-zinc-600"}`}
               />
@@ -64,23 +62,20 @@ export default function RegisterPage() {
             <h1 className="text-4xl font-semibold tracking-tight">
               Создать аккаунт
             </h1>
-            <p className="mt-2 text-zinc-400 text-lg">
-              Начните контролировать свои финансы
-            </p>
           </div>
 
           <AnimatePresence mode="wait">
             {step === 1 && (
               <motion.div
                 key="step1"
-                variants={stepVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="flex flex-col gap-6"
               >
                 {/* Email */}
-                <div className="mb-6">
+                <div>
                   <label className="block text-sm text-zinc-400 mb-2">
                     Email
                   </label>
@@ -140,14 +135,14 @@ export default function RegisterPage() {
             {step === 2 && (
               <motion.div
                 key="step2"
-                variants={stepVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="flex flex-col gap-6"
               >
-                {/* Code */}
-                <div className="mb-6">
+                {/* Код из письма */}
+                <div>
                   <label className="block text-sm text-zinc-400 mb-2">
                     Код из письма
                   </label>
@@ -171,8 +166,8 @@ export default function RegisterPage() {
                   />
                 </div>
 
-                {/* Password */}
-                <div className="mb-6">
+                {/* Пароль */}
+                <div>
                   <label className="block text-sm text-zinc-400 mb-2">
                     Пароль
                   </label>
@@ -196,7 +191,8 @@ export default function RegisterPage() {
                   />
                 </div>
 
-                <div className="mb-6">
+                {/* Подтверждение пароля */}
+                <div>
                   <label className="block text-sm text-zinc-400 mb-2">
                     Подтвердите пароль
                   </label>
