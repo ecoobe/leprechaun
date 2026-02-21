@@ -83,22 +83,17 @@ export default function LoginPage() {
               </Button>
             </motion.div>
 
-            {/* Забыл пароль */}
-            <motion.div layout>
-              <button
-                type="button"
-                className="text-sm text-emerald-400 hover:underline mt-2"
+            {/* Интерактивный текст */}
+            <motion.div layout className="text-center mt-2 text-sm text-zinc-400">
+              <span
+                className="cursor-pointer text-emerald-400 hover:underline"
+                onClick={() => alert("Форма восстановления пароля пока не реализована")}
               >
                 Забыл пароль?
-              </button>
-            </motion.div>
-
-            {/* Зарегистрироваться */}
-            <motion.div layout>
-              <Link href="/register">
-                <Button className="w-full rounded-full py-3 bg-zinc-800/60 text-white border border-zinc-700 hover:bg-zinc-700 transition-all mt-4">
-                  Впервые у нас? Зарегистрироваться
-                </Button>
+              </span>{" "}
+              Впервые у нас?{" "}
+              <Link href="/register" className="text-emerald-400 hover:underline">
+                Зарегистрироваться
               </Link>
             </motion.div>
           </motion.div>
