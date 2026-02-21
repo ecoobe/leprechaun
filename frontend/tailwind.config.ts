@@ -1,4 +1,3 @@
-// frontend/tailwind.config.ts
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -10,12 +9,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-        atelas: ["Atelas", "sans-serif"],
+        atelas: ["Atelas", "sans-serif"], // Класс font-atelas теперь работает
       },
     },
   },

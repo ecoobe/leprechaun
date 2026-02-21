@@ -1,8 +1,41 @@
-/* frontend/app/globals.css */
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* шрифт */
+/* ---------- Custom variants ---------- */
+@custom-variant dark (&:is(.dark *));
+
+/* ---------- Tailwind theme mapping ---------- */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+}
+
+/* ---------- Font ---------- */
 @font-face {
   font-family: "Atelas";
   src: url("/fonts/atelas-2.woff2") format("woff2");
@@ -11,23 +44,48 @@
   font-display: swap;
 }
 
+/* ---------- Design tokens ---------- */
 :root {
-  --font-sans: "Atelas", system-ui, sans-serif;
-  --background: oklch(0.141 0.005 285.823);
+  --radius: 0.625rem;
+
+  --background: oklch(0.141 0.005 285.823); /* zinc-950 */
   --foreground: oklch(0.985 0 0);
+
+  --card: oklch(0.21 0.006 285.885);
+  --card-foreground: oklch(0.985 0 0);
+
+  --primary: oklch(0.92 0.004 286.32);
+  --primary-foreground: oklch(0.21 0.006 285.885);
+
+  --muted: oklch(0.274 0.006 286.033);
+  --muted-foreground: oklch(0.705 0.015 286.067);
+
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.552 0.016 285.938);
 }
 
-/* базовые стили без @apply */
-html {
-  font-family: var(--font-sans);
+/* ---------- Base styles ---------- */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    font-family:
+      "Atelas",
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
-body {
-  background-color: var(--background);
-  color: var(--foreground);
-}
-
-/* Tailwind layers */
+/* ---------- Tailwind layers ---------- */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
