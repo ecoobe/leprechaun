@@ -21,7 +21,8 @@ export default function RegisterPage() {
 
       <Header />
 
-      <main className="relative min-h-screen flex items-center justify-center px-6 py-24 text-zinc-100">
+      {/* 👇 ВАЖНО: items-start вместо items-center */}
+      <main className="relative min-h-screen flex items-start justify-center px-6 pt-40 pb-24 text-zinc-100">
         <div
           className="
             w-full
@@ -54,8 +55,8 @@ export default function RegisterPage() {
             </h1>
           </div>
 
-          {/* STEP 1 (всегда виден в основе) */}
           <div className="space-y-6">
+            {/* STEP 1 */}
             <AnimatePresence initial={false}>
               {step === 1 && (
                 <motion.div
@@ -64,33 +65,35 @@ export default function RegisterPage() {
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{
-                    height: { duration: 0.4, ease: "easeInOut" },
-                    opacity: { duration: 0.2 },
+                    height: { duration: 0.45, ease: "easeInOut" },
+                    opacity: { duration: 0.25 },
                   }}
-                  className="overflow-hidden space-y-6"
                 >
-                  <div>
-                    <label className="block text-sm text-zinc-400 mb-2">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      placeholder="you@example.com"
-                      className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
+                  {/* 👇 Внутренний wrapper без overflow-hidden */}
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-sm text-zinc-400 mb-2">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        placeholder="you@example.com"
+                        className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
 
-                  <Button
-                    onClick={() => setStep(2)}
-                    className="w-full rounded-full py-3 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white"
-                  >
-                    Получить код
-                  </Button>
+                    <Button
+                      onClick={() => setStep(2)}
+                      className="w-full rounded-full py-3 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white"
+                    >
+                      Получить код
+                    </Button>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* STEP 2 (раскрывается вниз как FAQ) */}
+            {/* STEP 2 */}
             <AnimatePresence initial={false}>
               {step === 2 && (
                 <motion.div
@@ -99,47 +102,48 @@ export default function RegisterPage() {
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{
-                    height: { duration: 0.45, ease: "easeInOut" },
-                    opacity: { duration: 0.25 },
+                    height: { duration: 0.5, ease: "easeInOut" },
+                    opacity: { duration: 0.3 },
                   }}
-                  className="overflow-hidden space-y-6"
                 >
-                  <div>
-                    <label className="block text-sm text-zinc-400 mb-2">
-                      Код из письма
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Введите код"
-                      className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-sm text-zinc-400 mb-2">
+                        Код из письма
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Введите код"
+                        className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
 
-                  <div>
-                    <label className="block text-sm text-zinc-400 mb-2">
-                      Пароль
-                    </label>
-                    <input
-                      type="password"
-                      placeholder="Введите пароль"
-                      className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
+                    <div>
+                      <label className="block text-sm text-zinc-400 mb-2">
+                        Пароль
+                      </label>
+                      <input
+                        type="password"
+                        placeholder="Введите пароль"
+                        className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
 
-                  <div>
-                    <label className="block text-sm text-zinc-400 mb-2">
-                      Подтвердите пароль
-                    </label>
-                    <input
-                      type="password"
-                      placeholder="Повторите пароль"
-                      className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
+                    <div>
+                      <label className="block text-sm text-zinc-400 mb-2">
+                        Подтвердите пароль
+                      </label>
+                      <input
+                        type="password"
+                        placeholder="Повторите пароль"
+                        className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
 
-                  <Button className="w-full rounded-full py-3 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white">
-                    Сохранить
-                  </Button>
+                    <Button className="w-full rounded-full py-3 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white">
+                      Сохранить
+                    </Button>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
