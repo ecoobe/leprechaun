@@ -4,12 +4,10 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/ui/Header";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [emailLocked, setEmailLocked] = useState(false);
-
-  const dotGradient =
-    "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500";
 
   return (
     <>
@@ -26,10 +24,6 @@ export default function LoginPage() {
 
           {/* ---------- STATIC HEADER ---------- */}
           <div className="mb-10 text-center">
-            <div className="flex justify-center items-center gap-3 mb-4">
-              <div className={`w-2.5 h-2.5 rounded-full ${dotGradient}`} />
-            </div>
-
             <h1 className="text-4xl font-semibold tracking-tight">
               Войти в аккаунт
             </h1>
@@ -79,17 +73,7 @@ export default function LoginPage() {
               />
             </motion.div>
 
-            {/* Забыл пароль */}
-            <motion.div layout>
-              <button
-                type="button"
-                className="text-sm text-emerald-400 hover:underline self-end"
-              >
-                Забыл пароль?
-              </button>
-            </motion.div>
-
-            {/* Button */}
+            {/* Войти */}
             <motion.div layout>
               <Button
                 onClick={() => setEmailLocked(true)}
@@ -97,6 +81,25 @@ export default function LoginPage() {
               >
                 Войти
               </Button>
+            </motion.div>
+
+            {/* Забыл пароль */}
+            <motion.div layout>
+              <button
+                type="button"
+                className="text-sm text-emerald-400 hover:underline mt-2"
+              >
+                Забыл пароль?
+              </button>
+            </motion.div>
+
+            {/* Зарегистрироваться */}
+            <motion.div layout>
+              <Link href="/register">
+                <Button className="w-full rounded-full py-3 bg-zinc-800/60 text-white border border-zinc-700 hover:bg-zinc-700 transition-all mt-4">
+                  Впервые у нас? Зарегистрироваться
+                </Button>
+              </Link>
             </motion.div>
           </motion.div>
         </div>
