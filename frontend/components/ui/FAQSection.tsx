@@ -75,22 +75,25 @@ export function FAQSection() {
             const isOpen = openIndex === index;
 
             return (
-              <div
+              <motion.div
                 key={index}
+                layout
+                transition={{ duration: 0.35, ease: "easeInOut" }}
                 className={`
+                  rounded-3xl
                   border border-zinc-800
                   bg-zinc-900/60
                   backdrop-blur
+                  overflow-hidden
                   transition-all duration-300
                   hover:border-emerald-500/40
                   hover:shadow-xl
                   hover:shadow-emerald-500/10
-                  ${isOpen ? "rounded-3xl" : "rounded-full"}
                 `}
               >
                 <button
                   onClick={() => toggle(index)}
-                  className="flex w-full items-center justify-between px-10 py-7 text-left"
+                  className="flex w-full items-center justify-between px-10 py-8 text-left"
                 >
                   <span className="text-lg sm:text-xl font-medium tracking-tight">
                     {item.question}
@@ -108,6 +111,7 @@ export function FAQSection() {
                 <AnimatePresence initial={false}>
                   {isOpen && (
                     <motion.div
+                      key="content"
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
@@ -117,13 +121,13 @@ export function FAQSection() {
                       }}
                       className="overflow-hidden"
                     >
-                      <div className="px-10 pb-8 text-base sm:text-lg text-zinc-300 leading-relaxed">
+                      <div className="px-10 pb-10 text-base sm:text-lg text-zinc-300 leading-relaxed">
                         {item.answer}
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </motion.div>
             );
           })}
         </div>
