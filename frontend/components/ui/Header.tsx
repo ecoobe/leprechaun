@@ -99,7 +99,7 @@ export function Header() {
             duration-300
           "
         >
-          <Link href="https://t.me/your_channel" target="_blank">
+          <Link href="/register" target="_blank">
             Войти
           </Link>
         </Button>

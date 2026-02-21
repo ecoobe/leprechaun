@@ -33,7 +33,7 @@ export function CTASection() {
 
               {/* Small label */}
               <p className="text-sm uppercase tracking-widest text-emerald-400/70">
-                Начните прямо сейчас
+                Полностью бесплатно навсегда
               </p>
 
               {/* Main heading */}
