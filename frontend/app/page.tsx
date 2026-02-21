@@ -8,6 +8,7 @@ import { Testimonials } from "@/components/ui/Testimonials";
 import HowItWorks from "@/components/ui/HowItWorks";
 import { HeroSection } from "@/components/ui/HeroSection";
 import { FAQSection } from "@/components/ui/FAQSection";
+import { CTASection } from "@/components/ui/CTASection";
 
 /* =========================
    Home Page
@@ -71,37 +72,10 @@ export default function HomePage() {
         <FAQSection />
 
         {/* ================= CTA ================= */}
-        <section className="relative z-10 mx-auto max-w-4xl px-6 py-32">
-          <div className="rounded-3xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-950 p-10 text-center">
-            <h3 className="text-2xl sm:text-3xl font-bold">
-              Готовы начать?
-            </h3>
+        <CTASection />
 
-            <p className="mt-4 text-lg sm:text-xl text-zinc-400 leading-relaxed">
-              Пользователей, уже взявших свои финансы под контроль
-            </p>
-
-            <div className="mt-8">
-              <div className="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-6 py-3 text-base sm:text-lg text-emerald-400">
-                <span className="relative flex h-3 w-3 mr-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                </span>
-                12
-              </div>
-            </div>
-          </div>
-        </section>
-
+		{/* ================= SupportButton ================= */}
         <SupportButton />
-
-        {/* ================= FOOTER ================= */}
-        <footer className="relative z-10 border-t border-zinc-800 px-6 py-12 text-center text-sm sm:text-base text-zinc-500">
-          <div>Leprechaun — ваш финансовый помощник</div>
-          <div className="mt-3 text-xs sm:text-sm text-zinc-600">
-            Сделано с заботой, чтобы помочь разобраться с финансами
-          </div>
-        </footer>
 
       </main>
     </>
