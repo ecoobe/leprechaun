@@ -48,7 +48,7 @@ export function HeroSection() {
                 hover:shadow-lg
               "
             >
-              <Link href="https://t.me/dmilarin" target="_blank">
+              <Link href="/register">
                 Начать бесплатно
               </Link>
             </Button>
