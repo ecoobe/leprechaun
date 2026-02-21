@@ -2,9 +2,10 @@
 
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
+import { useState } from "react";
 
 /* =========================
-   Testimonials Data
+   Data
 ========================= */
 
 const testimonials = [
@@ -51,7 +52,7 @@ const testimonials = [
 ];
 
 /* =========================
-   Card Component
+   Card
 ========================= */
 
 function TestimonialCard({ testimonial }: { testimonial: any }) {
@@ -73,7 +74,6 @@ function TestimonialCard({ testimonial }: { testimonial: any }) {
           hover:shadow-emerald-500/10
         "
       >
-        {/* Stars */}
         <div className="flex gap-1 mb-4">
           {[...Array(testimonial.rating)].map((_, i) => (
             <Star
@@ -83,12 +83,10 @@ function TestimonialCard({ testimonial }: { testimonial: any }) {
           ))}
         </div>
 
-        {/* Text */}
         <p className="text-zinc-300 leading-relaxed mb-6">
           “{testimonial.text}”
         </p>
 
-        {/* Author */}
         <div className="border-t border-zinc-800 pt-4">
           <p className="font-semibold text-zinc-100">
             {testimonial.name}
@@ -100,25 +98,27 @@ function TestimonialCard({ testimonial }: { testimonial: any }) {
 }
 
 /* =========================
-   Main Component
+   Main
 ========================= */
 
 export function Testimonials() {
+  const [isPaused, setIsPaused] = useState(false);
+
   const firstRow = testimonials.slice(0, 4);
   const secondRow = testimonials.slice(4, 8);
 
   return (
     <section className="relative w-full py-32 overflow-hidden">
 
-      {/* Header */}
-      <div className="w-full px-6 mb-20 text-left">
+      {/* Header — выровнен как в HowItWorks */}
+      <div className="mx-auto max-w-[1400px] px-6 mb-20 text-left">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+          <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight mb-4">
             Что говорят пользователи
           </h2>
           <p className="text-xl text-zinc-400 max-w-2xl">
@@ -127,42 +127,64 @@ export function Testimonials() {
         </motion.div>
       </div>
 
-      {/* First row */}
-      <div className="relative w-full mb-8">
-        <motion.div
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{
-            duration: 60,
-            repeat: Infinity,
-            ease: "linear",
-            repeatType: "loop",
-          }}
-          className="flex w-max"
+      {/* Mask wrapper */}
+      <div
+        className="relative w-full"
+        style={{
+          maskImage:
+            "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
+          WebkitMaskImage:
+            "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
+        }}
+      >
+        {/* First row */}
+        <div
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          className="relative w-full mb-8"
         >
-          {[...firstRow, ...firstRow].map((t, idx) => (
-            <TestimonialCard key={`first-${idx}`} testimonial={t} />
-          ))}
-        </motion.div>
-      </div>
+          <motion.div
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{
+              duration: 70,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            style={{
+              animationPlayState: isPaused ? "paused" : "running",
+            }}
+            className="flex w-max"
+          >
+            {[...firstRow, ...firstRow].map((t, idx) => (
+              <TestimonialCard key={`first-${idx}`} testimonial={t} />
+            ))}
+          </motion.div>
+        </div>
 
-      {/* Second row */}
-      <div className="relative w-full">
-        <motion.div
-          animate={{ x: ["-50%", "0%"] }}
-          transition={{
-            duration: 60,
-            repeat: Infinity,
-            ease: "linear",
-            repeatType: "loop",
-          }}
-          className="flex w-max"
+        {/* Second row */}
+        <div
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          className="relative w-full"
         >
-          {[...secondRow, ...secondRow].map((t, idx) => (
-            <TestimonialCard key={`second-${idx}`} testimonial={t} />
-          ))}
-        </motion.div>
+          <motion.div
+            animate={{ x: ["-50%", "0%"] }}
+            transition={{
+              duration: 70,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            style={{
+              animationPlayState: isPaused ? "paused" : "running",
+            }}
+            className="flex w-max"
+          >
+            {[...secondRow, ...secondRow].map((t, idx) => (
+              <TestimonialCard key={`second-${idx}`} testimonial={t} />
+            ))}
+          </motion.div>
+        </div>
       </div>
-
     </section>
   );
 }
