@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
-import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/ui/Header";
@@ -9,7 +8,7 @@ import { Header } from "@/components/ui/Header";
 export default function RegisterPage() {
   const [step, setStep] = useState<1 | 2>(1);
 
-  const dotColor =
+  const dotGradient =
     "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500";
 
   return (
@@ -23,39 +22,29 @@ export default function RegisterPage() {
       <Header />
 
       <main className="relative min-h-screen flex items-center justify-center px-6 py-24 text-zinc-100">
-        <motion.div
-          layout
-          transition={{ layout: { duration: 0.6, ease: "easeInOut" } }}
-          className="w-full max-w-md bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-3xl p-10 shadow-xl"
+        <div
+          className="
+            w-full
+            max-w-md
+            bg-zinc-900/60
+            backdrop-blur-xl
+            border border-zinc-800
+            rounded-3xl
+            p-10
+            shadow-xl
+          "
         >
           {/* Header */}
-          <div className="mb-8 text-center">
+          <div className="mb-10 text-center">
             <div className="flex justify-center items-center gap-3 mb-4">
-              <motion.div
-                layout
-                animate={step === 1 ? { scale: 1.05 } : { scale: 1 }}
-                transition={{
-                  repeat: step === 1 ? Infinity : 0,
-                  repeatType: "reverse",
-                  duration: 2,
-                  ease: "easeInOut",
-                }}
+              <div
                 className={`w-2.5 h-2.5 rounded-full ${
-                  step === 1 ? dotColor : "bg-emerald-500"
+                  step === 1 ? dotGradient : "bg-emerald-500"
                 }`}
               />
-
-              <motion.div
-                layout
-                animate={step === 2 ? { scale: 1.05 } : { scale: 1 }}
-                transition={{
-                  repeat: step === 2 ? Infinity : 0,
-                  repeatType: "reverse",
-                  duration: 2,
-                  ease: "easeInOut",
-                }}
+              <div
                 className={`w-2.5 h-2.5 rounded-full ${
-                  step === 2 ? dotColor : "bg-zinc-600"
+                  step === 2 ? dotGradient : "bg-zinc-600"
                 }`}
               />
             </div>
@@ -65,72 +54,97 @@ export default function RegisterPage() {
             </h1>
           </div>
 
-          {/* Контент */}
-          <motion.div layout className="flex flex-col gap-6">
-            {step === 1 && (
-              <>
-                <motion.div layout>
-                  <label className="block text-sm text-zinc-400 mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    placeholder="you@example.com"
-                  />
-                </motion.div>
-
-                <Button
-                  onClick={() => setStep(2)}
-                  className="w-full rounded-full py-3 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white"
+          {/* STEP 1 (всегда виден в основе) */}
+          <div className="space-y-6">
+            <AnimatePresence initial={false}>
+              {step === 1 && (
+                <motion.div
+                  key="step1"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{
+                    height: { duration: 0.4, ease: "easeInOut" },
+                    opacity: { duration: 0.2 },
+                  }}
+                  className="overflow-hidden space-y-6"
                 >
-                  Получить код
-                </Button>
-              </>
-            )}
+                  <div>
+                    <label className="block text-sm text-zinc-400 mb-2">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="you@example.com"
+                      className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
 
-            {step === 2 && (
-              <>
-                <motion.div layout>
-                  <label className="block text-sm text-zinc-400 mb-2">
-                    Код из письма
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    placeholder="Введите код"
-                  />
+                  <Button
+                    onClick={() => setStep(2)}
+                    className="w-full rounded-full py-3 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white"
+                  >
+                    Получить код
+                  </Button>
                 </motion.div>
+              )}
+            </AnimatePresence>
 
-                <motion.div layout>
-                  <label className="block text-sm text-zinc-400 mb-2">
-                    Пароль
-                  </label>
-                  <input
-                    type="password"
-                    className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    placeholder="Введите пароль"
-                  />
+            {/* STEP 2 (раскрывается вниз как FAQ) */}
+            <AnimatePresence initial={false}>
+              {step === 2 && (
+                <motion.div
+                  key="step2"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{
+                    height: { duration: 0.45, ease: "easeInOut" },
+                    opacity: { duration: 0.25 },
+                  }}
+                  className="overflow-hidden space-y-6"
+                >
+                  <div>
+                    <label className="block text-sm text-zinc-400 mb-2">
+                      Код из письма
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Введите код"
+                      className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm text-zinc-400 mb-2">
+                      Пароль
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="Введите пароль"
+                      className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm text-zinc-400 mb-2">
+                      Подтвердите пароль
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="Повторите пароль"
+                      className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+
+                  <Button className="w-full rounded-full py-3 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white">
+                    Сохранить
+                  </Button>
                 </motion.div>
-
-                <motion.div layout>
-                  <label className="block text-sm text-zinc-400 mb-2">
-                    Подтвердите пароль
-                  </label>
-                  <input
-                    type="password"
-                    className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    placeholder="Повторите пароль"
-                  />
-                </motion.div>
-
-                <Button className="w-full rounded-full py-3 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white">
-                  Сохранить
-                </Button>
-              </>
-            )}
-          </motion.div>
-        </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
       </main>
     </>
   );
