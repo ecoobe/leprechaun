@@ -67,7 +67,7 @@ export function CTASection() {
                       hover:shadow-lg
                     "
                   >
-                    <Link href="https://t.me/your_channel" target="_blank">
+                    <Link href="https://t.me/dmilarin" target="_blank">
                       Начать
                     </Link>
                   </Button>
