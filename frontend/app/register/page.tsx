@@ -22,12 +22,9 @@ export default function RegisterPage() {
       <Header />
 
       <main className="relative min-h-screen flex items-start justify-center px-6 pt-40 pb-24 text-zinc-100">
-        <motion.div
-          layout
-          transition={{ duration: 0.45, ease: "easeInOut" }}
-          className="w-full max-w-md bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-3xl p-10 shadow-xl"
-        >
-          {/* Header */}
+        <div className="w-full max-w-md bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-3xl p-10 shadow-xl">
+
+          {/* ---------- СТАТИЧНЫЙ HEADER ---------- */}
           <div className="mb-10 text-center">
             <div className="flex justify-center items-center gap-3 mb-4">
               <div
@@ -47,7 +44,12 @@ export default function RegisterPage() {
             </h1>
           </div>
 
-          <motion.div layout className="flex flex-col gap-6">
+          {/* ---------- АНИМИРУЕМАЯ ФОРМА ---------- */}
+          <motion.div
+            layout
+            transition={{ duration: 0.45, ease: "easeInOut" }}
+            className="flex flex-col gap-6"
+          >
             {/* Email */}
             <motion.div layout>
               <label className="block text-sm text-zinc-400 mb-2">
@@ -72,7 +74,12 @@ export default function RegisterPage() {
             {/* Дополнительные поля */}
             {expanded && (
               <>
-                <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
+                <motion.div
+                  layout
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
                   <label className="block text-sm text-zinc-400 mb-2">
                     Код из письма
                   </label>
@@ -83,7 +90,12 @@ export default function RegisterPage() {
                   />
                 </motion.div>
 
-                <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
+                <motion.div
+                  layout
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
                   <label className="block text-sm text-zinc-400 mb-2">
                     Пароль
                   </label>
@@ -94,7 +106,12 @@ export default function RegisterPage() {
                   />
                 </motion.div>
 
-                <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
+                <motion.div
+                  layout
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
                   <label className="block text-sm text-zinc-400 mb-2">
                     Подтвердите пароль
                   </label>
@@ -117,7 +134,7 @@ export default function RegisterPage() {
               </Button>
             </motion.div>
           </motion.div>
-        </motion.div>
+        </div>
       </main>
     </>
   );
