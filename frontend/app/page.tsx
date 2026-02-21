@@ -2,14 +2,12 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import Link from "next/link";
 
 import { Header } from "@/components/ui/Header";
 import { SupportButton } from "@/components/ui/SupportButton";
 import { Testimonials } from "@/components/ui/Testimonials";
-import { HeroShowcase } from "@/components/ui/HeroShowcase";
 import HowItWorks from "@/components/ui/HowItWorks";
-import { Button } from "@/components/ui/button";
+import { HeroSection } from "@/components/ui/HeroSection";
 
 /* =========================
    FAQ Item Component
@@ -95,7 +93,7 @@ export default function HomePage() {
 
   return (
     <>
-      {/* Background Glow */}
+      {/* ================= Background Glow ================= */}
       <div className="pointer-events-none fixed inset-0">
         <div className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-indigo-500/20 blur-3xl" />
@@ -106,92 +104,14 @@ export default function HomePage() {
       <main className="relative min-h-screen overflow-x-hidden text-zinc-100">
 
         {/* ================= HERO ================= */}
-        <section className="relative w-full py-36">
-          <div className="mx-auto max-w-7xl px-6 grid gap-20 lg:grid-cols-2 items-center">
-
-            {/* LEFT */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-left"
-            >
-              <h1 className="text-6xl sm:text-8xl font-semibold tracking-tight leading-tight">
-                Лепрекон
-                <span className="block text-3xl sm:text-4xl font-medium tracking-tight leading-snug text-emerald-400 mt-3">
-                  Спокойствие в финансах
-                </span>
-              </h1>
-
-              <p className="mt-8 max-w-xl text-lg sm:text-xl text-zinc-300 leading-relaxed">
-                Лепрекон следит за твоей кармой в банках, напоминая вовремя
-                о платежах и помогая держать всё под контролем.
-              </p>
-
-              <div className="mt-12 flex gap-6 flex-wrap">
-
-                {/* Primary */}
-                <Button
-                  asChild
-                  className="
-                    rounded-full
-                    px-8
-                    py-6
-                    bg-gradient-to-r
-                    from-emerald-500
-                    via-green-500
-                    to-teal-500
-                    text-white
-                    shadow-md
-                    hover:scale-105
-                    hover:shadow-lg
-                    transition-all
-                    duration-300
-                  "
-                >
-                  <Link href="https://t.me/your_channel" target="_blank">
-                    Начать бесплатно
-                  </Link>
-                </Button>
-
-                {/* Secondary */}
-                <Button
-                  asChild
-                  className="
-                    rounded-full
-                    px-8
-                    py-6
-                    border
-                    border-zinc-700
-                    bg-zinc-900/60
-                    backdrop-blur
-                    text-zinc-200
-                    hover:bg-zinc-800
-                    hover:border-zinc-600
-                    transition-all
-                    duration-300
-                  "
-                >
-                  <Link href="/how-it-works">
-                    Узнать больше
-                  </Link>
-                </Button>
-
-              </div>
-            </motion.div>
-
-            {/* RIGHT */}
-            <HeroShowcase />
-
-          </div>
-        </section>
+        <HeroSection />
 
         {/* ================= HOW IT WORKS ================= */}
         <HowItWorks />
 
         {/* ================= TESTIMONIALS ================= */}
-		<Testimonials />
-		
+        <Testimonials />
+
         {/* ================= FAQ ================= */}
         <section
           id="faq"
