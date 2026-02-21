@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 export function Header() {
   return (
     <header className="fixed top-6 left-0 right-0 z-50 px-6">
-      
       <nav
         className="
           w-full
@@ -24,7 +23,7 @@ export function Header() {
         "
       >
         {/* LOGO */}
-        <a href="#hero" className="flex items-center gap-4 group cursor-pointer">
+        <Link href="/#hero" className="flex items-center gap-4 group">
           <div
             className="
               w-11 h-11
@@ -41,9 +40,7 @@ export function Header() {
               group-hover:scale-105
             "
           >
-            <span className="text-white font-semibold text-lg">
-              L
-            </span>
+            <span className="text-white font-semibold text-lg">L</span>
           </div>
 
           <span
@@ -61,28 +58,28 @@ export function Header() {
           >
             Leprechaun
           </span>
-        </a>
+        </Link>
 
         {/* Navigation */}
         <div className="hidden md:flex items-center gap-10 text-base font-medium text-zinc-400">
-          <a href="#how-it-works" className="hover:text-white transition-colors">
+          <Link href="/#how-it-works" className="hover:text-white transition-colors">
             Как работает
-          </a>
+          </Link>
 
-          <a href="#testimonials" className="hover:text-white transition-colors">
+          <Link href="/#testimonials" className="hover:text-white transition-colors">
             Отзывы
-          </a>
+          </Link>
 
-          <a href="#faq" className="hover:text-white transition-colors">
+          <Link href="/#faq" className="hover:text-white transition-colors">
             FAQ
-          </a>
+          </Link>
 
-          <a href="#cta" className="hover:text-white transition-colors">
+          <Link href="/#cta" className="hover:text-white transition-colors">
             Начать
-          </a>
+          </Link>
         </div>
 
-        {/* CTA Button */}
+        {/* CTA */}
         <Button
           asChild
           className="
@@ -104,7 +101,6 @@ export function Header() {
             Войти
           </Link>
         </Button>
-
       </nav>
     </header>
   );
