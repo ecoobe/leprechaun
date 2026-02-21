@@ -11,7 +11,7 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
-        atelas: ["Atelas", "sans-serif"], // <- добавили сюда шрифт Atelas
+        atelas: ["Atelas", "sans-serif"],
       },
     },
   },
