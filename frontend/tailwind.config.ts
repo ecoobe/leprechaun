@@ -8,13 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
-      },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-        atelas: ["Atelas", "sans-serif"], // Класс font-atelas теперь работает
+        mono: ["var(--font-mono)", "monospace"],
       },
     },
   },
