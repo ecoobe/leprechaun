@@ -83,18 +83,22 @@ export default function LoginPage() {
               </Button>
             </motion.div>
 
-            {/* Интерактивный текст */}
-            <motion.div layout className="text-center mt-2 text-sm text-zinc-400">
-              <span
-                className="cursor-pointer text-emerald-400 hover:underline"
-                onClick={() => alert("Форма восстановления пароля пока не реализована")}
-              >
-                Забыл пароль?
-              </span>{" "}
-              Впервые у нас?{" "}
-              <Link href="/register" className="text-emerald-400 hover:underline">
-                Зарегистрироваться
-              </Link>
+            {/* Интерактивный текст на двух строках */}
+            <motion.div layout className="text-center mt-2 text-sm text-zinc-400 space-y-1">
+              <div>
+                <span
+                  className="cursor-pointer text-emerald-400 hover:underline"
+                  onClick={() => alert("Форма восстановления пароля пока не реализована")}
+                >
+                  Забыл пароль?
+                </span>
+              </div>
+              <div>
+                Впервые у нас?{" "}
+                <Link href="/register" className="text-emerald-400 hover:underline">
+                  Зарегистрироваться
+                </Link>
+              </div>
             </motion.div>
           </motion.div>
         </div>
