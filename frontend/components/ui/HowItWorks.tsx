@@ -68,24 +68,22 @@ export default function HowItWorks() {
               key={step.title}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              whileHover={{ y: -8, scale: 1.02 }}
               viewport={{ once: true }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              transition={{ duration: 0.6, delay: index * 0.15 }}
               className="
                 rounded-3xl
-                border
-                border-zinc-800
+                border border-zinc-800
                 bg-zinc-900/60
                 backdrop-blur
                 p-10
                 transition-all
                 duration-300
+                hover:-translate-y-2
                 hover:border-emerald-500/40
                 hover:shadow-xl
                 hover:shadow-emerald-500/10
               "
             >
-              {/* Icon */}
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center mb-6">
                 <step.icon className="w-7 h-7 text-emerald-400" />
               </div>
