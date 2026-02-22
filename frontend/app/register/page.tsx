@@ -22,7 +22,12 @@ export default function RegisterPage() {
       <Header />
 
       <main className="relative min-h-screen flex items-start justify-center px-6 pt-40 pb-24 text-zinc-100">
-        <div className="form-card">
+        {/* --- Card контейнер с плавной анимацией высоты --- */}
+        <motion.div
+          layout
+          transition={{ duration: 0.45, ease: "easeInOut" }}
+          className="form-card"
+        >
           {/* Header with dots */}
           <div className="form-header">
             <div className="flex justify-center items-center gap-3 mb-4">
@@ -40,13 +45,10 @@ export default function RegisterPage() {
             <h1 className="form-title">Создать аккаунт</h1>
           </div>
 
-          {/* Form */}
+          {/* --- Form fields --- */}
           <div className="flex flex-col gap-6">
             {/* Email */}
-            <motion.div
-              initial={false}
-              layout
-            >
+            <motion.div initial={false} layout>
               <label className="form-label">Email</label>
               <input
                 type="email"
@@ -56,13 +58,13 @@ export default function RegisterPage() {
               />
             </motion.div>
 
-            {/* Expanded fields: появляются поочередно через opacity */}
+            {/* Expanded fields: появляются через opacity */}
             {expanded && (
               <>
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.25, delay: fieldDelays[0] }}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.25, delay: fieldDelays[0], ease: "easeOut" }}
                 >
                   <label className="form-label">Код из письма</label>
                   <input
@@ -73,9 +75,9 @@ export default function RegisterPage() {
                 </motion.div>
 
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.25, delay: fieldDelays[1] }}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.25, delay: fieldDelays[1], ease: "easeOut" }}
                 >
                   <label className="form-label">Пароль</label>
                   <input
@@ -86,9 +88,9 @@ export default function RegisterPage() {
                 </motion.div>
 
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.25, delay: fieldDelays[2] }}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.25, delay: fieldDelays[2], ease: "easeOut" }}
                 >
                   <label className="form-label">Подтвердите пароль</label>
                   <input
@@ -114,7 +116,7 @@ export default function RegisterPage() {
               </Button>
             </motion.div>
           </div>
-        </div>
+        </motion.div>
       </main>
     </>
   );
