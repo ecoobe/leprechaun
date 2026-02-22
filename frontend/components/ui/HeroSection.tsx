@@ -7,8 +7,8 @@ import { HeroShowcase } from "@/components/ui/HeroShowcase";
 
 export function HeroSection() {
   return (
-    <section className="relative py-36 px-6">
-      <div className="mx-auto max-w-7xl grid gap-20 lg:grid-cols-2 items-center">
+    <section className="section">
+      <div className="container-wide grid gap-20 lg:grid-cols-2 items-center">
 
         {/* LEFT */}
         <motion.div
@@ -31,43 +31,13 @@ export function HeroSection() {
 
           <div className="mt-12 flex gap-6 flex-wrap">
 
-            <Button
-              asChild
-              className="
-                rounded-full
-                px-8 py-6
-                bg-gradient-to-r
-                from-emerald-500
-                via-green-500
-                to-teal-500
-                text-white
-                shadow-md
-                transition-all
-                duration-300
-                hover:scale-105
-                hover:shadow-lg
-              "
-            >
+            <Button asChild className="btn-primary px-8 py-6">
               <Link href="/register">
                 Начать бесплатно
               </Link>
             </Button>
 
-            <Button
-              asChild
-              className="
-                rounded-full
-                px-8 py-6
-                border border-zinc-700
-                bg-zinc-900/60
-                backdrop-blur
-                text-zinc-200
-                transition-all
-                duration-300
-                hover:bg-zinc-800
-                hover:border-zinc-600
-              "
-            >
+            <Button asChild className="btn-secondary px-8 py-6">
               <Link href="/how-it-works">
                 Узнать больше
               </Link>
