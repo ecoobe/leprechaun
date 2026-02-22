@@ -137,4 +137,41 @@
   .footer-text {
     @apply text-sm text-zinc-600;
   }
+
+  .form-card {
+    @apply w-full max-w-md bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-3xl p-10 shadow-xl;
+  }
+
+  .form-header {
+    @apply mb-10 text-center;
+  }
+
+  .form-title {
+    @apply text-4xl font-semibold tracking-tight;
+  }
+
+  .form-label {
+    @apply block text-sm text-zinc-400 mb-2;
+  }
+
+  .form-input {
+    @apply w-full rounded-xl px-4 py-3 text-white bg-zinc-800/60 border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300;
+  }
+
+  .form-input:disabled {
+    @apply bg-zinc-800/40 border-zinc-700 text-zinc-400 cursor-not-allowed;
+  }
+
+  .form-link {
+    @apply text-emerald-400 hover:underline;
+  }
+
+  .form-text-muted {
+    @apply text-sm text-zinc-400;
+  }
+
+  /* Gradient dots for registration steps */
+  .dot-gradient {
+    @apply bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500;
+  }
 }

@@ -8,9 +8,6 @@ import { Header } from "@/components/ui/Header";
 export default function RegisterPage() {
   const [expanded, setExpanded] = useState(false);
 
-  const dotGradient =
-    "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500";
-
   return (
     <>
       {/* Background */}
@@ -22,56 +19,43 @@ export default function RegisterPage() {
       <Header />
 
       <main className="relative min-h-screen flex items-start justify-center px-6 pt-40 pb-24 text-zinc-100">
-        <div className="w-full max-w-md bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-3xl p-10 shadow-xl">
-
-          {/* ---------- СТАТИЧНЫЙ HEADER ---------- */}
-          <div className="mb-10 text-center">
+        <div className="form-card">
+          {/* Static header with dots */}
+          <div className="form-header">
             <div className="flex justify-center items-center gap-3 mb-4">
               <div
                 className={`w-2.5 h-2.5 rounded-full ${
-                  !expanded ? dotGradient : "bg-emerald-500"
+                  !expanded ? "dot-gradient" : "bg-emerald-500"
                 }`}
               />
               <div
                 className={`w-2.5 h-2.5 rounded-full ${
-                  expanded ? dotGradient : "bg-zinc-600"
+                  expanded ? "dot-gradient" : "bg-zinc-600"
                 }`}
               />
             </div>
 
-            <h1 className="text-4xl font-semibold tracking-tight">
-              Создать аккаунт
-            </h1>
+            <h1 className="form-title">Создать аккаунт</h1>
           </div>
 
-          {/* ---------- АНИМИРУЕМАЯ ФОРМА ---------- */}
+          {/* Animated form */}
           <motion.div
             layout
             transition={{ duration: 0.45, ease: "easeInOut" }}
             className="flex flex-col gap-6"
           >
-            {/* Email */}
+            {/* Email (always visible) */}
             <motion.div layout>
-              <label className="block text-sm text-zinc-400 mb-2">
-                Email
-              </label>
+              <label className="form-label">Email</label>
               <input
                 type="email"
                 disabled={expanded}
                 placeholder="you@example.com"
-                className={`
-                  w-full rounded-xl px-4 py-3 text-white
-                  border transition-all duration-300
-                  ${
-                    expanded
-                      ? "bg-zinc-800/40 border-zinc-700 text-zinc-400 cursor-not-allowed"
-                      : "bg-zinc-800/60 border-zinc-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  }
-                `}
+                className={`form-input ${expanded ? "disabled" : ""}`}
               />
             </motion.div>
 
-            {/* Дополнительные поля */}
+            {/* Expanded fields */}
             {expanded && (
               <>
                 <motion.div
@@ -80,13 +64,11 @@ export default function RegisterPage() {
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <label className="block text-sm text-zinc-400 mb-2">
-                    Код из письма
-                  </label>
+                  <label className="form-label">Код из письма</label>
                   <input
                     type="text"
                     placeholder="Введите код"
-                    className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="form-input"
                   />
                 </motion.div>
 
@@ -96,13 +78,11 @@ export default function RegisterPage() {
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <label className="block text-sm text-zinc-400 mb-2">
-                    Пароль
-                  </label>
+                  <label className="form-label">Пароль</label>
                   <input
                     type="password"
                     placeholder="Введите пароль"
-                    className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="form-input"
                   />
                 </motion.div>
 
@@ -112,13 +92,11 @@ export default function RegisterPage() {
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <label className="block text-sm text-zinc-400 mb-2">
-                    Подтвердите пароль
-                  </label>
+                  <label className="form-label">Подтвердите пароль</label>
                   <input
                     type="password"
                     placeholder="Повторите пароль"
-                    className="w-full rounded-xl bg-zinc-800/60 border border-zinc-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="form-input"
                   />
                 </motion.div>
               </>
@@ -128,7 +106,8 @@ export default function RegisterPage() {
             <motion.div layout>
               <Button
                 onClick={() => setExpanded(true)}
-                className="w-full rounded-full py-3 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white"
+                variant="primary"
+                className="w-full rounded-full py-3"
               >
                 {expanded ? "Сохранить" : "Получить код"}
               </Button>
