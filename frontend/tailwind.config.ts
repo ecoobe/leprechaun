@@ -9,8 +9,14 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
+        /* Основной текст сайта */
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+
+        /* Моно */
         mono: ["var(--font-mono)", "monospace"],
+
+        /* Логотип */
+        atelas: ["var(--font-atelas)", "serif"],
       },
     },
   },

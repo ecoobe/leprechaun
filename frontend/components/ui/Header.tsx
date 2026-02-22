@@ -22,12 +22,12 @@ export function Header() {
           shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)]
         "
       >
-        {/* LOGO */}
-        <Link href="/#hero" className="flex items-center gap-4 group">
+        {/* ---------- LOGO ---------- */}
+        <Link href="/#hero" className="group">
           <span
             className="
-              text-2xl
               font-atelas
+              text-2xl
               tracking-tight
               bg-gradient-to-r
               from-emerald-400
@@ -35,32 +35,46 @@ export function Header() {
               to-teal-400
               bg-clip-text
               text-transparent
+              transition-opacity
+              group-hover:opacity-80
             "
           >
             Leprechaun
           </span>
         </Link>
 
-        {/* Navigation */}
+        {/* ---------- Navigation ---------- */}
         <div className="hidden md:flex items-center gap-10 text-base font-medium text-zinc-400">
-          <Link href="/#how-it-works" className="hover:text-white transition-colors">
+          <Link
+            href="/#how-it-works"
+            className="hover:text-white transition-colors"
+          >
             Как работает
           </Link>
 
-          <Link href="/#testimonials" className="hover:text-white transition-colors">
+          <Link
+            href="/#testimonials"
+            className="hover:text-white transition-colors"
+          >
             Отзывы
           </Link>
 
-          <Link href="/#faq" className="hover:text-white transition-colors">
+          <Link
+            href="/#faq"
+            className="hover:text-white transition-colors"
+          >
             FAQ
           </Link>
 
-          <Link href="/#cta" className="hover:text-white transition-colors">
+          <Link
+            href="/#cta"
+            className="hover:text-white transition-colors"
+          >
             Начать
           </Link>
         </div>
 
-        {/* CTA */}
+        {/* ---------- CTA ---------- */}
         <Button
           asChild
           className="
@@ -78,9 +92,7 @@ export function Header() {
             duration-300
           "
         >
-          <Link href="/login">
-            Войти
-          </Link>
+          <Link href="/login">Войти</Link>
         </Button>
       </nav>
     </header>
