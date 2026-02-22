@@ -26,7 +26,7 @@ const testimonials = [
 function TestimonialCard({ testimonial }: { testimonial: any }) {
   return (
     <div className="flex-shrink-0 w-[340px] mx-4">
-      <div className="testimonial-card flex flex-col h-[250px]">
+      <div className="testimonial-card flex flex-col h-[240px]">
         {/* Stars */}
         <div className="flex gap-1 mb-4">
           {[...Array(testimonial.rating)].map((_, i) => (
