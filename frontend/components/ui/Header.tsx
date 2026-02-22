@@ -27,7 +27,7 @@ export function Header() {
           <span
             className="
               font-atelas
-              text-2xl
+              text-3xl
               tracking-tight
               bg-gradient-to-r
               from-emerald-400
