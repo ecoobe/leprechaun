@@ -43,10 +43,7 @@ export default function RegisterPage() {
           {/* Form */}
           <div className="flex flex-col gap-6">
             {/* Email */}
-            <motion.div
-              initial={false}
-              layout
-            >
+            <div>
               <label className="form-label">Email</label>
               <input
                 type="email"
@@ -54,9 +51,9 @@ export default function RegisterPage() {
                 placeholder="you@example.com"
                 className={`form-input ${expanded ? "disabled" : ""}`}
               />
-            </motion.div>
+            </div>
 
-            {/* Expanded fields: появляются поочередно через opacity */}
+            {/* Expanded fields: появляются по очереди через opacity */}
             {expanded && (
               <>
                 <motion.div
@@ -104,6 +101,7 @@ export default function RegisterPage() {
             <motion.div
               layout
               transition={{ duration: 0.45, ease: "easeInOut" }}
+              className="mt-6" // отступ от последнего поля
             >
               <Button
                 onClick={() => setExpanded(true)}
