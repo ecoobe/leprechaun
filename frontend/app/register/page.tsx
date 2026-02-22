@@ -8,14 +8,9 @@ import { Header } from "@/components/ui/Header";
 export default function RegisterPage() {
   const [expanded, setExpanded] = useState(false);
 
-  const fieldVariants = {
-    hidden: { opacity: 0, height: 0, marginBottom: 0 },
-    visible: { opacity: 1, height: "auto", marginBottom: 24 }, // 24px = gap-6
-    exit: { opacity: 0, height: 0, marginBottom: 0 }
-  };
-
   return (
     <>
+      {/* Background */}
       <div className="pointer-events-none fixed inset-0">
         <div className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-indigo-500/20 blur-3xl" />
@@ -59,17 +54,16 @@ export default function RegisterPage() {
               />
             </motion.div>
 
-            {/* Expanded fields with AnimatePresence */}
-            <AnimatePresence mode="sync">
+            {/* Expanded fields - появляются с opacity, без анимации высоты */}
+            <AnimatePresence>
               {expanded && (
                 <>
                   <motion.div
                     key="code"
-                    variants={fieldVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    transition={{ duration: 0.35, ease: "easeInOut" }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
                   >
                     <label className="form-label">Код из письма</label>
                     <input
@@ -81,11 +75,10 @@ export default function RegisterPage() {
 
                   <motion.div
                     key="password"
-                    variants={fieldVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    transition={{ duration: 0.35, ease: "easeInOut" }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
                   >
                     <label className="form-label">Пароль</label>
                     <input
@@ -97,11 +90,10 @@ export default function RegisterPage() {
 
                   <motion.div
                     key="confirm"
-                    variants={fieldVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    transition={{ duration: 0.35, ease: "easeInOut" }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
                   >
                     <label className="form-label">Подтвердите пароль</label>
                     <input
