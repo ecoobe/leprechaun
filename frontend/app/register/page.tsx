@@ -22,13 +22,8 @@ export default function RegisterPage() {
       <Header />
 
       <main className="relative min-h-screen flex items-start justify-center px-6 pt-40 pb-24 text-zinc-100">
-        {/* Карточка с анимированным layout – расширяется плавно */}
-        <motion.div
-          layout
-          transition={{ duration: 0.45, ease: "easeInOut" }}
-          className="form-card"
-        >
-          {/* Header с точками-индикаторами */}
+        <div className="form-card">
+          {/* Header with dots */}
           <div className="form-header">
             <div className="flex justify-center items-center gap-3 mb-4">
               <div
@@ -45,20 +40,23 @@ export default function RegisterPage() {
             <h1 className="form-title">Создать аккаунт</h1>
           </div>
 
-          {/* Форма */}
+          {/* Form */}
           <div className="flex flex-col gap-6">
-            {/* Email (всегда виден) */}
-            <motion.div initial={false} layout>
+            {/* Email */}
+            <motion.div
+              initial={false}
+              layout
+            >
               <label className="form-label">Email</label>
               <input
                 type="email"
                 disabled={expanded}
                 placeholder="you@example.com"
-                className="form-input"
+                className={`form-input ${expanded ? "disabled" : ""}`}
               />
             </motion.div>
 
-            {/* Дополнительные поля, появляются после нажатия на кнопку */}
+            {/* Expanded fields: появляются поочередно через opacity */}
             {expanded && (
               <>
                 <motion.div
@@ -102,7 +100,7 @@ export default function RegisterPage() {
               </>
             )}
 
-            {/* Кнопка – тоже с layout для плавного перемещения */}
+            {/* Button */}
             <motion.div
               layout
               transition={{ duration: 0.45, ease: "easeInOut" }}
@@ -116,7 +114,7 @@ export default function RegisterPage() {
               </Button>
             </motion.div>
           </div>
-        </motion.div>
+        </div>
       </main>
     </>
   );
