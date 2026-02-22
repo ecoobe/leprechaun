@@ -10,23 +10,22 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        /* === GRADIENT PRIMARY (как было btn-primary / btn-primary-large) === */
-        primary: 
-		  "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-zinc-800 shadow-md hover:brightness-110 hover:shadow-lg transition-all duration-300",
+        /* GRADIENT PRIMARY */
+        primary:
+          "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-zinc-800 shadow-md hover:scale-105 hover:shadow-lg",
 
-        /* === DARK GLASS SECONDARY (как было btn-secondary / btn-secondary-large) === */
+        /* DARK GLASS SECONDARY */
         secondary:
-          "border border-zinc-700 bg-zinc-900/60 backdrop-blur text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600",
+          "border border-zinc-700 bg-zinc-900/60 backdrop-blur text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:scale-105 hover:shadow-lg",
 
-        /* === Outline (оставляем системный) === */
+        //Outline (оставляем системный)
         outline:
           "border border-zinc-700 bg-transparent hover:bg-zinc-800",
 
-        /* === Ghost === */
+        //Ghost
         ghost:
           "hover:bg-accent hover:text-accent-foreground",
-
-        /* === Link === */
+        //Link
         link:
           "text-primary underline-offset-4 hover:underline",
       },
