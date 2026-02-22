@@ -116,11 +116,10 @@
   }
 
   .step-card {
-    @apply border border-zinc-800 bg-zinc-900/60 backdrop-blur p-10 transition-all duration-300 hover:-translate-y-2 hover:border-blue-500/40 hover:shadow-xl hover:shadow-blue-500/10;
+    @apply rounded-3xl border border-zinc-800 bg-zinc-900/60 backdrop-blur p-10 transition-all duration-300 hover:-translate-y-2 hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/10;
   }
-
   .testimonial-card {
-    @apply border border-zinc-800 bg-zinc-900/60 backdrop-blur p-8 transition-all duration-300 hover:-translate-y-2 hover:border-blue-500/40 hover:shadow-xl hover:shadow-blue-500/10;
+    @apply rounded-3xl border border-zinc-800 bg-zinc-900/60 backdrop-blur p-8 transition-all duration-300 hover:-translate-y-2 hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/10;
   }
 
   .faq-card {
