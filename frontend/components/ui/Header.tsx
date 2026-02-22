@@ -39,7 +39,7 @@ export function Header() {
               group-hover:opacity-80
             "
           >
-            Leprechaun
+            leprechaun
           </span>
         </Link>
 
