@@ -9,14 +9,14 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        /* Основной текст сайта */
+        /* Основной текст сайта (Manrope из next/font) */
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
 
         /* Моно */
         mono: ["var(--font-mono)", "monospace"],
 
         /* Логотип */
-        atelas: ["var(--font-atelas)", "serif"],
+        atelas: ["Atelas", "serif"],
       },
     },
   },
