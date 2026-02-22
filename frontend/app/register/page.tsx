@@ -8,8 +8,8 @@ import { Header } from "@/components/ui/Header";
 export default function RegisterPage() {
   const [expanded, setExpanded] = useState(false);
 
-  // задержки для последовательного появления полей
-  const fieldDelays = [0.05, 0.15, 0.25]; // в секундах
+  // Задержки для последовательного появления полей
+  const fieldDelays = [0.05, 0.15, 0.25];
 
   return (
     <>
@@ -41,13 +41,12 @@ export default function RegisterPage() {
           </div>
 
           {/* Form */}
-          <motion.div
-            layout
-            transition={{ duration: 0.45, ease: "easeInOut" }}
-            className="flex flex-col gap-6"
-          >
+          <div className="flex flex-col gap-6">
             {/* Email */}
-            <motion.div layout>
+            <motion.div
+              initial={false}
+              layout
+            >
               <label className="form-label">Email</label>
               <input
                 type="email"
@@ -57,7 +56,7 @@ export default function RegisterPage() {
               />
             </motion.div>
 
-            {/* Expanded fields: появляются последовательно через opacity */}
+            {/* Expanded fields: появляются поочередно через opacity */}
             {expanded && (
               <>
                 <motion.div
@@ -66,7 +65,11 @@ export default function RegisterPage() {
                   transition={{ duration: 0.25, delay: fieldDelays[0] }}
                 >
                   <label className="form-label">Код из письма</label>
-                  <input type="text" placeholder="Введите код" className="form-input" />
+                  <input
+                    type="text"
+                    placeholder="Введите код"
+                    className="form-input"
+                  />
                 </motion.div>
 
                 <motion.div
@@ -75,7 +78,11 @@ export default function RegisterPage() {
                   transition={{ duration: 0.25, delay: fieldDelays[1] }}
                 >
                   <label className="form-label">Пароль</label>
-                  <input type="password" placeholder="Введите пароль" className="form-input" />
+                  <input
+                    type="password"
+                    placeholder="Введите пароль"
+                    className="form-input"
+                  />
                 </motion.div>
 
                 <motion.div
@@ -84,13 +91,20 @@ export default function RegisterPage() {
                   transition={{ duration: 0.25, delay: fieldDelays[2] }}
                 >
                   <label className="form-label">Подтвердите пароль</label>
-                  <input type="password" placeholder="Повторите пароль" className="form-input" />
+                  <input
+                    type="password"
+                    placeholder="Повторите пароль"
+                    className="form-input"
+                  />
                 </motion.div>
               </>
             )}
 
-            {/* Button двигается вниз непрерывно */}
-            <motion.div layout transition={{ duration: 0.45, ease: "easeInOut" }}>
+            {/* Button */}
+            <motion.div
+              layout
+              transition={{ duration: 0.45, ease: "easeInOut" }}
+            >
               <Button
                 onClick={() => setExpanded(true)}
                 variant="primary"
@@ -99,7 +113,7 @@ export default function RegisterPage() {
                 {expanded ? "Сохранить" : "Получить код"}
               </Button>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </main>
     </>
