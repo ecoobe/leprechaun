@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/ui/Header";
@@ -8,9 +8,12 @@ import { Header } from "@/components/ui/Header";
 export default function RegisterPage() {
   const [expanded, setExpanded] = useState(false);
 
+  // задержки для последовательного появления полей
+  const fieldDelays = [0.05, 0.15, 0.25]; // в секундах
+
   return (
     <>
-      {/* ---------- Background ---------- */}
+      {/* Background */}
       <div className="pointer-events-none fixed inset-0">
         <div className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-indigo-500/20 blur-3xl" />
@@ -20,7 +23,7 @@ export default function RegisterPage() {
 
       <main className="relative min-h-screen flex items-start justify-center px-6 pt-40 pb-24 text-zinc-100">
         <div className="form-card">
-          {/* ---------- Static header with dots ---------- */}
+          {/* Header with dots */}
           <div className="form-header">
             <div className="flex justify-center items-center gap-3 mb-4">
               <div
@@ -34,17 +37,16 @@ export default function RegisterPage() {
                 }`}
               />
             </div>
-
             <h1 className="form-title">Создать аккаунт</h1>
           </div>
 
-          {/* ---------- Animated form ---------- */}
+          {/* Form */}
           <motion.div
             layout
             transition={{ duration: 0.45, ease: "easeInOut" }}
             className="flex flex-col gap-6"
           >
-            {/* Email (always visible) */}
+            {/* Email */}
             <motion.div layout>
               <label className="form-label">Email</label>
               <input
@@ -55,49 +57,40 @@ export default function RegisterPage() {
               />
             </motion.div>
 
-            {/* Expanded fields */}
-            <AnimatePresence>
-              {expanded && (
+            {/* Expanded fields: появляются последовательно через opacity */}
+            {expanded && (
+              <>
                 <motion.div
-                  layout
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.35 }}
-                  className="flex flex-col gap-6"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.25, delay: fieldDelays[0] }}
                 >
-                  <div>
-                    <label className="form-label">Код из письма</label>
-                    <input
-                      type="text"
-                      placeholder="Введите код"
-                      className="form-input"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="form-label">Пароль</label>
-                    <input
-                      type="password"
-                      placeholder="Введите пароль"
-                      className="form-input"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="form-label">Подтвердите пароль</label>
-                    <input
-                      type="password"
-                      placeholder="Повторите пароль"
-                      className="form-input"
-                    />
-                  </div>
+                  <label className="form-label">Код из письма</label>
+                  <input type="text" placeholder="Введите код" className="form-input" />
                 </motion.div>
-              )}
-            </AnimatePresence>
 
-            {/* Button */}
-            <motion.div layout>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.25, delay: fieldDelays[1] }}
+                >
+                  <label className="form-label">Пароль</label>
+                  <input type="password" placeholder="Введите пароль" className="form-input" />
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.25, delay: fieldDelays[2] }}
+                >
+                  <label className="form-label">Подтвердите пароль</label>
+                  <input type="password" placeholder="Повторите пароль" className="form-input" />
+                </motion.div>
+              </>
+            )}
+
+            {/* Button двигается вниз непрерывно */}
+            <motion.div layout transition={{ duration: 0.45, ease: "easeInOut" }}>
               <Button
                 onClick={() => setExpanded(true)}
                 variant="primary"
