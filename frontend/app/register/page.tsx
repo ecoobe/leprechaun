@@ -51,7 +51,7 @@ export default function RegisterPage() {
                 type="email"
                 disabled={expanded}
                 placeholder="you@example.com"
-                className={`form-input ${expanded ? "disabled" : ""}`}
+                className="form-input"
               />
             </motion.div>
 
