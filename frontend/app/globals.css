@@ -14,11 +14,9 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ---------- Tailwind theme mapping ---------- */
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-
-  /* ❗ НЕ объявляем --font-sans здесь */
 
   --color-border: var(--border);
   --color-ring: var(--ring);
@@ -44,6 +42,9 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
+
+  /* ✅ Добавляем кастомный шрифт для логотипа */
+  --font-atelas: Atelas, serif;
 }
 
 /* ---------- Design tokens ---------- */
@@ -86,8 +87,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-/* ---------- Tailwind layers ---------- */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
