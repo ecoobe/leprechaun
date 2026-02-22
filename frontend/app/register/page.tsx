@@ -7,10 +7,13 @@ import { Header } from "@/components/ui/Header";
 
 export default function RegisterPage() {
   const [expanded, setExpanded] = useState(false);
+
+  // Задержки для последовательного появления полей
   const fieldDelays = [0.05, 0.15, 0.25];
 
   return (
     <>
+      {/* Background */}
       <div className="pointer-events-none fixed inset-0">
         <div className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-indigo-500/20 blur-3xl" />
@@ -37,14 +40,13 @@ export default function RegisterPage() {
             <h1 className="form-title">Создать аккаунт</h1>
           </div>
 
-          {/* Анимируемая обёртка для полей и кнопки */}
-          <motion.div
-            layout
-            transition={{ duration: 0.45, ease: "easeInOut" }}
-            className="flex flex-col gap-6"
-          >
+          {/* Form */}
+          <div className="flex flex-col gap-6">
             {/* Email */}
-            <div>
+            <motion.div
+              initial={false}
+              layout
+            >
               <label className="form-label">Email</label>
               <input
                 type="email"
@@ -52,9 +54,9 @@ export default function RegisterPage() {
                 placeholder="you@example.com"
                 className={`form-input ${expanded ? "disabled" : ""}`}
               />
-            </div>
+            </motion.div>
 
-            {/* Expanded fields */}
+            {/* Expanded fields: появляются поочередно через opacity */}
             {expanded && (
               <>
                 <motion.div
@@ -102,7 +104,6 @@ export default function RegisterPage() {
             <motion.div
               layout
               transition={{ duration: 0.45, ease: "easeInOut" }}
-              className="mt-8"
             >
               <Button
                 onClick={() => setExpanded(true)}
@@ -112,7 +113,7 @@ export default function RegisterPage() {
                 {expanded ? "Сохранить" : "Получить код"}
               </Button>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </main>
     </>
