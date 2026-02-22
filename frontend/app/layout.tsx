@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
 
-const manrope = Roboto({
+const manrope = Manrope({
   subsets: ["latin", "cyrillic"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-sans",
