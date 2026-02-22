@@ -8,10 +8,12 @@ import { Header } from "@/components/ui/Header";
 export default function RegisterPage() {
   const [expanded, setExpanded] = useState(false);
 
+  // Задержки для последовательного появления полей
   const fieldDelays = [0.05, 0.15, 0.25];
 
   return (
     <>
+      {/* Background */}
       <div className="pointer-events-none fixed inset-0">
         <div className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-indigo-500/20 blur-3xl" />
@@ -21,7 +23,7 @@ export default function RegisterPage() {
 
       <main className="relative min-h-screen flex items-start justify-center px-6 pt-40 pb-24 text-zinc-100">
         <div className="form-card">
-          {/* Header with dots (остаётся статичным) */}
+          {/* Header with dots */}
           <div className="form-header">
             <div className="flex justify-center items-center gap-3 mb-4">
               <div
@@ -38,14 +40,13 @@ export default function RegisterPage() {
             <h1 className="form-title">Создать аккаунт</h1>
           </div>
 
-          {/* Анимированный контейнер для всех полей и кнопки */}
-          <motion.div
-            layout
-            transition={{ duration: 0.45, ease: "easeInOut" }}
-            className="flex flex-col gap-6"
-          >
-            {/* Email — без собственного layout, двигается только за счёт родителя */}
-            <div>
+          {/* Form */}
+          <div className="flex flex-col gap-6">
+            {/* Email */}
+            <motion.div
+              initial={false}
+              layout
+            >
               <label className="form-label">Email</label>
               <input
                 type="email"
@@ -53,9 +54,9 @@ export default function RegisterPage() {
                 placeholder="you@example.com"
                 className={`form-input ${expanded ? "disabled" : ""}`}
               />
-            </div>
+            </motion.div>
 
-            {/* Дополнительные поля (появляются с opacity) */}
+            {/* Expanded fields: появляются поочередно через opacity */}
             {expanded && (
               <>
                 <motion.div
@@ -99,8 +100,11 @@ export default function RegisterPage() {
               </>
             )}
 
-            {/* Кнопка — тоже без layout, двигается внутри родителя */}
-            <div>
+            {/* Button */}
+            <motion.div
+              layout
+              transition={{ duration: 0.45, ease: "easeInOut" }}
+            >
               <Button
                 onClick={() => setExpanded(true)}
                 variant="primary"
@@ -108,8 +112,8 @@ export default function RegisterPage() {
               >
                 {expanded ? "Сохранить" : "Получить код"}
               </Button>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
       </main>
     </>
