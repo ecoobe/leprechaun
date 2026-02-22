@@ -8,7 +8,6 @@ import { Header } from "@/components/ui/Header";
 export default function RegisterPage() {
   const [expanded, setExpanded] = useState(false);
 
-  // Задержки для последовательного появления полей
   const fieldDelays = [0.05, 0.15, 0.25];
 
   return (
@@ -22,8 +21,13 @@ export default function RegisterPage() {
       <Header />
 
       <main className="relative min-h-screen flex items-start justify-center px-6 pt-40 pb-24 text-zinc-100">
-        <div className="form-card">
-          {/* Header with dots */}
+        {/* --- карточка регистрации с плавным растягиванием --- */}
+        <motion.div
+          layout
+          transition={{ duration: 0.45, ease: "easeInOut" }}
+          className="form-card"
+        >
+          {/* Header */}
           <div className="form-header">
             <div className="flex justify-center items-center gap-3 mb-4">
               <div
@@ -40,13 +44,10 @@ export default function RegisterPage() {
             <h1 className="form-title">Создать аккаунт</h1>
           </div>
 
-          {/* Form */}
+          {/* Form fields */}
           <div className="flex flex-col gap-6">
             {/* Email */}
-            <motion.div
-              initial={false}
-              layout
-            >
+            <div>
               <label className="form-label">Email</label>
               <input
                 type="email"
@@ -54,9 +55,9 @@ export default function RegisterPage() {
                 placeholder="you@example.com"
                 className={`form-input ${expanded ? "disabled" : ""}`}
               />
-            </motion.div>
+            </div>
 
-            {/* Expanded fields: появляются поочередно через opacity */}
+            {/* Expanded fields */}
             {expanded && (
               <>
                 <motion.div
@@ -104,6 +105,7 @@ export default function RegisterPage() {
             <motion.div
               layout
               transition={{ duration: 0.45, ease: "easeInOut" }}
+              className="mt-6" // увеличенный отступ от последнего поля
             >
               <Button
                 onClick={() => setExpanded(true)}
@@ -114,7 +116,7 @@ export default function RegisterPage() {
               </Button>
             </motion.div>
           </div>
-        </div>
+        </motion.div>
       </main>
     </>
   );
