@@ -18,7 +18,7 @@ export function HeroSection() {
         >
           <h1 className="text-6xl sm:text-8xl font-semibold tracking-tight leading-tight">
             Лепрекон
-            <span className="block text-3xl sm:text-4xl font-medium text-emerald-400 mt-3">
+            <span className="block text-3xl sm:text-4xl font-medium text-emerald-400 mt-3 tracking-wide">
               Спокойствие в финансах
             </span>
           </h1>
