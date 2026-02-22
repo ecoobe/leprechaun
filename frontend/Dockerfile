@@ -9,10 +9,6 @@ COPY frontend/package*.json ./
 RUN npm install
 
 COPY frontend/ .
-
-# 🔥 Отключаем Turbopack в Next 16 canary
-ENV NEXT_DISABLE_TURBOPACK=1
-
 RUN npm run build
 
 # ===============================
