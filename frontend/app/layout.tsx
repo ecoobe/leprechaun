@@ -22,9 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru" className={`${manrope.variable} scroll-smooth`}>
-      <body className="min-h-screen bg-zinc-950 text-zinc-100 antialiased">
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
