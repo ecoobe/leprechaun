@@ -7,11 +7,10 @@ import { Header } from "@/components/ui/Header";
 
 export default function RegisterPage() {
   const [expanded, setExpanded] = useState(false);
-  const duration = 0.45; // синхронизация с родительским layout
 
   return (
     <>
-      {/* Background */}
+      {/* ---------- Background ---------- */}
       <div className="pointer-events-none fixed inset-0">
         <div className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-indigo-500/20 blur-3xl" />
@@ -21,7 +20,7 @@ export default function RegisterPage() {
 
       <main className="relative min-h-screen flex items-start justify-center px-6 pt-40 pb-24 text-zinc-100">
         <div className="form-card">
-          {/* Static header with dots */}
+          {/* ---------- Static header with dots ---------- */}
           <div className="form-header">
             <div className="flex justify-center items-center gap-3 mb-4">
               <div
@@ -35,13 +34,14 @@ export default function RegisterPage() {
                 }`}
               />
             </div>
+
             <h1 className="form-title">Создать аккаунт</h1>
           </div>
 
-          {/* Animated form */}
+          {/* ---------- Animated form ---------- */}
           <motion.div
             layout
-            transition={{ duration, ease: "easeInOut" }}
+            transition={{ duration: 0.45, ease: "easeInOut" }}
             className="flex flex-col gap-6"
           >
             {/* Email (always visible) */}
@@ -51,59 +51,48 @@ export default function RegisterPage() {
                 type="email"
                 disabled={expanded}
                 placeholder="you@example.com"
-                className="form-input"
+                className={`form-input ${expanded ? "disabled" : ""}`}
               />
             </motion.div>
 
-            {/* Expanded fields - появляются строго синхронно с движением кнопки */}
+            {/* Expanded fields */}
             <AnimatePresence>
               {expanded && (
-                <>
-                  <motion.div
-                    key="code"
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration, ease: "easeInOut" }}
-                  >
+                <motion.div
+                  layout
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.35 }}
+                  className="flex flex-col gap-6"
+                >
+                  <div>
                     <label className="form-label">Код из письма</label>
                     <input
                       type="text"
                       placeholder="Введите код"
                       className="form-input"
                     />
-                  </motion.div>
+                  </div>
 
-                  <motion.div
-                    key="password"
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration, ease: "easeInOut", delay: 0.05 }}
-                  >
+                  <div>
                     <label className="form-label">Пароль</label>
                     <input
                       type="password"
                       placeholder="Введите пароль"
                       className="form-input"
                     />
-                  </motion.div>
+                  </div>
 
-                  <motion.div
-                    key="confirm"
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration, ease: "easeInOut", delay: 0.1 }}
-                  >
+                  <div>
                     <label className="form-label">Подтвердите пароль</label>
                     <input
                       type="password"
                       placeholder="Повторите пароль"
                       className="form-input"
                     />
-                  </motion.div>
-                </>
+                  </div>
+                </motion.div>
               )}
             </AnimatePresence>
 
