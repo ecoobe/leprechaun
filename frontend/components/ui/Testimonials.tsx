@@ -81,7 +81,7 @@ export function Testimonials() {
 
       {/* Row wrapper с маской */}
       <div
-        className="relative w-full pt-4"
+        className="relative w-full pt-4 pb-4"
         style={{
           maskImage:
             "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
