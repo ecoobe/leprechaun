@@ -30,55 +30,17 @@ export function HeroSection() {
           </p>
 
           <div className="mt-12 flex gap-6 flex-wrap">
-
-            <Button
-              asChild
-              className="
-                rounded-full
-                px-8 py-6
-                bg-gradient-to-r
-                from-emerald-500
-                via-green-500
-                to-teal-500
-                text-white
-                shadow-md
-                transition-all
-                duration-300
-                hover:scale-105
-                hover:shadow-lg
-              "
-            >
-              <Link href="/register">
-                Начать бесплатно
-              </Link>
+            <Button asChild className="btn-primary-large">
+              <Link href="/register">Начать бесплатно</Link>
             </Button>
-
-            <Button
-              asChild
-              className="
-                rounded-full
-                px-8 py-6
-                border border-zinc-700
-                bg-zinc-900/60
-                backdrop-blur
-                text-zinc-200
-                transition-all
-                duration-300
-                hover:bg-zinc-800
-                hover:border-zinc-600
-              "
-            >
-              <Link href="/how-it-works">
-                Узнать больше
-              </Link>
+            <Button asChild className="btn-secondary-large">
+              <Link href="/how-it-works">Узнать больше</Link>
             </Button>
-
           </div>
         </motion.div>
 
         {/* RIGHT */}
         <HeroShowcase />
-
       </div>
     </section>
   );
