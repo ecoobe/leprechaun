@@ -113,7 +113,9 @@
     @apply rounded-full px-8 py-6 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg;
   }
 
-  .btn-secondary-large {
+  .btn-secondary-large,
+  button.btn-secondary-large,
+  a.btn-secondary-large {
     @apply rounded-full px-8 py-6 border border-zinc-700 bg-zinc-900/60 backdrop-blur text-zinc-200 transition-all duration-300 hover:bg-zinc-800 hover:border-zinc-600;
   }
 
