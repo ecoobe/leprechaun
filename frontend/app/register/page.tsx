@@ -7,11 +7,11 @@ import { Header } from "@/components/ui/Header";
 
 export default function RegisterPage() {
   const [expanded, setExpanded] = useState(false);
-
-  const duration = 0.45; // синхронизируем с родителем
+  const duration = 0.45; // синхронизация с родительским layout
 
   return (
     <>
+      {/* Background */}
       <div className="pointer-events-none fixed inset-0">
         <div className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-indigo-500/20 blur-3xl" />
@@ -55,15 +55,15 @@ export default function RegisterPage() {
               />
             </motion.div>
 
-            {/* Expanded fields */}
+            {/* Expanded fields - появляются строго синхронно с движением кнопки */}
             <AnimatePresence>
               {expanded && (
                 <>
                   <motion.div
                     key="code"
-                    initial={{ opacity: 0, y: -10 }}
+                    initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
+                    exit={{ opacity: 0, y: -8 }}
                     transition={{ duration, ease: "easeInOut" }}
                   >
                     <label className="form-label">Код из письма</label>
@@ -76,9 +76,9 @@ export default function RegisterPage() {
 
                   <motion.div
                     key="password"
-                    initial={{ opacity: 0, y: -10 }}
+                    initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
+                    exit={{ opacity: 0, y: -8 }}
                     transition={{ duration, ease: "easeInOut", delay: 0.05 }}
                   >
                     <label className="form-label">Пароль</label>
@@ -91,9 +91,9 @@ export default function RegisterPage() {
 
                   <motion.div
                     key="confirm"
-                    initial={{ opacity: 0, y: -10 }}
+                    initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
+                    exit={{ opacity: 0, y: -8 }}
                     transition={{ duration, ease: "easeInOut", delay: 0.1 }}
                   >
                     <label className="form-label">Подтвердите пароль</label>
