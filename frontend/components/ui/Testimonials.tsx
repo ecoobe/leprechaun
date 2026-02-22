@@ -26,22 +26,7 @@ const testimonials = [
 function TestimonialCard({ testimonial }: { testimonial: any }) {
   return (
     <div className="flex-shrink-0 w-[340px] mx-4">
-      <div
-        className="
-          h-full
-          rounded-3xl
-          border border-zinc-800
-          bg-zinc-900/60
-          backdrop-blur
-          p-8
-          transition-all
-          duration-300
-          hover:-translate-y-2
-          hover:border-emerald-500/40
-          hover:shadow-xl
-          hover:shadow-emerald-500/10
-        "
-      >
+      <div className="testimonial-card">
         <div className="flex gap-1 mb-4">
           {[...Array(testimonial.rating)].map((_, i) => (
             <Star key={i} className="w-4 h-4 fill-emerald-500 text-emerald-500" />
@@ -74,26 +59,19 @@ export function Testimonials() {
 
   return (
     <section className="relative py-32 px-6">
-
-      {/* Контейнер как в HowItWorks */}
       <div className="mx-auto max-w-7xl">
-
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-20 text-left"
+          className="mb-20"
         >
-          <h2 className="text-5xl sm:text-6xl font-semibold tracking-tight">
-            Что говорят пользователи
-          </h2>
-          <p className="mt-4 text-xl text-zinc-400 max-w-2xl">
+          <h2 className="section-title">Что говорят пользователи</h2>
+          <p className="section-subtitle">
             Уже десятки людей управляют своими финансами спокойнее
           </p>
         </motion.div>
-
       </div>
 
       {/* Row wrapper с маской */}
@@ -106,7 +84,6 @@ export function Testimonials() {
             "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
         }}
       >
-
         {/* First row */}
         <div
           onMouseEnter={() => setIsPaused(true)}
@@ -153,7 +130,6 @@ export function Testimonials() {
             ))}
           </motion.div>
         </div>
-
       </div>
     </section>
   );

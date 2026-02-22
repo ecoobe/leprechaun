@@ -3,9 +3,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
-/* =========================
-   FAQ Data
-========================= */
 const faqItems = [
   {
     question: "Что такое Leprechaun?",
@@ -39,9 +36,6 @@ const faqItems = [
   },
 ];
 
-/* =========================
-   FAQ Section
-========================= */
 export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
@@ -52,24 +46,17 @@ export function FAQSection() {
   return (
     <section className="relative py-32 px-6">
       <div className="mx-auto max-w-7xl">
-
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-20 text-left"
+          className="mb-20"
         >
-          <h2 className="text-5xl sm:text-6xl font-semibold tracking-tight">
-            FAQs
-          </h2>
-          <p className="mt-4 text-xl text-zinc-400 max-w-2xl">
-            Частые вопросы
-          </p>
+          <h2 className="section-title">FAQs</h2>
+          <p className="section-subtitle">Частые вопросы</p>
         </motion.div>
 
-        {/* Items */}
         <div className="space-y-6">
           {faqItems.map((item, index) => {
             const isOpen = openIndex === index;
@@ -79,17 +66,7 @@ export function FAQSection() {
                 key={index}
                 layout
                 transition={{ duration: 0.35, ease: "easeInOut" }}
-                className={`
-                  rounded-3xl
-                  border border-zinc-800
-                  bg-zinc-900/60
-                  backdrop-blur
-                  overflow-hidden
-                  transition-all duration-300
-                  hover:border-emerald-500/40
-                  hover:shadow-xl
-                  hover:shadow-emerald-500/10
-                `}
+                className="faq-card"
               >
                 <button
                   onClick={() => toggle(index)}
@@ -131,7 +108,6 @@ export function FAQSection() {
             );
           })}
         </div>
-
       </div>
     </section>
   );

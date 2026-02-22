@@ -118,4 +118,23 @@
   .step-card {
     @apply rounded-3xl border border-zinc-800 bg-zinc-900/60 backdrop-blur p-10 transition-all duration-300 hover:-translate-y-2 hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/10;
   }
+  .testimonial-card {
+    @apply rounded-3xl border border-zinc-800 bg-zinc-900/60 backdrop-blur p-8 transition-all duration-300 hover:-translate-y-2 hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/10;
+  }
+
+  .faq-card {
+    @apply rounded-3xl border border-zinc-800 bg-zinc-900/60 backdrop-blur overflow-hidden transition-all duration-300 hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/10;
+  }
+
+  .cta-card {
+    @apply relative rounded-3xl border border-zinc-800 bg-zinc-900/70 backdrop-blur overflow-hidden;
+  }
+
+  .cta-card-inner {
+    @apply relative grid gap-16 p-14 lg:grid-cols-2 lg:items-center;
+  }
+
+  .footer-text {
+    @apply text-sm text-zinc-600;
+  }
 }
