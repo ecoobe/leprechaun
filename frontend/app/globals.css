@@ -14,7 +14,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ---------- Tailwind theme mapping ---------- */
-@theme {
+@theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
@@ -59,8 +59,14 @@
   --primary: oklch(0.92 0.004 286.32);
   --primary-foreground: oklch(0.21 0.006 285.885);
 
+  --secondary: oklch(0.25 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+
   --muted: oklch(0.274 0.006 286.033);
   --muted-foreground: oklch(0.705 0.015 286.067);
+
+  --accent: oklch(0.32 0.01 286);
+  --accent-foreground: oklch(0.985 0 0);
 
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
@@ -87,7 +93,7 @@
   }
 }
 
-/* ---------- Reusable component styles ---------- */
+/* ---------- Reusable layout styles (без кнопок!) ---------- */
 @layer components {
   .nav-container {
     @apply w-full flex items-center justify-between gap-8 px-10 py-4 rounded-full bg-zinc-900/70 backdrop-blur-xl border border-zinc-800 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)];
@@ -99,24 +105,6 @@
 
   .nav-link {
     @apply text-zinc-400 hover:text-white transition-colors;
-  }
-
-  .btn-primary {
-    @apply rounded-full px-7 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300;
-  }
-
-  .btn-secondary {
-    @apply rounded-full px-7 border border-zinc-700 bg-zinc-900/60 backdrop-blur text-zinc-200 transition-all duration-300 hover:bg-zinc-800 hover:border-zinc-600;
-  }
-
-  .btn-primary-large {
-    @apply rounded-full px-8 py-6 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg;
-  }
-
-  .btn-secondary-large,
-  button.btn-secondary-large,
-  a.btn-secondary-large {
-    @apply rounded-full px-8 py-6 border border-zinc-700 bg-zinc-900/60 backdrop-blur text-zinc-200 transition-all duration-300 hover:bg-zinc-800 hover:border-zinc-600;
   }
 
   .section-title {

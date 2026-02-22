@@ -45,19 +45,19 @@ export default function HowItWorks() {
     <section className="relative py-32 px-6">
       <div className="mx-auto max-w-7xl">
 
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-20 text-left"
+          className="mb-20"
         >
           <h2 className="section-title">Как это работает</h2>
-          <p className="section-subtitle">Три шага к финансовому спокойствию</p>
+          <p className="section-subtitle">
+            Три шага к финансовому спокойствию
+          </p>
         </motion.div>
 
-        {/* Steps */}
         <div className="grid md:grid-cols-3 gap-10">
           {steps.map((step, index) => (
             <motion.div
@@ -80,7 +80,7 @@ export default function HowItWorks() {
                 {step.title}
               </h3>
 
-              <p className="text-zinc-400 mb-6 leading-relaxed">
+              <p className="text-muted-foreground mb-6 leading-relaxed">
                 {step.description}
               </p>
 
@@ -88,7 +88,7 @@ export default function HowItWorks() {
                 {step.features.map((feature) => (
                   <li
                     key={feature}
-                    className="flex items-center gap-3 text-sm text-zinc-400"
+                    className="flex items-center gap-3 text-sm text-muted-foreground"
                   >
                     <div className="w-2 h-2 rounded-full bg-emerald-500" />
                     {feature}

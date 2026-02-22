@@ -13,7 +13,7 @@ export function Header() {
         </Link>
 
         {/* Navigation */}
-        <div className="hidden md:flex items-center gap-10 text-base font-medium text-zinc-400">
+        <div className="hidden md:flex items-center gap-10 text-base font-medium">
           <Link href="/#how-it-works" className="nav-link">
             Как работает
           </Link>
@@ -29,7 +29,7 @@ export function Header() {
         </div>
 
         {/* CTA */}
-        <Button asChild className="btn-primary">
+        <Button asChild variant="primary">
           <Link href="/login">Войти</Link>
         </Button>
       </nav>

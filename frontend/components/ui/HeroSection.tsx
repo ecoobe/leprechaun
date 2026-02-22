@@ -15,25 +15,25 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-left"
         >
           <h1 className="text-6xl sm:text-8xl font-semibold tracking-tight leading-tight">
             Лепрекон
-            <span className="block text-3xl sm:text-4xl font-medium tracking-tight leading-snug text-emerald-400 mt-3">
+            <span className="block text-3xl sm:text-4xl font-medium text-emerald-400 mt-3">
               Спокойствие в финансах
             </span>
           </h1>
 
-          <p className="mt-8 max-w-xl text-lg sm:text-xl text-zinc-300 leading-relaxed">
+          <p className="mt-8 max-w-xl text-lg sm:text-xl text-muted-foreground leading-relaxed">
             Лепрекон следит за твоей кармой в банках, напоминая вовремя
             о платежах и помогая держать всё под контролем.
           </p>
 
           <div className="mt-12 flex gap-6 flex-wrap">
-            <Button asChild className="btn-primary-large">
+            <Button asChild variant="primary" size="lg">
               <Link href="/register">Начать бесплатно</Link>
             </Button>
-            <Button asChild className="btn-secondary-large">
+
+            <Button asChild variant="secondary" size="lg">
               <Link href="/how-it-works">Узнать больше</Link>
             </Button>
           </div>
