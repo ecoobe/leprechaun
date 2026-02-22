@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import { Golos_Text } from "next/font/google";
 import "./globals.css";
 
-const manrope = Manrope({
+const manrope = Golos_Text({
   subsets: ["latin", "cyrillic"],
-  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-sans",
   display: "swap",
 });
