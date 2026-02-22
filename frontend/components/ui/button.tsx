@@ -12,7 +12,7 @@ const buttonVariants = cva(
       variant: {
         /* === GRADIENT PRIMARY (как было btn-primary / btn-primary-large) === */
         primary:
-          "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-zinc-900 shadow-md hover:scale-105 hover:shadow-lg",
+          "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-zinc-700 shadow-md hover:scale-105 hover:shadow-lg",
 
         /* === DARK GLASS SECONDARY (как было btn-secondary / btn-secondary-large) === */
         secondary:
