@@ -1,7 +1,4 @@
-/* ===============================
-   Local Fonts
-=============================== */
-
+/* ---------- Local Fonts ---------- */
 @font-face {
   font-family: "Atelas";
   src: url("/fonts/Atelas-Regular.woff2") format("woff2");
@@ -10,19 +7,13 @@
   font-display: swap;
 }
 
-/* ===============================
-   Tailwind
-=============================== */
-
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* ---------- Custom variants ---------- */
 @custom-variant dark (&:is(.dark *));
 
-/* ===============================
-   Theme Mapping (Tailwind v4)
-=============================== */
-
+/* ---------- Tailwind theme mapping ---------- */
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -34,8 +25,14 @@
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
 
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
 
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
@@ -46,13 +43,11 @@
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
 
+  /* ✅ Добавляем кастомный шрифт для логотипа */
   --font-atelas: Atelas, serif;
 }
 
-/* ===============================
-   Design Tokens
-=============================== */
-
+/* ---------- Design tokens ---------- */
 :root {
   --radius: 0.625rem;
 
@@ -73,10 +68,7 @@
   --ring: oklch(0.552 0.016 285.938);
 }
 
-/* ===============================
-   Base
-=============================== */
-
+/* ---------- Base styles ---------- */
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -93,100 +85,5 @@
 
   body {
     @apply bg-background text-foreground;
-  }
-}
-
-/* ===============================
-   Design System Components
-=============================== */
-
-@layer components {
-  /* ----- Layout ----- */
-
-  .section {
-    @apply py-32 px-6;
-  }
-
-  .container-wide {
-    @apply mx-auto max-w-7xl;
-  }
-
-  .container-default {
-    @apply mx-auto max-w-6xl;
-  }
-
-  /* ----- Typography ----- */
-
-  .section-title {
-    @apply text-5xl sm:text-6xl font-semibold tracking-tight;
-  }
-
-  .section-subtitle {
-    @apply mt-4 text-xl text-zinc-400 max-w-2xl;
-  }
-
-  .logo-text {
-    @apply font-atelas text-3xl tracking-tight
-           bg-gradient-to-r
-           from-emerald-400
-           via-green-400
-           to-teal-400
-           bg-clip-text
-           text-transparent
-           transition-opacity
-           hover:opacity-80;
-  }
-
-  /* ----- Glass Surfaces ----- */
-
-  .glass-nav {
-    @apply bg-zinc-900/70
-           backdrop-blur-xl
-           border border-zinc-800
-           shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)];
-  }
-
-  .glass-card {
-    @apply rounded-3xl
-           border border-zinc-800
-           bg-zinc-900/60
-           backdrop-blur
-           transition-all
-           duration-300;
-  }
-
-  .glass-card-hover {
-    @apply hover:-translate-y-2
-           hover:border-emerald-500/40
-           hover:shadow-xl
-           hover:shadow-emerald-500/10;
-  }
-
-  /* ----- Buttons ----- */
-
-  .btn-primary {
-    @apply rounded-full
-           bg-gradient-to-r
-           from-emerald-500
-           via-green-500
-           to-teal-500
-           text-white
-           shadow-md
-           transition-all
-           duration-300
-           hover:scale-105
-           hover:shadow-lg;
-  }
-
-  .btn-secondary {
-    @apply rounded-full
-           border border-zinc-700
-           bg-zinc-900/60
-           backdrop-blur
-           text-zinc-200
-           transition-all
-           duration-300
-           hover:bg-zinc-800
-           hover:border-zinc-600;
   }
 }
