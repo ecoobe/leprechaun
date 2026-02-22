@@ -16,7 +16,7 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-6xl sm:text-8xl font-semibold tracking-tight leading-tight">
+          <h1 className="text-7xl sm:text-8xl font-semibold tracking-tight leading-tight">
             Лепрекон
             <span className="block text-3xl sm:text-4xl font-medium text-emerald-400 mt-3 tracking-wide">
               Спокойствие в финансах
