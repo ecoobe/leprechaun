@@ -22,13 +22,8 @@ export default function RegisterPage() {
       <Header />
 
       <main className="relative min-h-screen flex items-start justify-center px-6 pt-40 pb-24 text-zinc-100">
-        {/* --- Карточка с motion.layout для синхронного растягивания --- */}
-        <motion.div
-          layout
-          transition={{ duration: 0.45, ease: "easeInOut" }}
-          className="form-card"
-        >
-          {/* Header с точками */}
+        <div className="form-card">
+          {/* Header with dots */}
           <div className="form-header">
             <div className="flex justify-center items-center gap-3 mb-4">
               <div
@@ -45,10 +40,13 @@ export default function RegisterPage() {
             <h1 className="form-title">Создать аккаунт</h1>
           </div>
 
-          {/* --- Поля формы --- */}
+          {/* Form */}
           <div className="flex flex-col gap-6">
             {/* Email */}
-            <motion.div layout initial={false}>
+            <motion.div
+              initial={false}
+              layout
+            >
               <label className="form-label">Email</label>
               <input
                 type="email"
@@ -58,7 +56,7 @@ export default function RegisterPage() {
               />
             </motion.div>
 
-            {/* Expanded fields */}
+            {/* Expanded fields: появляются поочередно через opacity */}
             {expanded && (
               <>
                 <motion.div
@@ -102,11 +100,10 @@ export default function RegisterPage() {
               </>
             )}
 
-            {/* Кнопка с небольшим отступом сверху */}
+            {/* Button */}
             <motion.div
               layout
               transition={{ duration: 0.45, ease: "easeInOut" }}
-              className="mt-4" // вот этот отступ делает кнопку ниже
             >
               <Button
                 onClick={() => setExpanded(true)}
@@ -117,7 +114,7 @@ export default function RegisterPage() {
               </Button>
             </motion.div>
           </div>
-        </motion.div>
+        </div>
       </main>
     </>
   );
