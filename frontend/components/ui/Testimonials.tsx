@@ -26,18 +26,23 @@ const testimonials = [
 function TestimonialCard({ testimonial }: { testimonial: any }) {
   return (
     <div className="flex-shrink-0 w-[340px] mx-4">
-      <div className="testimonial-card">
+      <div className="testimonial-card flex flex-col h-[300px]">
+        {/* Stars */}
         <div className="flex gap-1 mb-4">
           {[...Array(testimonial.rating)].map((_, i) => (
             <Star key={i} className="w-4 h-4 fill-emerald-500 text-emerald-500" />
           ))}
         </div>
 
-        <p className="text-zinc-300 leading-relaxed mb-6">
-          “{testimonial.text}”
-        </p>
+        {/* Text - занимает всё доступное пространство, но не растягивает сам текст */}
+        <div className="flex-1 overflow-hidden">
+          <p className="text-zinc-300 leading-relaxed line-clamp-3">
+            “{testimonial.text}”
+          </p>
+        </div>
 
-        <div className="border-t border-zinc-800 pt-4">
+        {/* Name */}
+        <div className="border-t border-zinc-800 pt-4 mt-4">
           <p className="font-semibold text-zinc-100">
             {testimonial.name}
           </p>
