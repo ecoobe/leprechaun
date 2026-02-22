@@ -22,12 +22,7 @@ export default function RegisterPage() {
       <Header />
 
       <main className="relative min-h-screen flex items-start justify-center px-6 pt-40 pb-24 text-zinc-100">
-        {/* Motion wrapper для плавного растягивания капсулы */}
-        <motion.div
-          layout
-          transition={{ duration: 0.45, ease: "easeInOut" }}
-          className="form-card"
-        >
+        <div className="form-card">
           {/* Header with dots */}
           <div className="form-header">
             <div className="flex justify-center items-center gap-3 mb-4">
@@ -58,7 +53,7 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Expanded fields */}
+            {/* Expanded fields: появляются по очереди через opacity */}
             {expanded && (
               <>
                 <motion.div
@@ -106,7 +101,7 @@ export default function RegisterPage() {
             <motion.div
               layout
               transition={{ duration: 0.45, ease: "easeInOut" }}
-              className="mt-8" // чуть больше отступ от последнего поля
+              className="mt-6" // отступ от последнего поля
             >
               <Button
                 onClick={() => setExpanded(true)}
@@ -117,7 +112,7 @@ export default function RegisterPage() {
               </Button>
             </motion.div>
           </div>
-        </motion.div>
+        </div>
       </main>
     </>
   );
