@@ -3,13 +3,24 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
+    environment:
+      APP_PORT: 8080
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: leprechaun
+      DB_PASSWORD: secret
+      DB_NAME: leprechaun
+      JWT_SECRET: supersecret
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       app-network:
         aliases:
           - backend
     mem_limit: 256m
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/api/count"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -30,6 +41,24 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+
+  postgres:
+    image: postgres:16
+    container_name: leprechaun_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: leprechaun
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: leprechaun
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U leprechaun"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
 
   grafana:
     image: grafana/grafana:latest
@@ -128,6 +157,7 @@ services:
 
 volumes:
   prometheus_data:
+  postgres_data:
 
 networks:
   app-network:
