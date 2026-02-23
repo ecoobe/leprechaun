@@ -50,6 +50,8 @@ services:
       POSTGRES_USER: leprechaun
       POSTGRES_PASSWORD: secret
       POSTGRES_DB: leprechaun
+    ports:
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
