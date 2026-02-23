@@ -1,16 +1,20 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"net/http"
+
+	"leprechaun/internal/app"
 )
 
 func main() {
-	http.HandleFunc("/api/count", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "42")
-	})
+	application, err := app.New()
+	if err != nil {
+		log.Fatalf("failed to initialize app: %v", err)
+	}
 
-	fmt.Println("Backend запущен на :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Println("Server starting on", application.Server.Addr)
+
+	if err := application.Server.ListenAndServe(); err != nil {
+		log.Fatalf("server failed: %v", err)
+	}
 }
