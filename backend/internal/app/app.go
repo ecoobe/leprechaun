@@ -1,6 +1,7 @@
 package app
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
 
@@ -11,19 +12,27 @@ import (
 
 type App struct {
 	Server *http.Server
+	DB     *sql.DB
 }
 
 func New() (*App, error) {
 	cfg := config.Load()
 
-	dbpool, err := db.NewPostgres(cfg)
+	dbpool, err := db.NewPostgres(db.Config{
+		Host:     cfg.DBHost,
+		Port:     cfg.DBPort,
+		User:     cfg.DBUser,
+		Password: cfg.DBPassword,
+		Name:     cfg.DBName,
+	})
 	if err != nil {
 		return nil, err
 	}
 
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/health", httpHandler.HealthHandler)
+	healthHandler := httpHandler.NewHealthHandler(dbpool)
+	mux.HandleFunc("/health", healthHandler)
 
 	server := &http.Server{
 		Addr:    ":" + cfg.AppPort,
@@ -32,9 +41,8 @@ func New() (*App, error) {
 
 	log.Println("Application initialized")
 
-	_ = dbpool // позже будем использовать
-
 	return &App{
 		Server: server,
+		DB:     dbpool,
 	}, nil
 }

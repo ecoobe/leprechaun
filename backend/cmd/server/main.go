@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"backend/internal/db"
+	"leprechaun/internal/db"
 )
 
 func main() {
