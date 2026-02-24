@@ -6,6 +6,8 @@ import (
 	"os"
 
 	"leprechaun/internal/db"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func main() {
@@ -31,6 +33,9 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("OK"))
 	})
+
+	// Добавляем эндпоинт для метрик
+	http.Handle("/metrics", promhttp.Handler())
 
 	port := os.Getenv("APP_PORT")
 	if port == "" {
