@@ -9,6 +9,9 @@ CREATE TABLE IF NOT EXISTS users (
 
     password_hash TEXT,
 
+    first_name TEXT,
+    last_name TEXT,
+
     role TEXT NOT NULL DEFAULT 'user'
         CHECK (role IN ('user', 'admin')),
 
@@ -19,7 +22,6 @@ CREATE TABLE IF NOT EXISTS users (
     deleted_at TIMESTAMPTZ
 );
 
--- Индекс для активных пользователей (soft delete pattern)
 CREATE INDEX idx_users_not_deleted
     ON users (deleted_at)
     WHERE deleted_at IS NULL;
