@@ -8,6 +8,8 @@ import (
 	"leprechaun/internal/config"
 	"leprechaun/internal/db"
 	httpHandler "leprechaun/internal/handlers/http"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 type App struct {
@@ -33,6 +35,7 @@ func New() (*App, error) {
 
 	healthHandler := httpHandler.NewHealthHandler(dbpool)
 	mux.HandleFunc("/health", healthHandler)
+	mux.Handle("/metrics", promhttp.Handler())
 
 	server := &http.Server{
 		Addr:    ":" + cfg.AppPort,
