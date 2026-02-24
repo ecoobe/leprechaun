@@ -62,6 +62,21 @@ services:
     networks:
       - app-network
 
+  migrate:
+      image: migrate/migrate
+      command: [
+        "-path", "/migrations",
+        "-database", "postgres://leprechaun:secret@postgres:5432/leprechaun?sslmode=disable",
+        "up"
+      ]
+      volumes:
+        - ./backend/migrations:/migrations
+      depends_on:
+        postgres:
+          condition: service_healthy
+      networks:
+        - app-network  
+
   grafana:
     image: grafana/grafana:latest
     user: "472:472"
