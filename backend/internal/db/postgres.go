@@ -2,45 +2,58 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"log"
 	"time"
 
-	"leprechaun/internal/config"
-
-	"github.com/jackc/pgx/v5/pgxpool"
+	_ "github.com/lib/pq"
 )
 
-func NewPostgres(cfg *config.Config) (*pgxpool.Pool, error) {
+type Config struct {
+	Host     string
+	Port     string
+	User     string
+	Password string
+	Name     string
+}
+
+func NewPostgres(cfg Config) (*sql.DB, error) {
 	dsn := fmt.Sprintf(
-		"postgres://%s:%s@%s:%s/%s",
-		cfg.DBUser,
-		cfg.DBPassword,
-		cfg.DBHost,
-		cfg.DBPort,
-		cfg.DBName,
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		cfg.Host,
+		cfg.Port,
+		cfg.User,
+		cfg.Password,
+		cfg.Name,
 	)
 
-	poolConfig, err := pgxpool.ParseConfig(dsn)
-	if err != nil {
-		return nil, err
+	var db *sql.DB
+	var err error
+
+	maxAttempts := 10
+	retryDelay := 3 * time.Second
+
+	for attempt := 1; attempt <= maxAttempts; attempt++ {
+		db, err = sql.Open("postgres", dsn)
+		if err != nil {
+			log.Printf("DB open error (attempt %d/%d): %v", attempt, maxAttempts, err)
+			time.Sleep(retryDelay)
+			continue
+		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		err = db.PingContext(ctx)
+		cancel()
+
+		if err == nil {
+			log.Println("Successfully connected to PostgreSQL")
+			return db, nil
+		}
+
+		log.Printf("DB ping failed (attempt %d/%d): %v", attempt, maxAttempts, err)
+		time.Sleep(retryDelay)
 	}
 
-	poolConfig.MaxConns = 10
-	poolConfig.MinConns = 2
-
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	dbpool, err := pgxpool.NewWithConfig(ctx, poolConfig)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := dbpool.Ping(ctx); err != nil {
-		return nil, err
-	}
-
-	log.Println("PostgreSQL connected")
-	return dbpool, nil
+	return nil, fmt.Errorf("could not connect to database after %d attempts: %w", maxAttempts, err)
 }
