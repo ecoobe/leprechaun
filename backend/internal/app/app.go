@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"leprechaun/internal/auth"
 	"leprechaun/internal/config"
 	"leprechaun/internal/db"
 	httpHandler "leprechaun/internal/handlers/http"
@@ -36,6 +37,13 @@ func New() (*App, error) {
 	healthHandler := httpHandler.NewHealthHandler(dbpool)
 	mux.HandleFunc("/health", healthHandler)
 	mux.Handle("/metrics", promhttp.Handler())
+
+	authRepo := auth.NewRepository(dbpool)
+	authService := auth.NewService(authRepo)
+	authHandler := httpHandler.NewAuthHandler(authService)
+
+	mux.HandleFunc("/auth/request-code", authHandler.RequestCode)
+	mux.HandleFunc("/auth/register", authHandler.Register)
 
 	server := &http.Server{
 		Addr:    ":" + cfg.AppPort,
