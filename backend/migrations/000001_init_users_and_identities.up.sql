@@ -4,9 +4,11 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
+    -- Email может быть NULL
     email TEXT UNIQUE,
     email_verified BOOLEAN NOT NULL DEFAULT false,
 
+    -- NULL если OAuth-only аккаунт
     password_hash TEXT,
 
     first_name TEXT,
@@ -22,8 +24,14 @@ CREATE TABLE IF NOT EXISTS users (
     deleted_at TIMESTAMPTZ
 );
 
+-- Индекс для soft delete
 CREATE INDEX idx_users_not_deleted
     ON users (deleted_at)
+    WHERE deleted_at IS NULL;
+
+-- Индекс для быстрого поиска по email (без deleted)
+CREATE INDEX idx_users_email_not_deleted
+    ON users (email)
     WHERE deleted_at IS NULL;
 
 -- USER IDENTITIES (OAuth)
