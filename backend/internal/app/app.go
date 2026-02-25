@@ -21,6 +21,7 @@ type App struct {
 func New() (*App, error) {
 	cfg := config.Load()
 
+	// --- DB ---
 	dbpool, err := db.NewPostgres(db.Config{
 		Host:     cfg.DBHost,
 		Port:     cfg.DBPort,
@@ -32,12 +33,17 @@ func New() (*App, error) {
 		return nil, err
 	}
 
+	// --- Router ---
 	mux := http.NewServeMux()
 
+	// Health
 	healthHandler := httpHandler.NewHealthHandler(dbpool)
 	mux.HandleFunc("/health", healthHandler)
+
+	// Prometheus
 	mux.Handle("/metrics", promhttp.Handler())
 
+	// --- Auth wiring ---
 	authRepo := auth.NewRepository(dbpool)
 	authService := auth.NewService(authRepo)
 	authHandler := httpHandler.NewAuthHandler(authService)
@@ -45,6 +51,7 @@ func New() (*App, error) {
 	mux.HandleFunc("/auth/request-code", authHandler.RequestCode)
 	mux.HandleFunc("/auth/register", authHandler.Register)
 
+	// --- Server ---
 	server := &http.Server{
 		Addr:    ":" + cfg.AppPort,
 		Handler: mux,
