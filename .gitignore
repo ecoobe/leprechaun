@@ -39,3 +39,7 @@ nginx/auth/*.htpasswd
 
 #macOS
 .DS_Store
+certbot/
+cleanup.sh
+monitoring/grafana/grafana.db
+monitoring/grafana/plugins/
