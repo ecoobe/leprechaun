@@ -8,7 +8,6 @@ import (
 	"fmt"
 	mrand "math/rand"
 	"regexp"
-	"strconv"
 	"strings"
 	"time"
 
@@ -102,12 +101,15 @@ func (s *Service) Login(ctx context.Context, email, password string) (string, st
 		return "", "", errors.New("invalid credentials")
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword(
+		[]byte(user.PasswordHash),
+		[]byte(password),
+	); err != nil {
 		return "", "", errors.New("invalid credentials")
 	}
 
 	// ACCESS
-	access, err := s.tokenManager.GenerateAccessToken(strconv.FormatInt(user.ID, 10))
+	access, err := s.tokenManager.GenerateAccessToken(user.ID)
 	if err != nil {
 		return "", "", err
 	}
@@ -126,6 +128,10 @@ func (s *Service) Login(ctx context.Context, email, password string) (string, st
 
 	return access, rawRefresh, nil
 }
+
+// =======================
+// REFRESH (ROTATION)
+// =======================
 
 func (s *Service) Refresh(ctx context.Context, rawRefresh string) (string, string, error) {
 
@@ -147,7 +153,7 @@ func (s *Service) Refresh(ctx context.Context, rawRefresh string) (string, strin
 	}
 
 	// новый access
-	access, err := s.tokenManager.GenerateAccessToken(strconv.FormatInt(userID, 10))
+	access, err := s.tokenManager.GenerateAccessToken(userID)
 	if err != nil {
 		return "", "", err
 	}
@@ -178,6 +184,6 @@ func generateCode() string {
 
 func generateRandomString(n int) string {
 	b := make([]byte, n)
-	crand.Read(b)
+	_, _ = crand.Read(b)
 	return base64.RawURLEncoding.EncodeToString(b)
 }

@@ -13,7 +13,10 @@ var (
 	ErrUserAlreadyExists = errors.New("user already exists")
 )
 
-// User represents a user in the system.
+// =======================
+// USER MODEL
+// =======================
+
 type User struct {
 	ID           int64
 	Email        string
@@ -73,17 +76,23 @@ func (r *Repository) CreateUser(ctx context.Context, email, passwordHash string)
 	return err
 }
 
-// FindUserByEmail возвращает пользователя по email.
+// Получить пользователя по email
 func (r *Repository) FindUserByEmail(ctx context.Context, email string) (*User, error) {
 	query := `
 		SELECT id, email, password_hash
 		FROM users
 		WHERE email = $1
+		  AND deleted_at IS NULL
 	`
 
 	var user User
+
 	err := r.db.QueryRowContext(ctx, query, email).
 		Scan(&user.ID, &user.Email, &user.PasswordHash)
+
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, ErrUserNotFound
+	}
 
 	if err != nil {
 		return nil, err
@@ -98,7 +107,6 @@ func (r *Repository) FindUserByEmail(ctx context.Context, email string) (*User, 
 // =======================
 //
 
-// Создать или обновить verification токен
 func (r *Repository) UpsertVerificationToken(
 	ctx context.Context,
 	email,
@@ -125,7 +133,6 @@ func (r *Repository) UpsertVerificationToken(
 	return err
 }
 
-// Получить verification токен
 func (r *Repository) GetVerificationToken(
 	ctx context.Context,
 	email string,
@@ -155,7 +162,6 @@ func (r *Repository) GetVerificationToken(
 	return token, expiresAt, nil
 }
 
-// Удалить verification токен
 func (r *Repository) DeleteVerificationToken(
 	ctx context.Context,
 	email string,
@@ -179,7 +185,6 @@ func (r *Repository) DeleteVerificationToken(
 // =======================
 //
 
-// CreateRefreshToken создаёт новый refresh токен для пользователя.
 func (r *Repository) CreateRefreshToken(
 	ctx context.Context,
 	userID int64,
@@ -212,6 +217,10 @@ func (r *Repository) FindRefreshToken(
 
 	err := r.db.QueryRowContext(ctx, query, tokenHash).
 		Scan(&userID, &expires)
+
+	if errors.Is(err, sql.ErrNoRows) {
+		return 0, time.Time{}, ErrTokenNotFound
+	}
 
 	if err != nil {
 		return 0, time.Time{}, err
