@@ -88,6 +88,38 @@ func writeJSON(w http.ResponseWriter, status int, payload any) {
 	json.NewEncoder(w).Encode(payload)
 }
 
+func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "invalid request", http.StatusBadRequest)
+		return
+	}
+
+	access, refresh, err := h.service.Login(
+		r.Context(),
+		strings.ToLower(strings.TrimSpace(req.Email)),
+		req.Password,
+	)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	writeJSON(w, http.StatusOK, map[string]string{
+		"access_token":  access,
+		"refresh_token": refresh,
+	})
+}
+
 func (h *AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 	type request struct {
 		RefreshToken string `json:"refresh_token"`

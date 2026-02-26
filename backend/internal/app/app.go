@@ -54,6 +54,7 @@ func New() (*App, error) {
 
 	mux.HandleFunc("/auth/request-code", authHandler.RequestCode)
 	mux.HandleFunc("/auth/register", authHandler.Register)
+	mux.HandleFunc("/auth/login", authHandler.Login)
 	mux.HandleFunc("/auth/refresh", authHandler.Refresh)
 
 	// --- Server ---

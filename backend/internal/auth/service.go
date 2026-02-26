@@ -181,3 +181,5 @@ func generateRandomString(n int) string {
 	crand.Read(b)
 	return base64.RawURLEncoding.EncodeToString(b)
 }
+
+func (s *Service) Login(ctx context.Context, email, password string) (string, string, error)
