@@ -2,11 +2,13 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/ui/Header";
-import { requestCode, register } from "@/lib/api";
+import { requestCode, register, login } from "@/lib/api";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [expanded, setExpanded] = useState(false);
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
@@ -37,7 +39,7 @@ export default function RegisterPage() {
     try {
       const result = await requestCode(email);
       setSuccess(result.message || "Код отправлен на почту");
-      setExpanded(true); // раскрываем остальные поля
+      setExpanded(true);
     } catch (err: any) {
       setError(err.message || "Ошибка при отправке кода");
     } finally {
@@ -62,11 +64,24 @@ export default function RegisterPage() {
     setLoading(true);
     setError("");
     setSuccess("");
+
     try {
+      // 1. Регистрация
       const result = await register(email, code, password);
       setSuccess(result.message || "Регистрация успешна!");
-      // Здесь можно перенаправить пользователя, например, на страницу входа:
-      // window.location.href = "/login";
+
+      // 2. Автоматический вход (логин)
+      try {
+        const loginData = await login(email, password);
+        localStorage.setItem("access_token", loginData.access_token);
+        localStorage.setItem("refresh_token", loginData.refresh_token);
+        // 3. Перенаправление в личный кабинет
+        router.push("/dashboard");
+      } catch (loginErr: any) {
+        // Если автоматический вход не удался, предлагаем войти вручную
+        setError("Регистрация прошла, но не удалось выполнить вход. Пожалуйста, войдите вручную.");
+        router.push("/login");
+      }
     } catch (err: any) {
       setError(err.message || "Ошибка регистрации");
     } finally {
@@ -84,7 +99,7 @@ export default function RegisterPage() {
 
   return (
     <>
-      {/* Фоновые элементы (без изменений) */}
+      {/* Фоновые элементы */}
       <div className="pointer-events-none fixed inset-0">
         <div className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-indigo-500/20 blur-3xl" />
@@ -94,7 +109,7 @@ export default function RegisterPage() {
 
       <main className="relative min-h-screen flex items-start justify-center px-6 pt-40 pb-24 text-zinc-100">
         <div className="form-card">
-          {/* Заголовок с точками (без изменений) */}
+          {/* Заголовок с точками */}
           <div className="form-header">
             <div className="flex justify-center items-center gap-3 mb-4">
               <div
@@ -132,7 +147,7 @@ export default function RegisterPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                disabled={loading || expanded} // после раскрытия email уже не меняем
+                disabled={loading || expanded}
                 placeholder="you@example.com"
                 className={`form-input ${expanded ? "disabled" : ""}`}
               />
