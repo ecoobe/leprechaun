@@ -15,11 +15,15 @@ import (
 )
 
 type Service struct {
-	repo *Repository
+	repo         *Repository
+	tokenManager *TokenManager
 }
 
-func NewService(repo *Repository) *Service {
-	return &Service{repo: repo}
+func NewService(repo *Repository, tm *TokenManager) *Service {
+	return &Service{
+		repo:         repo,
+		tokenManager: tm,
+	}
 }
 
 var emailRegex = regexp.MustCompile(`^[^@\s]+@[^@\s]+\.[^@\s]+$`)
@@ -83,6 +87,43 @@ func (s *Service) Register(ctx context.Context, email, code, password string) er
 	}
 
 	return s.repo.DeleteVerificationToken(ctx, email)
+}
+
+// =======================
+// LOGIN
+// =======================
+
+func (s *Service) Login(ctx context.Context, email, password string) (string, string, error) {
+	email = strings.ToLower(strings.TrimSpace(email))
+
+	user, err := s.repo.FindUserByEmail(ctx, email)
+	if err != nil {
+		return "", "", errors.New("invalid credentials")
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)); err != nil {
+		return "", "", errors.New("invalid credentials")
+	}
+
+	// ACCESS
+	access, err := s.tokenManager.GenerateAccessToken(user.ID)
+	if err != nil {
+		return "", "", err
+	}
+
+	// REFRESH
+	rawRefresh, hashRefresh, err := s.tokenManager.GenerateRefreshToken()
+	if err != nil {
+		return "", "", err
+	}
+
+	expires := time.Now().Add(7 * 24 * time.Hour)
+
+	if err := s.repo.CreateRefreshToken(ctx, user.ID, hashRefresh, expires); err != nil {
+		return "", "", err
+	}
+
+	return access, rawRefresh, nil
 }
 
 // =======================

@@ -13,6 +13,13 @@ var (
 	ErrUserAlreadyExists = errors.New("user already exists")
 )
 
+// User represents a user in the system.
+type User struct {
+	ID           int64
+	Email        string
+	PasswordHash string
+}
+
 type Repository struct {
 	db *sql.DB
 }
@@ -64,6 +71,25 @@ func (r *Repository) CreateUser(ctx context.Context, email, passwordHash string)
 	)
 
 	return err
+}
+
+// FindUserByEmail возвращает пользователя по email.
+func (r *Repository) FindUserByEmail(ctx context.Context, email string) (*User, error) {
+	query := `
+		SELECT id, email, password_hash
+		FROM users
+		WHERE email = $1
+	`
+
+	var user User
+	err := r.db.QueryRowContext(ctx, query, email).
+		Scan(&user.ID, &user.Email, &user.PasswordHash)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }
 
 //
@@ -144,5 +170,28 @@ func (r *Repository) DeleteVerificationToken(
 		email,
 	)
 
+	return err
+}
+
+//
+// =======================
+// REFRESH TOKENS
+// =======================
+//
+
+// CreateRefreshToken создаёт новый refresh токен для пользователя.
+func (r *Repository) CreateRefreshToken(
+	ctx context.Context,
+	userID int64,
+	tokenHash string,
+	expiresAt time.Time,
+) error {
+
+	query := `
+		INSERT INTO refresh_tokens (user_id, token_hash, expires_at)
+		VALUES ($1, $2, $3)
+	`
+
+	_, err := r.db.ExecContext(ctx, query, userID, tokenHash, expiresAt)
 	return err
 }

@@ -45,7 +45,11 @@ func New() (*App, error) {
 
 	// --- Auth wiring ---
 	authRepo := auth.NewRepository(dbpool)
-	authService := auth.NewService(authRepo)
+
+	tokenManager := auth.NewTokenManager(cfg.JWTSecret)
+
+	authService := auth.NewService(authRepo, tokenManager)
+
 	authHandler := httpHandler.NewAuthHandler(authService)
 
 	mux.HandleFunc("/auth/request-code", authHandler.RequestCode)
