@@ -220,23 +220,6 @@ export default function DashboardPage() {
               </motion.div>
             ))}
           </div>
-
-          {/* Кнопка выхода */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="mt-12 flex justify-center"
-          >
-            <Button
-              onClick={handleLogout}
-              variant="secondary"
-              className="rounded-full px-8 py-3 text-base"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Выйти
-            </Button>
-          </motion.div>
         </div>
       </main>
     </>
