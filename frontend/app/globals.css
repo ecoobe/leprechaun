@@ -10,6 +10,16 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* ---------- Анимация жидкого стекла ---------- */
+@keyframes liquid-shine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(15deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(15deg);
+  }
+}
+
 /* ---------- Custom variants ---------- */
 @custom-variant dark (&:is(.dark *));
 
@@ -93,8 +103,40 @@
   }
 }
 
-/* ---------- Reusable layout styles (без кнопок!) ---------- */
+/* ---------- Reusable layout styles ---------- */
 @layer components {
+  .glass-effect {
+    @apply relative overflow-hidden;
+  }
+
+  .glass-effect::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle at 30% 30%,
+      rgba(255, 255, 255, 0.08) 0%,
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .glass-effect:hover::before {
+    opacity: 0.7;
+    animation: liquid-shine 2.5s infinite linear;
+  }
+
+  .glass-effect > * {
+    position: relative;
+    z-index: 2;
+  }
+
   .nav-container {
     @apply w-full flex items-center justify-between gap-8 px-10 py-4 rounded-full bg-zinc-900/70 backdrop-blur-xl border border-zinc-800 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)];
   }
@@ -116,18 +158,19 @@
   }
 
   .step-card {
-    @apply rounded-3xl border border-zinc-800 bg-zinc-900/60 backdrop-blur p-10 transition-all duration-300 hover:-translate-y-2 hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/10;
+    @apply rounded-3xl border border-zinc-800 bg-zinc-900/60 backdrop-blur p-10 transition-all duration-300 hover:-translate-y-2 hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/10 glass-effect;
   }
+
   .testimonial-card {
-    @apply rounded-3xl border border-zinc-800 bg-zinc-900/60 backdrop-blur p-8 transition-all duration-300 hover:-translate-y-2 hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/10;
+    @apply rounded-3xl border border-zinc-800 bg-zinc-900/60 backdrop-blur p-8 transition-all duration-300 hover:-translate-y-2 hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/10 glass-effect;
   }
 
   .faq-card {
-    @apply rounded-3xl border border-zinc-800 bg-zinc-900/60 backdrop-blur overflow-hidden transition-all duration-300 hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/10;
+    @apply rounded-3xl border border-zinc-800 bg-zinc-900/60 backdrop-blur overflow-hidden transition-all duration-300 hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/10 glass-effect;
   }
 
   .cta-card {
-    @apply relative rounded-3xl border border-zinc-800 bg-zinc-900/70 backdrop-blur overflow-hidden;
+    @apply relative rounded-3xl border border-zinc-800 bg-zinc-900/70 backdrop-blur overflow-hidden glass-effect;
   }
 
   .cta-card-inner {
@@ -170,7 +213,6 @@
     @apply text-sm text-zinc-400;
   }
 
-  /* Gradient dots for registration steps */
   .dot-gradient {
     @apply bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500;
   }
