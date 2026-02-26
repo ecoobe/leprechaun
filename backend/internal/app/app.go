@@ -43,9 +43,6 @@ func New() (*App, error) {
 	// Prometheus
 	mux.Handle("/metrics", promhttp.Handler())
 
-	// Login
-	mux.HandleFunc("/auth/refresh", authHandler.Refresh)
-
 	// --- Auth wiring ---
 	authRepo := auth.NewRepository(dbpool)
 
@@ -57,6 +54,7 @@ func New() (*App, error) {
 
 	mux.HandleFunc("/auth/request-code", authHandler.RequestCode)
 	mux.HandleFunc("/auth/register", authHandler.Register)
+	mux.HandleFunc("/auth/refresh", authHandler.Refresh)
 
 	// --- Server ---
 	server := &http.Server{

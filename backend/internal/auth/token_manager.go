@@ -2,6 +2,7 @@ package auth
 
 import (
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"time"
 
@@ -55,6 +56,11 @@ func (tm *TokenManager) GenerateRefreshToken() (string, string, error) {
 	hashStr := hex.EncodeToString(hash[:])
 
 	return raw, hashStr, nil
+}
+
+func (tm *TokenManager) HashRefreshToken(raw string) string {
+	h := sha256.Sum256([]byte(raw))
+	return base64.RawURLEncoding.EncodeToString(h[:])
 }
 
 //
