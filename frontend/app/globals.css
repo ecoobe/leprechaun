@@ -93,10 +93,10 @@
   }
 }
 
-/* ---------- Components & liquid glass effect ---------- */
+/* ---------- Reusable layout styles (без кнопок!) ---------- */
 @layer components {
   .nav-container {
-    @apply w-full flex items-center justify-between gap-8 px-10 py-4 rounded-full bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)];
+    @apply w-full flex items-center justify-between gap-8 px-10 py-4 rounded-full bg-zinc-900/70 backdrop-blur-xl border border-zinc-800 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)];
   }
 
   .logo-text {
@@ -115,21 +115,19 @@
     @apply mt-4 text-xl text-zinc-400 max-w-2xl;
   }
 
-  /* ---------- Liquid glass cards ---------- */
-  .step-card,
-  .testimonial-card,
-  .faq-card,
-  .cta-card,
-  .form-card {
-    @apply rounded-3xl border border-zinc-800/30 bg-zinc-900/30 backdrop-blur-lg p-8 transition-all duration-300;
+  .step-card {
+    @apply rounded-3xl border border-zinc-800 bg-zinc-900/60 backdrop-blur p-10 transition-all duration-300 hover:-translate-y-2 hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/10;
+  }
+  .testimonial-card {
+    @apply rounded-3xl border border-zinc-800 bg-zinc-900/60 backdrop-blur p-8 transition-all duration-300 hover:-translate-y-2 hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/10;
   }
 
-  .step-card:hover,
-  .testimonial-card:hover,
-  .faq-card:hover,
-  .cta-card:hover,
-  .form-card:hover {
-    @apply hover:shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-1 hover:scale-105;
+  .faq-card {
+    @apply rounded-3xl border border-zinc-800 bg-zinc-900/60 backdrop-blur overflow-hidden transition-all duration-300 hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/10;
+  }
+
+  .cta-card {
+    @apply relative rounded-3xl border border-zinc-800 bg-zinc-900/70 backdrop-blur overflow-hidden;
   }
 
   .cta-card-inner {
@@ -138,6 +136,10 @@
 
   .footer-text {
     @apply text-sm text-zinc-600;
+  }
+
+  .form-card {
+    @apply w-full max-w-md bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-3xl p-10 shadow-xl;
   }
 
   .form-header {
@@ -153,11 +155,11 @@
   }
 
   .form-input {
-    @apply w-full rounded-xl px-4 py-3 text-white bg-zinc-800/40 border border-zinc-700/30 backdrop-blur focus:outline-none focus:border-emerald-500/40 focus:shadow-lg focus:shadow-emerald-500/10 transition-all duration-300;
+    @apply w-full rounded-xl px-4 py-3 text-white bg-zinc-800/60 border border-zinc-700 focus:outline-none focus:border-emerald-500/40 focus:shadow-lg focus:shadow-emerald-500/10 transition-all duration-300;
   }
 
   .form-input:disabled {
-    @apply bg-zinc-800/20 border-zinc-700 text-zinc-400 cursor-not-allowed;
+    @apply bg-zinc-800/40 border-zinc-700 text-zinc-400 cursor-not-allowed;
   }
 
   .form-link {
@@ -168,15 +170,16 @@
     @apply text-sm text-zinc-400;
   }
 
+  /* Gradient dots for registration steps */
   .dot-gradient {
     @apply bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500;
   }
 
   .support-button {
-    @apply fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-zinc-900/50 backdrop-blur border border-zinc-700 shadow-lg shadow-emerald-500/20 transition hover:border-emerald-400 hover:scale-105;
+    @apply fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-zinc-900 border border-zinc-700 shadow-lg shadow-emerald-500/20 transition hover:border-emerald-400;
   }
 
   .support-tooltip {
-    @apply pointer-events-none absolute right-14 whitespace-nowrap rounded-lg bg-zinc-900/70 px-3 py-1 text-xs text-zinc-200 opacity-0 transition group-hover:opacity-100;
+    @apply pointer-events-none absolute right-14 whitespace-nowrap rounded-lg bg-zinc-900 px-3 py-1 text-xs text-zinc-200 opacity-0 transition group-hover:opacity-100;
   }
 }
