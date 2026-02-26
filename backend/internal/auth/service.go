@@ -8,6 +8,7 @@ import (
 	"fmt"
 	mrand "math/rand"
 	"regexp"
+	"strconv" // <-- добавлен импорт
 	"strings"
 	"time"
 
@@ -108,8 +109,8 @@ func (s *Service) Login(ctx context.Context, email, password string) (string, st
 		return "", "", errors.New("invalid credentials")
 	}
 
-	// ACCESS
-	access, err := s.tokenManager.GenerateAccessToken(user.ID)
+	// ACCESS — преобразуем int64 в строку
+	access, err := s.tokenManager.GenerateAccessToken(strconv.FormatInt(user.ID, 10))
 	if err != nil {
 		return "", "", err
 	}
@@ -152,8 +153,8 @@ func (s *Service) Refresh(ctx context.Context, rawRefresh string) (string, strin
 		return "", "", err
 	}
 
-	// новый access
-	access, err := s.tokenManager.GenerateAccessToken(userID)
+	// новый access — преобразуем int64 в строку
+	access, err := s.tokenManager.GenerateAccessToken(strconv.FormatInt(userID, 10))
 	if err != nil {
 		return "", "", err
 	}
