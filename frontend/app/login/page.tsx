@@ -2,16 +2,46 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/ui/Header";
 import Link from "next/link";
+import { login } from "@/lib/api";
 
 export default function LoginPage() {
-  const [emailLocked, setEmailLocked] = useState(false);
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password) {
+      setError("Заполните все поля");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const data = await login(email, password);
+      // Сохраняем токены (можно также в httpOnly cookies, но для простоты используем localStorage)
+      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("refresh_token", data.refresh_token);
+      // Перенаправляем в личный кабинет
+      router.push("/dashboard");
+    } catch (err: any) {
+      setError(err.message || "Неверный email или пароль");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
-      {/* Background */}
+      {/* Background (оставляем как есть) */}
       <div className="pointer-events-none fixed inset-0">
         <div className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-indigo-500/20 blur-3xl" />
@@ -25,20 +55,29 @@ export default function LoginPage() {
             <h1 className="form-title">Войти в аккаунт</h1>
           </div>
 
-          <motion.div
+          {error && (
+            <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-200 text-sm">
+              {error}
+            </div>
+          )}
+
+          <motion.form
             layout
             transition={{ duration: 0.45, ease: "easeInOut" }}
             className="flex flex-col gap-6"
+            onSubmit={handleSubmit}
           >
             {/* Email */}
             <motion.div layout>
               <label className="form-label">Email</label>
               <input
                 type="email"
-                disabled={emailLocked}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={loading}
                 placeholder="you@example.com"
-                className={`form-input ${emailLocked ? "disabled" : ""}`}
-                // В Tailwind класс disabled уже учтён в .form-input:disabled, но для динамики можно оставить условный класс
+                className={`form-input ${loading ? "opacity-50" : ""}`}
+                required
               />
             </motion.div>
 
@@ -52,19 +91,24 @@ export default function LoginPage() {
               <label className="form-label">Пароль</label>
               <input
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={loading}
                 placeholder="Введите пароль"
-                className="form-input"
+                className={`form-input ${loading ? "opacity-50" : ""}`}
+                required
               />
             </motion.div>
 
             {/* Submit button */}
             <motion.div layout>
               <Button
-                onClick={() => setEmailLocked(true)}
+                type="submit"
                 variant="primary"
                 className="w-full rounded-full py-3"
+                disabled={loading}
               >
-                Войти
+                {loading ? "Вход..." : "Войти"}
               </Button>
             </motion.div>
 
@@ -85,7 +129,7 @@ export default function LoginPage() {
                 </Link>
               </div>
             </motion.div>
-          </motion.div>
+          </motion.form>
         </div>
       </main>
     </>
