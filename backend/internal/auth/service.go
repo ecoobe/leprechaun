@@ -2,9 +2,11 @@ package auth
 
 import (
 	"context"
+	crand "crypto/rand"
+	"encoding/base64"
 	"errors"
 	"fmt"
-	"math/rand"
+	mrand "math/rand"
 	"regexp"
 	"strings"
 	"time"
@@ -88,6 +90,12 @@ func (s *Service) Register(ctx context.Context, email, code, password string) er
 // =======================
 
 func generateCode() string {
-	rand.Seed(time.Now().UnixNano())
-	return fmt.Sprintf("%06d", rand.Intn(1000000))
+	mrand.Seed(time.Now().UnixNano())
+	return fmt.Sprintf("%06d", mrand.Intn(1000000))
+}
+
+func generateRandomString(n int) string {
+	b := make([]byte, n)
+	crand.Read(b)
+	return base64.RawURLEncoding.EncodeToString(b)
 }
