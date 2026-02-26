@@ -127,6 +127,46 @@ func (s *Service) Login(ctx context.Context, email, password string) (string, st
 	return access, rawRefresh, nil
 }
 
+func (s *Service) Refresh(ctx context.Context, rawRefresh string) (string, string, error) {
+
+	hash := s.tokenManager.HashRefreshToken(rawRefresh)
+
+	userID, expires, err := s.repo.FindRefreshToken(ctx, hash)
+	if err != nil {
+		return "", "", errors.New("invalid refresh token")
+	}
+
+	if time.Now().After(expires) {
+		_ = s.repo.DeleteRefreshToken(ctx, hash)
+		return "", "", errors.New("refresh token expired")
+	}
+
+	// ROTATION — удаляем старый
+	if err := s.repo.DeleteRefreshToken(ctx, hash); err != nil {
+		return "", "", err
+	}
+
+	// новый access
+	access, err := s.tokenManager.GenerateAccessToken(strconv.FormatInt(userID, 10))
+	if err != nil {
+		return "", "", err
+	}
+
+	// новый refresh
+	newRaw, newHash, err := s.tokenManager.GenerateRefreshToken()
+	if err != nil {
+		return "", "", err
+	}
+
+	newExpires := time.Now().Add(7 * 24 * time.Hour)
+
+	if err := s.repo.CreateRefreshToken(ctx, userID, newHash, newExpires); err != nil {
+		return "", "", err
+	}
+
+	return access, newRaw, nil
+}
+
 // =======================
 // UTILS
 // =======================

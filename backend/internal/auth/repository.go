@@ -195,3 +195,55 @@ func (r *Repository) CreateRefreshToken(
 	_, err := r.db.ExecContext(ctx, query, userID, tokenHash, expiresAt)
 	return err
 }
+
+func (r *Repository) FindRefreshToken(
+	ctx context.Context,
+	tokenHash string,
+) (int64, time.Time, error) {
+
+	query := `
+		SELECT user_id, expires_at
+		FROM refresh_tokens
+		WHERE token_hash = $1
+	`
+
+	var userID int64
+	var expires time.Time
+
+	err := r.db.QueryRowContext(ctx, query, tokenHash).
+		Scan(&userID, &expires)
+
+	if err != nil {
+		return 0, time.Time{}, err
+	}
+
+	return userID, expires, nil
+}
+
+func (r *Repository) DeleteRefreshToken(
+	ctx context.Context,
+	tokenHash string,
+) error {
+
+	query := `
+		DELETE FROM refresh_tokens
+		WHERE token_hash = $1
+	`
+
+	_, err := r.db.ExecContext(ctx, query, tokenHash)
+	return err
+}
+
+func (r *Repository) DeleteUserRefreshTokens(
+	ctx context.Context,
+	userID int64,
+) error {
+
+	query := `
+		DELETE FROM refresh_tokens
+		WHERE user_id = $1
+	`
+
+	_, err := r.db.ExecContext(ctx, query, userID)
+	return err
+}
