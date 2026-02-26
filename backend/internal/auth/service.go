@@ -8,6 +8,7 @@ import (
 	"fmt"
 	mrand "math/rand"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -106,7 +107,7 @@ func (s *Service) Login(ctx context.Context, email, password string) (string, st
 	}
 
 	// ACCESS
-	access, err := s.tokenManager.GenerateAccessToken(user.ID)
+	access, err := s.tokenManager.GenerateAccessToken(strconv.FormatInt(user.ID, 10))
 	if err != nil {
 		return "", "", err
 	}
