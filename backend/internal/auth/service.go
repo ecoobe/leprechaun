@@ -5,16 +5,11 @@ import (
 	"crypto/rand"
 	"errors"
 	"math/big"
-	mrand "math/rand"
 	"strings"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
-
-func init() {
-	mrand.Seed(time.Now().UnixNano())
-}
 
 // TokenProvider определяет интерфейс для работы с токенами.
 type TokenProvider interface {
