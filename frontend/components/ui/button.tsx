@@ -10,9 +10,9 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        /* LIQUID GLASS PRIMARY WITH CLEAR TEXT */
+        /* LIQUID GLASS PRIMARY WITH ORIGINAL GREEN GRADIENT */
         primary: `
-          bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500
+          bg-gradient-to-r from-emerald-500/80 via-green-500/80 to-teal-500/80
           text-zinc-900
           backdrop-blur-sm
           border border-white/20
