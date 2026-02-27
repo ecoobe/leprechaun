@@ -6,33 +6,33 @@ import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-semibold outline-none disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-white/30 transition-all duration-300 ease-out",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-semibold outline-none transition-[transform,box-shadow,background] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-white/40",
   {
     variants: {
       variant: {
-        /* LIQUID GLASS PRIMARY WITH ORIGINAL GREEN GRADIENT */
+        /* LIQUID GLASS PRIMARY WITH GREEN GRADIENT */
         primary: `
-          bg-gradient-to-r from-emerald-500/80 via-green-500/80 to-teal-500/80
-          text-zinc-900
-          backdrop-blur-sm
+          bg-gradient-to-r from-emerald-400/40 via-green-400/40 to-teal-400/40
+          text-white
+          backdrop-blur-md
           border border-white/20
-          shadow-md
-          hover:scale-102
-          hover:shadow-lg
-          active:scale-100
+          shadow-[0_4px_20px_rgba(0,0,0,0.25)]
+          hover:shadow-[0_6px_30px_rgba(0,0,0,0.35)]
+          hover:scale-[1.03]
+          active:scale-[0.98]
         `,
 
-        /* LIQUID GLASS SECONDARY */
+        /* PERFECT LIQUID DARK */
         secondary: `
-          bg-zinc-900/60
-          text-zinc-200
-          backdrop-blur-sm
+          bg-white/5
+          text-zinc-100
+          backdrop-blur-md
           border border-white/10
-          shadow-md
-          hover:bg-zinc-800/60
-          hover:shadow-lg
-          hover:scale-102
-          active:scale-100
+          shadow-[0_4px_16px_rgba(0,0,0,0.3)]
+          hover:bg-white/10
+          hover:shadow-[0_8px_28px_rgba(0,0,0,0.4)]
+          hover:scale-[1.03]
+          active:scale-[0.98]
         `,
 
         outline:
