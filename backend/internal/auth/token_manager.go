@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/base64"
+	"errors"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -24,7 +25,15 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
+// =======================
+// ACCESS TOKEN
+// =======================
+
 func (tm *TokenManager) GenerateAccessToken(userID string) (string, error) {
+	if userID == "" {
+		return "", errors.New("empty userID")
+	}
+
 	claims := Claims{
 		UserID: userID,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -32,9 +41,38 @@ func (tm *TokenManager) GenerateAccessToken(userID string) (string, error) {
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 		},
 	}
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(tm.secret)
 }
+
+func (tm *TokenManager) ParseAccessToken(tokenStr string) (*Claims, error) {
+	parser := jwt.NewParser(
+		jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Alg()}),
+	)
+
+	token, err := parser.ParseWithClaims(tokenStr, &Claims{}, func(token *jwt.Token) (any, error) {
+		return tm.secret, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	claims, ok := token.Claims.(*Claims)
+	if !ok || !token.Valid {
+		return nil, jwt.ErrTokenInvalidClaims
+	}
+
+	if claims.UserID == "" {
+		return nil, jwt.ErrTokenInvalidClaims
+	}
+
+	return claims, nil
+}
+
+// =======================
+// REFRESH TOKEN
+// =======================
 
 func (tm *TokenManager) GenerateRefreshToken() (string, error) {
 	return generateRandomString(32), nil
@@ -45,22 +83,16 @@ func (tm *TokenManager) HashRefreshToken(raw string) string {
 	return base64.RawURLEncoding.EncodeToString(h[:])
 }
 
-func (tm *TokenManager) ParseAccessToken(tokenStr string) (*Claims, error) {
-	token, err := jwt.ParseWithClaims(tokenStr, &Claims{}, func(token *jwt.Token) (any, error) {
-		return tm.secret, nil
-	})
-	if err != nil {
-		return nil, err
-	}
-	claims, ok := token.Claims.(*Claims)
-	if !ok || !token.Valid {
-		return nil, jwt.ErrTokenInvalidClaims
-	}
-	return claims, nil
-}
+// =======================
+// UTILS
+// =======================
 
 func generateRandomString(n int) string {
 	b := make([]byte, n)
-	_, _ = rand.Read(b)
+	_, err := rand.Read(b)
+	if err != nil {
+		// крайне редкий случай, но корректно обработаем
+		panic("crypto/rand failed")
+	}
 	return base64.RawURLEncoding.EncodeToString(b)
 }
