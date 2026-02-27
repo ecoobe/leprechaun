@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { jwtDecode } from "jwt-decode";
 import {
   CreditCard,
@@ -13,7 +12,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { UserMenu } from "@/components/ui/UserMenu";
+import { DashboardHeader } from "@/components/ui/DashboardHeader";
 
 interface TokenPayload {
   uid: string;
@@ -230,6 +229,7 @@ export default function DashboardPage() {
     );
   }
 
+
   const tools: Tool[] = [
     {
       id: "cards",
@@ -272,25 +272,21 @@ export default function DashboardPage() {
 
   return (
     <>
+      {/* Фоновые элементы */}
       <div className="pointer-events-none fixed inset-0">
         <div className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-indigo-500/20 blur-3xl" />
       </div>
 
-      <main className="relative min-h-screen">
-        <div className="p-8">
-          {/* Верхняя панель с логотипом и меню пользователя */}
-          <div className="flex justify-between items-center mb-6">
-            <Link href="/dashboard" className="group">
-              <span className="logo-text text-3xl">leprechaun</span>
-            </Link>
-            <UserMenu email={email || ""} />
-          </div>
+      {/* Хедер дашборда */}
+      <DashboardHeader email={email || ""} />
 
-          {/* Капсула, растянутая на всю доступную высоту (flex-1 + h-full) */}
-          <div className="form-card !max-w-full p-0 overflow-hidden flex h-[calc(100vh-12rem)]">
+      <main className="relative min-h-screen pt-24">
+        <div className="p-8">
+          {/* Единая капсула, содержащая левое меню и правый контент */}
+          <div className="form-card !max-w-full p-0 overflow-hidden flex min-h-[calc(100vh-12rem)]">
             {/* Левая колонка (меню) */}
-            <div className="w-80 border-r border-border p-6 bg-card/50 overflow-y-auto">
+            <div className="w-80 border-r border-border p-6 bg-card/50">
               <div className="flex items-center justify-between mb-4 px-1">
                 <h2 className="text-sm font-medium text-muted-foreground">Инструменты</h2>
                 <Sparkles className="w-4 h-4 text-emerald-400" />
@@ -310,7 +306,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Правая колонка (контент) */}
-            <div className="flex-1 p-8 overflow-y-auto">
+            <div className="flex-1 p-8">
               {selectedTool ? (
                 <ToolContent tool={selectedTool} />
               ) : (

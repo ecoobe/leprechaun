@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { jwtDecode } from "jwt-decode";
-import { UserMenu } from "@/components/ui/UserMenu";
 import { Button } from "@/components/ui/button";
+import { DashboardHeader } from "@/components/ui/DashboardHeader";
 
 interface TokenPayload {
   uid: string;
@@ -47,25 +46,20 @@ export default function SettingsPage() {
 
   return (
     <>
+      {/* Фоновые элементы */}
       <div className="pointer-events-none fixed inset-0">
         <div className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-indigo-500/20 blur-3xl" />
       </div>
 
-      <main className="relative min-h-screen">
-        <div className="p-8">
-          {/* Верхняя панель с логотипом и меню пользователя */}
-          <div className="flex justify-between items-center mb-6">
-            <Link href="/dashboard" className="group">
-              <span className="logo-text text-3xl">leprechaun</span>
-            </Link>
-            <UserMenu email={email || ""} />
-          </div>
+      <DashboardHeader email={email || ""} />
 
-          {/* Капсула с настройками, растянутая по высоте */}
-          <div className="form-card !max-w-full h-[calc(100vh-12rem)] p-8 overflow-y-auto">
-            <div className="max-w-2xl mx-auto">
-              <h1 className="text-3xl font-semibold tracking-tight mb-8">Настройки профиля</h1>
+      <main className="relative min-h-screen pt-24">
+        <div className="p-8">
+          {/* Форма настроек */}
+          <div className="max-w-2xl mx-auto">
+            <div className="form-card !max-w-full p-8">
+              <h1 className="text-3xl font-semibold tracking-tight mb-6">Настройки профиля</h1>
               <div className="space-y-6">
                 <div>
                   <label className="form-label">Имя</label>
