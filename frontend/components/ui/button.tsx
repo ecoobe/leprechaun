@@ -13,7 +13,7 @@ const buttonVariants = cva(
         /* LIQUID GLASS PRIMARY WITH WHITE TEXT AND SUBTLE HOVER */
         primary: `
           bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500
-          text-white
+          text-zinc-900
           backdrop-blur-sm
           border border-white/20
           shadow-md
