@@ -6,20 +6,20 @@ import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-semibold outline-none transition-[transform,box-shadow,background] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-white/40",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-semibold outline-none disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-white/30 transition-transform transition-shadow duration-300 ease-out",
   {
     variants: {
       variant: {
-        /* LIQUID GLASS PRIMARY WITH GREEN GRADIENT */
+        /* LIQUID GLASS PRIMARY WITH ORIGINAL GREEN GRADIENT */
         primary: `
-          bg-gradient-to-r from-emerald-400/40 via-green-400/40 to-teal-400/40
-          text-white
+          bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500
+          text-zinc-800
           backdrop-blur-md
           border border-white/20
-          shadow-[0_4px_20px_rgba(0,0,0,0.25)]
-          hover:shadow-[0_6px_30px_rgba(0,0,0,0.35)]
-          hover:scale-[1.03]
-          active:scale-[0.98]
+          shadow-md
+          hover:scale-105
+          hover:shadow-lg
+          active:scale-100
         `,
 
         /* PERFECT LIQUID DARK */
@@ -31,8 +31,8 @@ const buttonVariants = cva(
           shadow-[0_4px_16px_rgba(0,0,0,0.3)]
           hover:bg-white/10
           hover:shadow-[0_8px_28px_rgba(0,0,0,0.4)]
-          hover:scale-[1.03]
-          active:scale-[0.98]
+          hover:scale-105
+          active:scale-100
         `,
 
         outline:
