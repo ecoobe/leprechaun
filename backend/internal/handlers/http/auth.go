@@ -72,7 +72,8 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.service.Register(r.Context(), req.Email, req.Code, req.Password); err != nil {
+	// Исправлен порядок аргументов: email, password, code
+	if err := h.service.Register(r.Context(), req.Email, req.Password, req.Code); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
