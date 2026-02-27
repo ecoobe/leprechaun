@@ -6,32 +6,32 @@ import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-semibold outline-none disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-white/40 transition-transform transition-shadow transition-background duration-300 ease-out",
+  "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-semibold outline-none disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-white/30 transition-all duration-300 ease-out",
   {
     variants: {
       variant: {
-        /* LIQUID GLASS PRIMARY WITH LIGHTER GREEN GRADIENT AND SMOOTH ANIMATION */
+        /* LIQUID GLASS PRIMARY WITH WHITE TEXT AND SUBTLE HOVER */
         primary: `
-          bg-gradient-to-r from-emerald-500/60 via-green-500/60 to-teal-500/60
-          text-zinc-900
-          backdrop-blur-md
+          bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500
+          text-white
+          backdrop-blur-sm
           border border-white/20
           shadow-md
-          hover:scale-105
+          hover:scale-102
           hover:shadow-lg
           active:scale-100
         `,
 
-        /* PERFECT LIQUID DARK */
+        /* LIQUID GLASS SECONDARY */
         secondary: `
           bg-zinc-900/60
           text-zinc-200
-          backdrop-blur-md
+          backdrop-blur-sm
           border border-white/10
           shadow-md
           hover:bg-zinc-800/60
           hover:shadow-lg
-          hover:scale-105
+          hover:scale-102
           active:scale-100
         `,
 
