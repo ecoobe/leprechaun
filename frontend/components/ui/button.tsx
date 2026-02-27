@@ -18,10 +18,6 @@ const buttonVariants = cva(
         secondary:
           "border border-zinc-700 bg-zinc-900/60 backdrop-blur text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:scale-105 hover:shadow-lg font-semibold",
 
-        /* LIQUID GLASS (iOS 26 style) */
-        liquid:
-          "relative overflow-hidden bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-zinc-800 shadow-md hover:shadow-lg font-semibold before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-700 before:ease-in-out",
-
         //Outline (оставляем системный)
         outline:
           "border border-zinc-700 bg-transparent hover:bg-zinc-800",
