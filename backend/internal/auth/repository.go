@@ -151,3 +151,10 @@ func (r *Repository) DeleteUserRefreshTokens(ctx context.Context, userID string)
 	_, err := r.db.ExecContext(ctx, `DELETE FROM refresh_tokens WHERE user_id = $1`, userID)
 	return err
 }
+
+// DeleteExpiredRefreshTokens удаляет все просроченные refresh токены.
+func (r *Repository) DeleteExpiredRefreshTokens(ctx context.Context) error {
+	query := `DELETE FROM refresh_tokens WHERE expires_at < NOW()`
+	_, err := r.db.ExecContext(ctx, query)
+	return err
+}

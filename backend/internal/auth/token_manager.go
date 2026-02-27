@@ -1,9 +1,9 @@
 package auth
 
 import (
+	"crypto/rand"
 	"crypto/sha256"
 	"encoding/base64"
-	"encoding/hex"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -24,12 +24,7 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-//
-// =======================
-// ACCESS TOKEN
-// =======================
-//
-
+// GenerateAccessToken создаёт JWT access token.
 func (tm *TokenManager) GenerateAccessToken(userID string) (string, error) {
 	claims := Claims{
 		UserID: userID,
@@ -38,37 +33,22 @@ func (tm *TokenManager) GenerateAccessToken(userID string) (string, error) {
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 		},
 	}
-
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(tm.secret)
 }
 
-//
-// =======================
-// REFRESH TOKEN
-// =======================
-//
-
-func (tm *TokenManager) GenerateRefreshToken() (string, string, error) {
-	raw := generateRandomString(32)
-
-	hash := sha256.Sum256([]byte(raw))
-	hashStr := hex.EncodeToString(hash[:])
-
-	return raw, hashStr, nil
+// GenerateRefreshToken генерирует сырой refresh токен (случайная строка).
+func (tm *TokenManager) GenerateRefreshToken() (string, error) {
+	return generateRandomString(32), nil
 }
 
+// HashRefreshToken вычисляет хеш refresh токена для хранения в БД.
 func (tm *TokenManager) HashRefreshToken(raw string) string {
 	h := sha256.Sum256([]byte(raw))
 	return base64.RawURLEncoding.EncodeToString(h[:])
 }
 
-//
-// =======================
-// VERIFY ACCESS TOKEN
-// =======================
-//
-
+// ParseAccessToken проверяет и декодирует access token.
 func (tm *TokenManager) ParseAccessToken(tokenStr string) (*Claims, error) {
 	token, err := jwt.ParseWithClaims(tokenStr, &Claims{}, func(token *jwt.Token) (any, error) {
 		return tm.secret, nil
@@ -76,11 +56,16 @@ func (tm *TokenManager) ParseAccessToken(tokenStr string) (*Claims, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	claims, ok := token.Claims.(*Claims)
 	if !ok || !token.Valid {
 		return nil, jwt.ErrTokenInvalidClaims
 	}
-
 	return claims, nil
+}
+
+// generateRandomString – вспомогательная функция.
+func generateRandomString(n int) string {
+	b := make([]byte, n)
+	_, _ = rand.Read(b)
+	return base64.RawURLEncoding.EncodeToString(b)
 }
