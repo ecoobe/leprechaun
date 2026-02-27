@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { UserCircle, Settings, LogOut } from "lucide-react";
+import { Settings, LogOut } from "lucide-react";
 import { logout } from "@/lib/api";
 
 interface UserMenuProps {
@@ -13,6 +13,9 @@ export function UserMenu({ email }: UserMenuProps) {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // Берём первую букву email для аватара
+  const initial = email ? email[0].toUpperCase() : "?";
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -47,10 +50,10 @@ export function UserMenu({ email }: UserMenuProps) {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setMenuOpen(!menuOpen)}
-        className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 hover:border-emerald-500/60 transition"
+        className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 text-white font-semibold text-lg shadow-lg hover:shadow-emerald-500/30 transition"
         aria-label="Меню пользователя"
       >
-        <UserCircle className="w-6 h-6 text-emerald-400" />
+        {initial}
       </button>
 
       {menuOpen && (

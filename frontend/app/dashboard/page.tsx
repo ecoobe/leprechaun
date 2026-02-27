@@ -12,6 +12,7 @@ import {
   Sparkles,
   CheckCircle2,
   Clock,
+  Home,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Sidebar } from "@/components/ui/Sidebar";
@@ -23,83 +24,180 @@ interface TokenPayload {
   iat: number;
 }
 
-// Компонент карточки инструмента (без изменений)
+// Тип инструмента
+interface Tool {
+  id: string;
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  status: "active" | "soon" | "inactive";
+  content?: React.ReactNode; // фиктивный контент для правой панели
+}
+
+// Компонент карточки инструмента для левой панели (кликабельная)
 const ToolCard = ({
   icon: Icon,
   title,
-  description,
   status = "inactive",
+  isSelected,
   onClick,
 }: {
   icon: React.ElementType;
   title: string;
-  description: string;
   status?: "active" | "soon" | "inactive";
+  isSelected: boolean;
   onClick?: () => void;
 }) => {
   const isActive = status === "active";
   const isSoon = status === "soon";
+  const canClick = isActive && !isSoon;
 
   return (
     <motion.div
-      whileHover={!isSoon ? { y: -4, scale: 1.02 } : {}}
+      whileHover={canClick ? { x: 4 } : {}}
       transition={{ duration: 0.2 }}
       className={`
-        relative rounded-2xl border p-6 backdrop-blur-sm transition-all
+        relative rounded-xl border p-4 backdrop-blur-sm transition-all cursor-pointer
         ${
-          isActive
-            ? "border-emerald-500/40 bg-emerald-500/5 shadow-lg shadow-emerald-500/10"
-            : isSoon
-            ? "border-zinc-700/30 bg-zinc-800/20 opacity-75 cursor-not-allowed"
-            : "border-border bg-card hover:border-emerald-500/30 hover:shadow-md hover:shadow-emerald-500/5"
+          isSelected
+            ? "border-emerald-500/60 bg-emerald-500/10 shadow-md shadow-emerald-500/10"
+            : canClick
+            ? "border-border bg-card hover:border-emerald-500/30 hover:bg-card/80"
+            : "border-zinc-700/30 bg-zinc-800/20 opacity-60 cursor-not-allowed"
         }
       `}
-      onClick={!isSoon ? onClick : undefined}
+      onClick={canClick ? onClick : undefined}
     >
-      {isActive && (
-        <div className="absolute top-4 right-4">
-          <div className="flex items-center gap-1.5 text-xs font-medium text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-full">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>Активно</span>
-          </div>
+      <div className="flex items-center gap-3">
+        <div
+          className={`
+            w-10 h-10 rounded-lg flex items-center justify-center shrink-0
+            ${
+              isSelected || isActive
+                ? "bg-gradient-to-br from-emerald-500/20 to-teal-500/20"
+                : "bg-zinc-800/40"
+            }
+          `}
+        >
+          <Icon
+            className={`w-5 h-5 ${
+              isSelected || isActive ? "text-emerald-400" : "text-muted-foreground"
+            }`}
+          />
         </div>
-      )}
-      {isSoon && (
-        <div className="absolute top-4 right-4">
-          <div className="flex items-center gap-1.5 text-xs font-medium text-zinc-400 bg-zinc-800/40 px-3 py-1.5 rounded-full">
-            <Clock className="w-3.5 h-3.5" />
-            <span>Скоро</span>
-          </div>
-        </div>
-      )}
-
-      <div
-        className={`
-          w-14 h-14 rounded-xl flex items-center justify-center mb-4
-          ${
-            isActive
-              ? "bg-gradient-to-br from-emerald-500/20 to-teal-500/20"
-              : "bg-zinc-800/40"
-          }
-        `}
-      >
-        <Icon
-          className={`w-7 h-7 ${
-            isActive ? "text-emerald-400" : "text-muted-foreground"
+        <span
+          className={`font-medium ${
+            isSelected || isActive ? "text-foreground" : "text-muted-foreground"
           }`}
-        />
+        >
+          {title}
+        </span>
+        {isSoon && (
+          <span className="ml-auto text-xs bg-zinc-800/40 px-2 py-1 rounded-full text-muted-foreground">
+            Скоро
+          </span>
+        )}
       </div>
+    </motion.div>
+  );
+};
 
-      <h3
-        className={`text-lg font-semibold mb-2 ${
-          isActive ? "text-foreground" : "text-muted-foreground"
-        }`}
-      >
-        {title}
-      </h3>
-      <p className="text-sm text-muted-foreground leading-relaxed">
-        {description}
-      </p>
+// Компонент контента для правой панели (капсула)
+const ToolContent = ({ tool }: { tool: Tool }) => {
+  // Фиктивный контент для каждого инструмента
+  const getContent = () => {
+    switch (tool.id) {
+      case "cards":
+        return (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold">Мои карты</h2>
+            <p className="text-muted-foreground">
+              Здесь будет отображаться список ваших карт, лимиты и операции.
+            </p>
+            <div className="grid grid-cols-1 gap-3 mt-4">
+              <div className="p-4 rounded-xl border border-border bg-card/50">
+                <div className="flex justify-between">
+                  <span>💳 Visa Platinum</span>
+                  <span className="text-emerald-400">Активна</span>
+                </div>
+                <div className="text-sm text-muted-foreground mt-1">**** 1234</div>
+              </div>
+              <div className="p-4 rounded-xl border border-border bg-card/50">
+                <div className="flex justify-between">
+                  <span>💳 Mastercard Gold</span>
+                  <span className="text-emerald-400">Активна</span>
+                </div>
+                <div className="text-sm text-muted-foreground mt-1">**** 5678</div>
+              </div>
+            </div>
+          </div>
+        );
+      case "bot":
+        return (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold">Telegram-бот</h2>
+            <p className="text-muted-foreground">
+              Настройте уведомления и получайте напоминания в Telegram.
+            </p>
+            <div className="p-4 rounded-xl border border-border bg-card/50">
+              <div className="flex items-center gap-3">
+                <Bot className="w-8 h-8 text-emerald-400" />
+                <div>
+                  <div className="font-medium">Бот активен</div>
+                  <div className="text-sm text-muted-foreground">@leprechaun_bot</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      case "notifications":
+        return (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold">Уведомления</h2>
+            <p className="text-muted-foreground">
+              Скоро здесь появится возможность настройки уведомлений.
+            </p>
+          </div>
+        );
+      case "stats":
+        return (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold">Статистика</h2>
+            <p className="text-muted-foreground">
+              Графики и аналитика по вашим операциям появятся в ближайшее время.
+            </p>
+          </div>
+        );
+      case "settings":
+        return (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold">Настройки профиля</h2>
+            <p className="text-muted-foreground">
+              Для изменения настроек перейдите в соответствующий раздел.
+            </p>
+          </div>
+        );
+      default:
+        return (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold">Добро пожаловать!</h2>
+            <p className="text-muted-foreground">
+              Выберите инструмент слева, чтобы увидеть подробности.
+            </p>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      transition={{ duration: 0.3 }}
+      className="form-card !max-w-full h-full p-8"
+    >
+      {getContent()}
     </motion.div>
   );
 };
@@ -108,6 +206,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedToolId, setSelectedToolId] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
@@ -136,40 +235,45 @@ export default function DashboardPage() {
     );
   }
 
-  const tools = [
+  const tools: Tool[] = [
     {
+      id: "cards",
       icon: CreditCard,
       title: "Мои карты",
-      description:
-        "Управляйте кредитными картами, отслеживайте лимиты и платежи",
-      status: "active" as const,
+      description: "Управляйте кредитными картами, отслеживайте лимиты и платежи",
+      status: "active",
     },
     {
+      id: "bot",
       icon: Bot,
       title: "Telegram-бот",
-      description:
-        "Настройте уведомления и получайте напоминания в Telegram",
-      status: "active" as const,
+      description: "Настройте уведомления и получайте напоминания в Telegram",
+      status: "active",
     },
     {
+      id: "notifications",
       icon: Bell,
       title: "Уведомления",
       description: "Настройте типы уведомлений и время их получения",
-      status: "soon" as const,
+      status: "soon",
     },
     {
+      id: "stats",
       icon: BarChart3,
       title: "Статистика",
       description: "Анализируйте свои расходы и историю платежей",
-      status: "soon" as const,
+      status: "soon",
     },
     {
+      id: "settings",
       icon: Settings,
       title: "Настройки профиля",
       description: "Измените личные данные и параметры безопасности",
-      status: "inactive" as const,
+      status: "inactive",
     },
   ];
+
+  const selectedTool = tools.find((t) => t.id === selectedToolId) || null;
 
   return (
     <>
@@ -182,53 +286,52 @@ export default function DashboardPage() {
       <Sidebar />
 
       <main className="relative min-h-screen pl-64">
-        <div className="p-8">
-          {/* Верхняя панель: приветствие + меню пользователя */}
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl font-semibold tracking-tight">Личный кабинет</h1>
-              <p className="text-muted-foreground">
-                Добро пожаловать,{" "}
-                <span className="text-emerald-400">{email}</span>
-              </p>
+        <div className="flex h-full">
+          {/* Левая колонка: список инструментов */}
+          <div className="w-80 border-r border-border p-6 space-y-4">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-medium">Инструменты</h2>
+              <Sparkles className="w-4 h-4 text-emerald-400" />
             </div>
-            <UserMenu email={email || ""} />
-          </div>
-
-          {/* Сетка карточек */}
-          <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {tools.map((tool, index) => (
-              <motion.div
-                key={tool.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-              >
+            <div className="space-y-2">
+              {tools.map((tool) => (
                 <ToolCard
+                  key={tool.id}
                   icon={tool.icon}
                   title={tool.title}
-                  description={tool.description}
                   status={tool.status}
-                  onClick={() => {
-                    if (tool.status === "active") {
-                      alert(`Переход в раздел "${tool.title}" (будет реализовано)`);
-                    }
-                  }}
+                  isSelected={selectedToolId === tool.id}
+                  onClick={() => setSelectedToolId(tool.id)}
                 />
-              </motion.div>
-            ))}
-          </section>
+              ))}
+            </div>
+          </div>
 
-          {/* Нижняя плашка */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="mt-16 text-center text-sm text-muted-foreground/60"
-          >
-            <Sparkles className="inline w-4 h-4 mr-1 text-emerald-400" />
-            Больше инструментов появится в ближайшее время
-          </motion.div>
+          {/* Правая колонка: контент инструмента + меню пользователя сверху */}
+          <div className="flex-1 p-8">
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-2xl font-semibold tracking-tight">
+                {selectedTool ? selectedTool.title : "Личный кабинет"}
+              </h1>
+              <UserMenu email={email || ""} />
+            </div>
+
+            <div className="mt-4">
+              {selectedTool ? (
+                <ToolContent tool={selectedTool} />
+              ) : (
+                <div className="form-card !max-w-full h-full p-8 flex items-center justify-center">
+                  <div className="text-center">
+                    <Sparkles className="w-12 h-12 text-emerald-400/50 mx-auto mb-4" />
+                    <h3 className="text-xl font-medium mb-2">Добро пожаловать!</h3>
+                    <p className="text-muted-foreground">
+                      Выберите инструмент слева, чтобы начать работу.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </main>
     </>
