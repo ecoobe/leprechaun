@@ -6,26 +6,41 @@ import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-medium transition-all duration-300 disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-ring/50 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-semibold outline-none transition-[transform,box-shadow,background] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-white/40",
   {
     variants: {
       variant: {
-        /* GRADIENT PRIMARY */
-        primary:
-          "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-zinc-800 shadow-md hover:scale-105 hover:shadow-lg font-semibold",
+        /* PERFECT LIQUID PRIMARY */
+        primary: `
+          bg-white/10
+          text-white
+          backdrop-blur-md
+          border border-white/20
+          shadow-[0_4px_20px_rgba(0,0,0,0.25)]
+          hover:shadow-[0_6px_30px_rgba(0,0,0,0.35)]
+          hover:scale-[1.03]
+          active:scale-[0.98]
+        `,
 
-        /* DARK GLASS SECONDARY */
-        secondary:
-          "border border-zinc-700 bg-zinc-900/60 backdrop-blur text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:scale-105 hover:shadow-lg font-semibold",
+        /* PERFECT LIQUID DARK */
+        secondary: `
+          bg-white/5
+          text-zinc-100
+          backdrop-blur-md
+          border border-white/10
+          shadow-[0_4px_16px_rgba(0,0,0,0.3)]
+          hover:bg-white/10
+          hover:shadow-[0_8px_28px_rgba(0,0,0,0.4)]
+          hover:scale-[1.03]
+          active:scale-[0.98]
+        `,
 
-        //Outline (оставляем системный)
         outline:
           "border border-zinc-700 bg-transparent hover:bg-zinc-800",
 
-        //Ghost
         ghost:
-          "hover:bg-accent hover:text-accent-foreground",
-        //Link
+          "hover:bg-white/10",
+
         link:
           "text-primary underline-offset-4 hover:underline",
       },
