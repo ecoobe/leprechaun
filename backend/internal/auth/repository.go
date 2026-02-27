@@ -170,7 +170,9 @@ func (r *Repository) RotateRefreshToken(
 	if err != nil {
 		return "", err
 	}
-	defer tx.Rollback()
+	defer func() {
+		_ = tx.Rollback()
+	}()
 
 	var userID string
 	var expires time.Time

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"math/big"
 	mrand "math/rand"
+	"strings"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -51,6 +52,8 @@ func generateCode() string {
 // REQUEST CODE
 // =======================
 func (s *Service) RequestCode(ctx context.Context, email string) error {
+	email = normalizeEmail(email)
+
 	exists, err := s.repo.UserExistsByEmail(ctx, email)
 	if err != nil {
 		return err
@@ -67,6 +70,8 @@ func (s *Service) RequestCode(ctx context.Context, email string) error {
 // REGISTER
 // =======================
 func (s *Service) Register(ctx context.Context, email, password, code string) error {
+	email = normalizeEmail(email)
+
 	storedCode, expiresAt, err := s.repo.GetVerificationToken(ctx, email)
 	if err != nil {
 		return err
@@ -91,6 +96,8 @@ func (s *Service) Register(ctx context.Context, email, password, code string) er
 // LOGIN
 // =======================
 func (s *Service) Login(ctx context.Context, email, password string) (string, string, error) {
+	email = normalizeEmail(email)
+
 	user, err := s.repo.FindUserByEmail(ctx, email)
 	if err != nil {
 		// Защита от timing‑атаки
@@ -171,4 +178,9 @@ func (s *Service) LogoutAll(ctx context.Context, userID string) error {
 // =======================
 func (s *Service) CleanupExpiredTokens(ctx context.Context) error {
 	return s.repo.DeleteExpiredRefreshTokens(ctx)
+}
+
+// UTILS
+func normalizeEmail(email string) string {
+	return strings.ToLower(strings.TrimSpace(email))
 }
