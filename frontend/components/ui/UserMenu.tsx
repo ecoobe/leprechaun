@@ -49,7 +49,7 @@ export function UserMenu({ email }: UserMenuProps) {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setMenuOpen(!menuOpen)}
-        className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 text-white font-semibold text-lg shadow-lg hover:shadow-emerald-500/30 transition"
+        className="flex items-center justify-center h-12 w-12 rounded-full bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-zinc-900 font-semibold text-lg shadow-md hover:shadow-lg transition-all duration-300 border border-white/20"
         aria-label="Меню пользователя"
       >
         {initial}
