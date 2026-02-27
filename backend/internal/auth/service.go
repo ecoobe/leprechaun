@@ -123,32 +123,31 @@ func (s *Service) Login(ctx context.Context, email, password string) (string, st
 // REFRESH (ROTATION)
 // =======================
 func (s *Service) Refresh(ctx context.Context, refreshToken string) (string, string, error) {
-	hash := s.tokenManager.HashRefreshToken(refreshToken)
-	userID, expires, err := s.repo.FindRefreshToken(ctx, hash)
-	if err != nil {
-		return "", "", errors.New("invalid refresh token")
-	}
-	if time.Now().After(expires) {
-		_ = s.repo.DeleteRefreshToken(ctx, hash)
-		return "", "", errors.New("refresh token expired")
-	}
-	// rotation
-	if err := s.repo.DeleteRefreshToken(ctx, hash); err != nil {
-		return "", "", err
-	}
+	oldHash := s.tokenManager.HashRefreshToken(refreshToken)
+
 	newRefresh, err := s.tokenManager.GenerateRefreshToken()
 	if err != nil {
 		return "", "", err
 	}
+
 	newHash := s.tokenManager.HashRefreshToken(newRefresh)
 	newExpires := time.Now().Add(7 * 24 * time.Hour)
-	if err := s.repo.CreateRefreshToken(ctx, userID, newHash, newExpires); err != nil {
-		return "", "", err
+
+	userID, err := s.repo.RotateRefreshToken(
+		ctx,
+		oldHash,
+		newHash,
+		newExpires,
+	)
+	if err != nil {
+		return "", "", errors.New("invalid refresh token")
 	}
+
 	access, err := s.tokenManager.GenerateAccessToken(userID)
 	if err != nil {
 		return "", "", err
 	}
+
 	return access, newRefresh, nil
 }
 

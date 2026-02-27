@@ -158,3 +158,69 @@ func (r *Repository) DeleteExpiredRefreshTokens(ctx context.Context) error {
 	_, err := r.db.ExecContext(ctx, query)
 	return err
 }
+
+func (r *Repository) RotateRefreshToken(
+	ctx context.Context,
+	oldHash string,
+	newHash string,
+	newExpires time.Time,
+) (string, error) {
+
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		return "", err
+	}
+	defer tx.Rollback()
+
+	var userID string
+	var expires time.Time
+
+	err = tx.QueryRowContext(
+		ctx,
+		`SELECT user_id, expires_at 
+		 FROM refresh_tokens 
+		 WHERE token_hash = $1
+		 FOR UPDATE`,
+		oldHash,
+	).Scan(&userID, &expires)
+
+	if errors.Is(err, sql.ErrNoRows) {
+		return "", ErrTokenNotFound
+	}
+	if err != nil {
+		return "", err
+	}
+
+	if time.Now().After(expires) {
+		_, _ = tx.ExecContext(ctx,
+			`DELETE FROM refresh_tokens WHERE token_hash = $1`,
+			oldHash,
+		)
+		return "", errors.New("refresh token expired")
+	}
+
+	// удаляем старый
+	_, err = tx.ExecContext(ctx,
+		`DELETE FROM refresh_tokens WHERE token_hash = $1`,
+		oldHash,
+	)
+	if err != nil {
+		return "", err
+	}
+
+	// создаём новый
+	_, err = tx.ExecContext(ctx,
+		`INSERT INTO refresh_tokens (user_id, token_hash, expires_at)
+		 VALUES ($1, $2, $3)`,
+		userID, newHash, newExpires,
+	)
+	if err != nil {
+		return "", err
+	}
+
+	if err := tx.Commit(); err != nil {
+		return "", err
+	}
+
+	return userID, nil
+}
