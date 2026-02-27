@@ -14,7 +14,6 @@ export function UserMenu({ email }: UserMenuProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Берём первую букву email для аватара
   const initial = email ? email[0].toUpperCase() : "?";
 
   useEffect(() => {
@@ -50,7 +49,7 @@ export function UserMenu({ email }: UserMenuProps) {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setMenuOpen(!menuOpen)}
-        className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 text-white font-semibold text-lg shadow-lg hover:shadow-emerald-500/30 transition"
+        className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 text-white font-semibold text-lg shadow-lg hover:shadow-emerald-500/30 transition"
         aria-label="Меню пользователя"
       >
         {initial}
