@@ -6,53 +6,30 @@ import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-medium transition-all duration-300 disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-ring/50 [&_svg]:shrink-0 overflow-hidden",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-medium transition-all duration-300 disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-ring/50 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        /* LIQUID GLASS PRIMARY */
+        /* GRADIENT PRIMARY */
         primary:
-          `
-          bg-gradient-to-r from-emerald-400/70 via-green-400/70 to-teal-400/70
-          text-zinc-900
-          backdrop-blur-xl
-          border border-white/30
-          shadow-lg shadow-emerald-500/20
-          before:absolute before:inset-0
-          before:rounded-full
-          before:bg-white/10
-          before:opacity-0
-          before:transition-opacity
-          hover:before:opacity-100
-          hover:scale-105
-          hover:shadow-emerald-400/40
-          `,
+          "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-zinc-800 shadow-md hover:scale-105 hover:shadow-lg font-semibold",
 
-        /* LIQUID GLASS SECONDARY */
+        /* DARK GLASS SECONDARY */
         secondary:
-          `
-          bg-zinc-900/50
-          text-zinc-100
-          backdrop-blur-xl
-          border border-white/10
-          shadow-lg shadow-black/30
-          before:absolute before:inset-0
-          before:rounded-full
-          before:bg-white/5
-          before:opacity-0
-          before:transition-opacity
-          hover:before:opacity-100
-          hover:bg-zinc-800/60
-          hover:scale-105
-          hover:shadow-black/50
-          `,
+          "border border-zinc-700 bg-zinc-900/60 backdrop-blur text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 hover:scale-105 hover:shadow-lg font-semibold",
 
+        /* LIQUID GLASS (iOS 26 style) */
+        liquid:
+          "relative overflow-hidden bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-zinc-800 shadow-md hover:shadow-lg font-semibold before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-700 before:ease-in-out",
+
+        //Outline (оставляем системный)
         outline:
           "border border-zinc-700 bg-transparent hover:bg-zinc-800",
 
+        //Ghost
         ghost:
           "hover:bg-accent hover:text-accent-foreground",
-
+        //Link
         link:
           "text-primary underline-offset-4 hover:underline",
       },
