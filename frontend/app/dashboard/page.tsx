@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Header } from "@/components/ui/Header";
-import { Button } from "@/components/ui/button";
 import { jwtDecode } from "jwt-decode";
 import {
   CreditCard,
@@ -11,12 +9,13 @@ import {
   Bell,
   BarChart3,
   Settings,
-  LogOut,
+  Sparkles,
   CheckCircle2,
   Clock,
-  Sparkles,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { Sidebar } from "@/components/ui/Sidebar";
+import { UserMenu } from "@/components/ui/UserMenu";
 
 interface TokenPayload {
   uid: string;
@@ -24,12 +23,12 @@ interface TokenPayload {
   iat: number;
 }
 
-// Компонент карточки инструмента (стилизован с использованием глобальных переменных)
+// Компонент карточки инструмента (без изменений)
 const ToolCard = ({
   icon: Icon,
   title,
   description,
-  status = "inactive", // "active", "soon", "inactive"
+  status = "inactive",
   onClick,
 }: {
   icon: React.ElementType;
@@ -57,7 +56,6 @@ const ToolCard = ({
       `}
       onClick={!isSoon ? onClick : undefined}
     >
-      {/* Статусный значок */}
       {isActive && (
         <div className="absolute top-4 right-4">
           <div className="flex items-center gap-1.5 text-xs font-medium text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-full">
@@ -75,7 +73,6 @@ const ToolCard = ({
         </div>
       )}
 
-      {/* Иконка */}
       <div
         className={`
           w-14 h-14 rounded-xl flex items-center justify-center mb-4
@@ -93,7 +90,6 @@ const ToolCard = ({
         />
       </div>
 
-      {/* Заголовок и описание */}
       <h3
         className={`text-lg font-semibold mb-2 ${
           isActive ? "text-foreground" : "text-muted-foreground"
@@ -122,8 +118,7 @@ export default function DashboardPage() {
 
     try {
       const decoded = jwtDecode<TokenPayload>(token);
-      // TODO: запросить /auth/me для получения email и имени
-      // Пока используем заглушку
+      // TODO: запросить /auth/me для получения email
       setEmail("user@example.com");
     } catch (e) {
       console.error("Invalid token", e);
@@ -133,20 +128,11 @@ export default function DashboardPage() {
     }
   }, [router]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    router.push("/login");
-  };
-
   if (loading) {
     return (
-      <>
-        <Header />
-        <main className="min-h-screen flex items-center justify-center">
-          <div className="text-muted-foreground">Загрузка...</div>
-        </main>
-      </>
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-muted-foreground">Загрузка...</div>
+      </main>
     );
   }
 
@@ -187,40 +173,27 @@ export default function DashboardPage() {
 
   return (
     <>
-      {/* Фоновые элементы (декоративные круги) */}
+      {/* Фоновые элементы */}
       <div className="pointer-events-none fixed inset-0">
         <div className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-indigo-500/20 blur-3xl" />
       </div>
 
-      <Header />
+      <Sidebar />
 
-      <main className="relative min-h-screen px-4 sm:px-6 pt-32 pb-24">
-        <div className="max-w-7xl mx-auto">
-          {/* Верхняя панель: приветствие + кнопка выхода */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-12"
-          >
+      <main className="relative min-h-screen pl-64">
+        <div className="p-8">
+          {/* Верхняя панель: приветствие + меню пользователя */}
+          <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="section-title !text-4xl sm:!text-5xl mb-2">
-                Личный кабинет
-              </h1>
-              <p className="section-subtitle !mt-0 !text-lg">
+              <h1 className="text-3xl font-semibold tracking-tight">Личный кабинет</h1>
+              <p className="text-muted-foreground">
                 Добро пожаловать,{" "}
-                <span className="text-emerald-400 font-medium">{email}</span>
+                <span className="text-emerald-400">{email}</span>
               </p>
             </div>
-            <Button
-              onClick={handleLogout}
-              variant="ghost"
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground self-start sm:self-auto"
-            >
-              <LogOut className="w-4 h-4" />
-              Выйти
-            </Button>
-          </motion.div>
+            <UserMenu email={email || ""} />
+          </div>
 
           {/* Сетка карточек */}
           <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -246,7 +219,7 @@ export default function DashboardPage() {
             ))}
           </section>
 
-          {/* Нижняя плашка с подсказкой (опционально) */}
+          {/* Нижняя плашка */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
