@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { jwtDecode } from "jwt-decode";
 import {
   CreditCard,
@@ -20,7 +21,7 @@ interface TokenPayload {
   iat: number;
 }
 
-// Тип инструмента (дублируем, чтобы не импортировать из Sidebar)
+// Тип инструмента
 interface Tool {
   id: string;
   icon: React.ElementType;
@@ -99,7 +100,7 @@ const MenuItem = ({
   );
 };
 
-// Компонент контента для правой панели (капсула)
+// Компонент контента для правой панели
 const ToolContent = ({ tool }: { tool: Tool }) => {
   const getContent = () => {
     switch (tool.id) {
@@ -282,9 +283,11 @@ export default function DashboardPage() {
 
       <main className="relative min-h-screen">
         <div className="p-8">
-          {/* Верхняя панель: приветствие + меню пользователя (вне общей капсулы) */}
+          {/* Верхняя панель: логотип слева, меню пользователя справа */}
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-semibold tracking-tight">Личный кабинет</h1>
+            <Link href="/dashboard" className="group">
+              <span className="logo-text text-2xl">leprechaun</span>
+            </Link>
             <UserMenu email={email || ""} />
           </div>
 
