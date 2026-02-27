@@ -2,6 +2,7 @@ package http
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"net/mail"
 	"strings"
@@ -148,6 +149,34 @@ func (h *AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 		"access_token":  access,
 		"refresh_token": refresh,
 	})
+}
+
+// Logout обрабатывает выход пользователя
+func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req struct {
+		RefreshToken string `json:"refresh_token"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "invalid request", http.StatusBadRequest)
+		return
+	}
+	if req.RefreshToken == "" {
+		http.Error(w, "refresh_token is required", http.StatusBadRequest)
+		return
+	}
+
+	// Вызываем сервис для отзыва токена
+	if err := h.service.Logout(r.Context(), req.RefreshToken); err != nil {
+		// Логируем ошибку, но клиенту всегда отвечаем успехом
+		log.Printf("Logout error: %v", err)
+	}
+
+	writeJSON(w, http.StatusOK, map[string]string{"message": "logged out successfully"})
 }
 
 func writeJSON(w http.ResponseWriter, status int, payload any) {

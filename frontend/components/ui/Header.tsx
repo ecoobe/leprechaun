@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { UserCircle, Settings, LogOut } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { logout } from "@/lib/api"; // импортируем функцию logout
 
 export function Header() {
   const router = useRouter();
@@ -42,7 +43,17 @@ export function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const refreshToken = localStorage.getItem("refresh_token");
+    if (refreshToken) {
+      try {
+        // вызываем бэкенд для отзыва токена
+        await logout(refreshToken);
+      } catch (err) {
+        console.error("Logout error", err);
+        // даже при ошибке на бэкенде продолжаем очистку на клиенте
+      }
+    }
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     setIsAuthenticated(false);
