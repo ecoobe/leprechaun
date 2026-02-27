@@ -12,7 +12,6 @@ import {
   Sparkles,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { Sidebar } from "@/components/ui/Sidebar";
 import { UserMenu } from "@/components/ui/UserMenu";
 
 interface TokenPayload {
@@ -21,7 +20,7 @@ interface TokenPayload {
   iat: number;
 }
 
-// Тип инструмента
+// Тип инструмента (дублируем, чтобы не импортировать из Sidebar)
 interface Tool {
   id: string;
   icon: React.ElementType;
@@ -29,6 +28,76 @@ interface Tool {
   description: string;
   status: "active" | "soon" | "inactive";
 }
+
+// Компонент пункта меню (кнопка в левой части)
+const MenuItem = ({
+  icon: Icon,
+  title,
+  status = "inactive",
+  isSelected,
+  onClick,
+}: {
+  icon: React.ElementType;
+  title: string;
+  status?: "active" | "soon" | "inactive";
+  isSelected: boolean;
+  onClick?: () => void;
+}) => {
+  const isActive = status === "active";
+  const isSoon = status === "soon";
+  const canClick = isActive && !isSoon;
+
+  return (
+    <motion.div
+      whileHover={canClick ? { x: 4 } : {}}
+      transition={{ duration: 0.2 }}
+      className={`
+        relative rounded-full border px-5 py-3 backdrop-blur-sm transition-all cursor-pointer
+        ${
+          isSelected
+            ? "border-emerald-500/60 bg-emerald-500/10 shadow-md shadow-emerald-500/10"
+            : canClick
+            ? "border-border bg-card hover:border-emerald-500/30 hover:bg-card/80"
+            : "border-zinc-700/30 bg-zinc-800/20 opacity-60 cursor-not-allowed"
+        }
+      `}
+      onClick={canClick ? onClick : undefined}
+      role="button"
+      tabIndex={canClick ? 0 : -1}
+    >
+      <div className="flex items-center gap-3">
+        <div
+          className={`
+            w-10 h-10 rounded-full flex items-center justify-center shrink-0
+            ${
+              isSelected || isActive
+                ? "bg-gradient-to-br from-emerald-500/20 to-teal-500/20"
+                : "bg-zinc-800/40"
+            }
+          `}
+        >
+          <Icon
+            className={`w-5 h-5 ${
+              isSelected || isActive ? "text-emerald-400" : "text-muted-foreground"
+            }`}
+          />
+        </div>
+        <span
+          className={`font-medium truncate ${
+            isSelected || isActive ? "text-foreground" : "text-muted-foreground"
+          }`}
+        >
+          {title}
+        </span>
+        {isSoon && (
+          <span className="ml-auto text-xs bg-zinc-800/40 px-3 py-1 rounded-full text-muted-foreground whitespace-nowrap">
+            Скоро
+          </span>
+        )}
+      </div>
+    </motion.div>
+  );
+};
 
 // Компонент контента для правой панели (капсула)
 const ToolContent = ({ tool }: { tool: Tool }) => {
@@ -118,11 +187,12 @@ const ToolContent = ({ tool }: { tool: Tool }) => {
 
   return (
     <motion.div
+      key={tool.id}
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
       transition={{ duration: 0.3 }}
-      className="form-card !max-w-full h-full p-8"
+      className="h-full"
     >
       {getContent()}
     </motion.div>
@@ -210,35 +280,52 @@ export default function DashboardPage() {
         <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-indigo-500/20 blur-3xl" />
       </div>
 
-      <Sidebar
-        tools={tools}
-        selectedToolId={selectedToolId}
-        onSelectTool={setSelectedToolId}
-      />
-
-      <main className="relative min-h-screen pl-64">
+      <main className="relative min-h-screen">
         <div className="p-8">
+          {/* Верхняя панель: приветствие + меню пользователя (вне общей капсулы) */}
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              {selectedTool ? selectedTool.title : "Личный кабинет"}
-            </h1>
+            <h1 className="text-3xl font-semibold tracking-tight">Личный кабинет</h1>
             <UserMenu email={email || ""} />
           </div>
 
-          <div className="mt-4">
-            {selectedTool ? (
-              <ToolContent tool={selectedTool} />
-            ) : (
-              <div className="form-card !max-w-full p-8 flex items-center justify-center">
-                <div className="text-center">
-                  <Sparkles className="w-12 h-12 text-emerald-400/50 mx-auto mb-4" />
-                  <h3 className="text-xl font-medium mb-2">Добро пожаловать!</h3>
-                  <p className="text-muted-foreground">
-                    Выберите инструмент слева, чтобы начать работу.
-                  </p>
-                </div>
+          {/* Единая капсула, содержащая левое меню и правый контент */}
+          <div className="form-card !max-w-full p-0 overflow-hidden flex">
+            {/* Левая колонка (меню) */}
+            <div className="w-80 border-r border-border p-6 bg-card/50">
+              <div className="flex items-center justify-between mb-4 px-1">
+                <h2 className="text-sm font-medium text-muted-foreground">Инструменты</h2>
+                <Sparkles className="w-4 h-4 text-emerald-400" />
               </div>
-            )}
+              <div className="space-y-2">
+                {tools.map((tool) => (
+                  <MenuItem
+                    key={tool.id}
+                    icon={tool.icon}
+                    title={tool.title}
+                    status={tool.status}
+                    isSelected={selectedToolId === tool.id}
+                    onClick={() => setSelectedToolId(tool.id)}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Правая колонка (контент) */}
+            <div className="flex-1 p-8">
+              {selectedTool ? (
+                <ToolContent tool={selectedTool} />
+              ) : (
+                <div className="h-full flex items-center justify-center">
+                  <div className="text-center">
+                    <Sparkles className="w-12 h-12 text-emerald-400/50 mx-auto mb-4" />
+                    <h3 className="text-xl font-medium mb-2">Добро пожаловать!</h3>
+                    <p className="text-muted-foreground">
+                      Выберите инструмент слева, чтобы начать работу.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </main>
