@@ -10,9 +10,6 @@ import {
   BarChart3,
   Settings,
   Sparkles,
-  CheckCircle2,
-  Clock,
-  Home,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Sidebar } from "@/components/ui/Sidebar";
@@ -31,80 +28,10 @@ interface Tool {
   title: string;
   description: string;
   status: "active" | "soon" | "inactive";
-  content?: React.ReactNode; // фиктивный контент для правой панели
 }
-
-// Компонент карточки инструмента для левой панели (кликабельная)
-const ToolCard = ({
-  icon: Icon,
-  title,
-  status = "inactive",
-  isSelected,
-  onClick,
-}: {
-  icon: React.ElementType;
-  title: string;
-  status?: "active" | "soon" | "inactive";
-  isSelected: boolean;
-  onClick?: () => void;
-}) => {
-  const isActive = status === "active";
-  const isSoon = status === "soon";
-  const canClick = isActive && !isSoon;
-
-  return (
-    <motion.div
-      whileHover={canClick ? { x: 4 } : {}}
-      transition={{ duration: 0.2 }}
-      className={`
-        relative rounded-xl border p-4 backdrop-blur-sm transition-all cursor-pointer
-        ${
-          isSelected
-            ? "border-emerald-500/60 bg-emerald-500/10 shadow-md shadow-emerald-500/10"
-            : canClick
-            ? "border-border bg-card hover:border-emerald-500/30 hover:bg-card/80"
-            : "border-zinc-700/30 bg-zinc-800/20 opacity-60 cursor-not-allowed"
-        }
-      `}
-      onClick={canClick ? onClick : undefined}
-    >
-      <div className="flex items-center gap-3">
-        <div
-          className={`
-            w-10 h-10 rounded-lg flex items-center justify-center shrink-0
-            ${
-              isSelected || isActive
-                ? "bg-gradient-to-br from-emerald-500/20 to-teal-500/20"
-                : "bg-zinc-800/40"
-            }
-          `}
-        >
-          <Icon
-            className={`w-5 h-5 ${
-              isSelected || isActive ? "text-emerald-400" : "text-muted-foreground"
-            }`}
-          />
-        </div>
-        <span
-          className={`font-medium ${
-            isSelected || isActive ? "text-foreground" : "text-muted-foreground"
-          }`}
-        >
-          {title}
-        </span>
-        {isSoon && (
-          <span className="ml-auto text-xs bg-zinc-800/40 px-2 py-1 rounded-full text-muted-foreground">
-            Скоро
-          </span>
-        )}
-      </div>
-    </motion.div>
-  );
-};
 
 // Компонент контента для правой панели (капсула)
 const ToolContent = ({ tool }: { tool: Tool }) => {
-  // Фиктивный контент для каждого инструмента
   const getContent = () => {
     switch (tool.id) {
       case "cards":
@@ -283,54 +210,35 @@ export default function DashboardPage() {
         <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-indigo-500/20 blur-3xl" />
       </div>
 
-      <Sidebar />
+      <Sidebar
+        tools={tools}
+        selectedToolId={selectedToolId}
+        onSelectTool={setSelectedToolId}
+      />
 
       <main className="relative min-h-screen pl-64">
-        <div className="flex h-full">
-          {/* Левая колонка: список инструментов */}
-          <div className="w-80 border-r border-border p-6 space-y-4">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-medium">Инструменты</h2>
-              <Sparkles className="w-4 h-4 text-emerald-400" />
-            </div>
-            <div className="space-y-2">
-              {tools.map((tool) => (
-                <ToolCard
-                  key={tool.id}
-                  icon={tool.icon}
-                  title={tool.title}
-                  status={tool.status}
-                  isSelected={selectedToolId === tool.id}
-                  onClick={() => setSelectedToolId(tool.id)}
-                />
-              ))}
-            </div>
+        <div className="p-8">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-semibold tracking-tight">
+              {selectedTool ? selectedTool.title : "Личный кабинет"}
+            </h1>
+            <UserMenu email={email || ""} />
           </div>
 
-          {/* Правая колонка: контент инструмента + меню пользователя сверху */}
-          <div className="flex-1 p-8">
-            <div className="flex justify-between items-center mb-6">
-              <h1 className="text-2xl font-semibold tracking-tight">
-                {selectedTool ? selectedTool.title : "Личный кабинет"}
-              </h1>
-              <UserMenu email={email || ""} />
-            </div>
-
-            <div className="mt-4">
-              {selectedTool ? (
-                <ToolContent tool={selectedTool} />
-              ) : (
-                <div className="form-card !max-w-full h-full p-8 flex items-center justify-center">
-                  <div className="text-center">
-                    <Sparkles className="w-12 h-12 text-emerald-400/50 mx-auto mb-4" />
-                    <h3 className="text-xl font-medium mb-2">Добро пожаловать!</h3>
-                    <p className="text-muted-foreground">
-                      Выберите инструмент слева, чтобы начать работу.
-                    </p>
-                  </div>
+          <div className="mt-4">
+            {selectedTool ? (
+              <ToolContent tool={selectedTool} />
+            ) : (
+              <div className="form-card !max-w-full p-8 flex items-center justify-center">
+                <div className="text-center">
+                  <Sparkles className="w-12 h-12 text-emerald-400/50 mx-auto mb-4" />
+                  <h3 className="text-xl font-medium mb-2">Добро пожаловать!</h3>
+                  <p className="text-muted-foreground">
+                    Выберите инструмент слева, чтобы начать работу.
+                  </p>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </main>

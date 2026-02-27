@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import { motion } from "framer-motion";
-import { Sidebar } from "@/components/ui/Sidebar";
+import { Sidebar, type Tool } from "@/components/ui/Sidebar";
 import { UserMenu } from "@/components/ui/UserMenu";
 import { Button } from "@/components/ui/button";
+import { Settings } from "lucide-react";
 
 interface TokenPayload {
   uid: string;
@@ -46,6 +47,16 @@ export default function SettingsPage() {
     );
   }
 
+  // Определяем инструменты для сайдбара (только "Настройки", активный)
+  const settingsTools: Tool[] = [
+    {
+      id: "settings",
+      icon: Settings,
+      title: "Настройки",
+      status: "active",
+    },
+  ];
+
   return (
     <>
       {/* Фоновые элементы */}
@@ -54,7 +65,11 @@ export default function SettingsPage() {
         <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-indigo-500/20 blur-3xl" />
       </div>
 
-      <Sidebar />
+      <Sidebar
+        tools={settingsTools}
+        selectedToolId="settings"
+        onSelectTool={() => {}} // ничего не делаем при клике (уже выбрано)
+      />
 
       <main className="relative min-h-screen pl-64">
         <div className="p-8">
