@@ -4,14 +4,12 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
 
-
 export interface Tool {
   id: string;
   icon: React.ElementType;
   title: string;
   status: "active" | "soon" | "inactive";
 }
-
 
 interface SidebarProps {
   tools: Tool[];
@@ -42,7 +40,7 @@ const ToolCard = ({
       whileHover={canClick ? { x: 4 } : {}}
       transition={{ duration: 0.2 }}
       className={`
-        relative rounded-xl border p-4 backdrop-blur-sm transition-all cursor-pointer
+        relative rounded-full border px-5 py-3 backdrop-blur-sm transition-all cursor-pointer
         ${
           isSelected
             ? "border-emerald-500/60 bg-emerald-500/10 shadow-md shadow-emerald-500/10"
@@ -52,11 +50,13 @@ const ToolCard = ({
         }
       `}
       onClick={canClick ? onClick : undefined}
+      role="button"
+      tabIndex={canClick ? 0 : -1}
     >
       <div className="flex items-center gap-3">
         <div
           className={`
-            w-10 h-10 rounded-lg flex items-center justify-center shrink-0
+            w-10 h-10 rounded-full flex items-center justify-center shrink-0
             ${
               isSelected || isActive
                 ? "bg-gradient-to-br from-emerald-500/20 to-teal-500/20"
@@ -71,14 +71,14 @@ const ToolCard = ({
           />
         </div>
         <span
-          className={`font-medium ${
+          className={`font-medium truncate ${
             isSelected || isActive ? "text-foreground" : "text-muted-foreground"
           }`}
         >
           {title}
         </span>
         {isSoon && (
-          <span className="ml-auto text-xs bg-zinc-800/40 px-2 py-1 rounded-full text-muted-foreground">
+          <span className="ml-auto text-xs bg-zinc-800/40 px-3 py-1 rounded-full text-muted-foreground whitespace-nowrap">
             Скоро
           </span>
         )}
@@ -91,12 +91,12 @@ export function Sidebar({ tools, selectedToolId, onSelectTool }: SidebarProps) {
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-card/80 backdrop-blur-xl border-r border-border p-6 flex flex-col">
       <div className="mb-8">
-        <Link href="/dashboard" className="block">
+        <Link href="/dashboard" className="block" onClick={() => console.log("Logo clicked")}>
           <span className="logo-text text-2xl">leprechaun</span>
         </Link>
       </div>
       <div className="flex-1 space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between px-1">
           <h2 className="text-sm font-medium text-muted-foreground">Инструменты</h2>
           <Sparkles className="w-4 h-4 text-emerald-400" />
         </div>
@@ -108,7 +108,10 @@ export function Sidebar({ tools, selectedToolId, onSelectTool }: SidebarProps) {
               title={tool.title}
               status={tool.status}
               isSelected={selectedToolId === tool.id}
-              onClick={() => onSelectTool(tool.id)}
+              onClick={() => {
+                console.log("Tool clicked:", tool.id);
+                onSelectTool(tool.id);
+              }}
             />
           ))}
         </div>
