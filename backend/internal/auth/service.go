@@ -56,7 +56,7 @@ func (s *Service) RequestCode(ctx context.Context, email string) error {
 		return err
 	}
 	if exists {
-		return errors.New("email already exists") // UX-понятная ошибка
+		return errors.New("email already exists")
 	}
 	code := generateCode()
 	expires := time.Now().Add(10 * time.Minute)

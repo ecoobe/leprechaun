@@ -24,7 +24,6 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-// GenerateAccessToken создаёт JWT access token.
 func (tm *TokenManager) GenerateAccessToken(userID string) (string, error) {
 	claims := Claims{
 		UserID: userID,
@@ -37,18 +36,15 @@ func (tm *TokenManager) GenerateAccessToken(userID string) (string, error) {
 	return token.SignedString(tm.secret)
 }
 
-// GenerateRefreshToken генерирует сырой refresh токен (случайная строка).
 func (tm *TokenManager) GenerateRefreshToken() (string, error) {
 	return generateRandomString(32), nil
 }
 
-// HashRefreshToken вычисляет хеш refresh токена для хранения в БД.
 func (tm *TokenManager) HashRefreshToken(raw string) string {
 	h := sha256.Sum256([]byte(raw))
 	return base64.RawURLEncoding.EncodeToString(h[:])
 }
 
-// ParseAccessToken проверяет и декодирует access token.
 func (tm *TokenManager) ParseAccessToken(tokenStr string) (*Claims, error) {
 	token, err := jwt.ParseWithClaims(tokenStr, &Claims{}, func(token *jwt.Token) (any, error) {
 		return tm.secret, nil
@@ -63,7 +59,6 @@ func (tm *TokenManager) ParseAccessToken(tokenStr string) (*Claims, error) {
 	return claims, nil
 }
 
-// generateRandomString – вспомогательная функция.
 func generateRandomString(n int) string {
 	b := make([]byte, n)
 	_, _ = rand.Read(b)
