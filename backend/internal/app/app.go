@@ -26,8 +26,6 @@ func New() (*App, error) {
 	// =========================
 	// DB
 	// =========================
-	loginLimiter := middleware.NewRateLimiter(5, time.Minute)
-
 	dbpool, err := db.NewPostgres(db.Config{
 		Host:     cfg.DBHost,
 		Port:     cfg.DBPort,
@@ -40,22 +38,25 @@ func New() (*App, error) {
 	}
 
 	// =========================
+	// Middleware
+	// =========================
+	loginLimiter := middleware.NewRateLimiter(5, time.Minute)
+
+	// =========================
 	// Router
 	// =========================
-
 	mux := http.NewServeMux()
 
-	// Health
+	// --- Health ---
 	healthHandler := httpHandler.NewHealthHandler(dbpool)
 	mux.HandleFunc("/health", healthHandler)
 
-	// Prometheus
+	// --- Prometheus ---
 	mux.Handle("/metrics", promhttp.Handler())
 
 	// =========================
 	// Auth wiring
 	// =========================
-
 	authRepo := auth.NewRepository(dbpool)
 	tokenManager := auth.NewTokenManager(cfg.JWTSecret)
 	authService := auth.NewService(authRepo, tokenManager)
@@ -66,18 +67,19 @@ func New() (*App, error) {
 	mux.HandleFunc("/auth/register", authHandler.Register)
 	mux.HandleFunc("/auth/refresh", authHandler.Refresh)
 
+	// --- Login с rate limit ---
+	mux.Handle(
+		"/auth/login",
+		loginLimiter.Middleware(
+			http.HandlerFunc(authHandler.Login),
+		),
+	)
+
 	// --- Protected routes ---
 	mux.Handle(
 		"/auth/logout",
 		auth.AuthMiddleware(tokenManager)(
 			http.HandlerFunc(authHandler.Logout),
-		),
-	)
-
-	mux.Handle(
-		"/auth/login",
-		loginLimiter.Middleware(
-			http.HandlerFunc(authHandler.Login),
 		),
 	)
 
@@ -100,12 +102,19 @@ func New() (*App, error) {
 	)
 
 	// =========================
+	// Global middleware chain
+	// =========================
+	var handler http.Handler = mux
+
+	// 1️⃣ RequestID должен быть самым верхним
+	handler = middleware.RequestID(handler)
+
+	// =========================
 	// Server
 	// =========================
-
 	server := &http.Server{
 		Addr:    ":" + cfg.AppPort,
-		Handler: mux,
+		Handler: handler,
 	}
 
 	log.Println("Application initialized")
