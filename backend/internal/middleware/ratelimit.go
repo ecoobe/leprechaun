@@ -3,6 +3,7 @@ package middleware
 import (
 	"net"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 )
@@ -27,6 +28,7 @@ func (rl *RateLimiter) Middleware(next http.Handler) http.Handler {
 		key := clientIP(r)
 
 		if !rl.allow(key) {
+			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusTooManyRequests)
 			w.Write([]byte(`{"error":"too many requests"}`))
 			return
@@ -44,7 +46,7 @@ func (rl *RateLimiter) allow(key string) bool {
 	cutoff := now.Add(-rl.window)
 
 	timestamps := rl.requests[key]
-	var filtered []time.Time
+	filtered := make([]time.Time, 0, len(timestamps))
 
 	for _, t := range timestamps {
 		if t.After(cutoff) {
@@ -64,9 +66,22 @@ func (rl *RateLimiter) allow(key string) bool {
 }
 
 func clientIP(r *http.Request) string {
-	ip, _, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		return r.RemoteAddr
+	// 1️⃣ Если за nginx — используем X-Forwarded-For
+	if xf := r.Header.Get("X-Forwarded-For"); xf != "" {
+		parts := strings.Split(xf, ",")
+		return strings.TrimSpace(parts[0])
 	}
-	return ip
+
+	// 2️⃣ Альтернативный заголовок
+	if xr := r.Header.Get("X-Real-IP"); xr != "" {
+		return xr
+	}
+
+	// 3️⃣ Fallback на RemoteAddr
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err == nil {
+		return host
+	}
+
+	return r.RemoteAddr
 }
