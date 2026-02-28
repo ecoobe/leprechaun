@@ -107,11 +107,11 @@ func New() (*App, error) {
 	var handler http.Handler = mux
 
 	// Порядок важен:
-	// 1️⃣ RequestID
-	handler = middleware.RequestID(handler)
-
-	// 2️⃣ Logging
+	// Сначала Logging
 	handler = middleware.Logging(handler)
+
+	// Потом RequestID
+	handler = middleware.RequestID(handler)
 
 	// =========================
 	// Server
