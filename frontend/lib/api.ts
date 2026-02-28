@@ -67,11 +67,18 @@ export async function refresh(refreshToken: string): Promise<LoginResponse> {
   return handleResponse<LoginResponse>(res);
 }
 
-// Выход (отзыв refresh токена)
+// Выход (отзыв refresh токена) – требует access token в заголовке
 export async function logout(refreshToken: string): Promise<MessageResponse> {
+  const accessToken = localStorage.getItem("access_token");
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  };
+  if (accessToken) {
+    headers['Authorization'] = `Bearer ${accessToken}`;
+  }
   const res = await fetch(`${API_PREFIX}/auth/logout`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify({ refresh_token: refreshToken }),
   });
   return handleResponse<MessageResponse>(res);
