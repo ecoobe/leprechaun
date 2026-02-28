@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"sync"
 	"time"
+
+	"leprechaun/internal/metrics"
 )
 
 type RateLimiter struct {
@@ -26,6 +28,7 @@ func (rl *RateLimiter) Middleware(next http.Handler) http.Handler {
 		key := clientIP(r)
 
 		if !rl.allow(key) {
+			metrics.RateLimitHits.Inc() // <-- добавить
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusTooManyRequests)
 			w.Write([]byte(`{"error":"too many requests"}`))

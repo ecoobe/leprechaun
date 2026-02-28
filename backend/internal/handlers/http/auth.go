@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"leprechaun/internal/auth"
+	"leprechaun/internal/metrics"
 )
 
 type AuthHandler struct {
@@ -118,9 +119,14 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	access, refresh, err := h.service.Login(r.Context(), req.Email, req.Password)
 	if err != nil {
+		// Увеличиваем счетчик неудачных попыток входа
+		metrics.LoginFailures.WithLabelValues(req.Email).Inc()
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
+
+	// Успешная аутентификация
+	metrics.AuthSuccess.Inc()
 
 	writeJSON(w, http.StatusOK, map[string]string{
 		"access_token":  access,
@@ -144,6 +150,9 @@ func (h *AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
+
+	// Обновление токена также считается успешной аутентификацией (опционально)
+	metrics.AuthSuccess.Inc()
 
 	writeJSON(w, http.StatusOK, map[string]string{
 		"access_token":  access,
