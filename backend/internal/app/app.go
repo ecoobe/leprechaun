@@ -21,7 +21,10 @@ type App struct {
 func New() (*App, error) {
 	cfg := config.Load()
 
-	// --- DB ---
+	// =========================
+	// DB
+	// =========================
+
 	dbpool, err := db.NewPostgres(db.Config{
 		Host:     cfg.DBHost,
 		Port:     cfg.DBPort,
@@ -33,7 +36,10 @@ func New() (*App, error) {
 		return nil, err
 	}
 
-	// --- Router ---
+	// =========================
+	// Router
+	// =========================
+
 	mux := http.NewServeMux()
 
 	// Health
@@ -43,22 +49,51 @@ func New() (*App, error) {
 	// Prometheus
 	mux.Handle("/metrics", promhttp.Handler())
 
-	// --- Auth wiring ---
+	// =========================
+	// Auth wiring
+	// =========================
+
 	authRepo := auth.NewRepository(dbpool)
-
 	tokenManager := auth.NewTokenManager(cfg.JWTSecret)
-
 	authService := auth.NewService(authRepo, tokenManager)
-
 	authHandler := httpHandler.NewAuthHandler(authService)
 
+	// --- Public routes ---
 	mux.HandleFunc("/auth/request-code", authHandler.RequestCode)
 	mux.HandleFunc("/auth/register", authHandler.Register)
 	mux.HandleFunc("/auth/login", authHandler.Login)
 	mux.HandleFunc("/auth/refresh", authHandler.Refresh)
-	mux.HandleFunc("/auth/logout", authHandler.Logout)
 
-	// --- Server ---
+	// --- Protected routes ---
+	mux.Handle(
+		"/auth/logout",
+		auth.AuthMiddleware(tokenManager)(
+			http.HandlerFunc(authHandler.Logout),
+		),
+	)
+
+	// Пример защищённого endpoint
+	mux.Handle(
+		"/me",
+		auth.AuthMiddleware(tokenManager)(
+			http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				userID, ok := auth.GetUserID(r.Context())
+				if !ok {
+					http.Error(w, "unauthorized", http.StatusUnauthorized)
+					return
+				}
+
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte(`{"user_id":"` + userID + `"}`))
+			}),
+		),
+	)
+
+	// =========================
+	// Server
+	// =========================
+
 	server := &http.Server{
 		Addr:    ":" + cfg.AppPort,
 		Handler: mux,
