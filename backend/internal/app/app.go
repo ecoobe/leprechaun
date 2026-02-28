@@ -4,11 +4,13 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"time"
 
 	"leprechaun/internal/auth"
 	"leprechaun/internal/config"
 	"leprechaun/internal/db"
 	httpHandler "leprechaun/internal/handlers/http"
+	"leprechaun/internal/middleware"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
@@ -24,6 +26,7 @@ func New() (*App, error) {
 	// =========================
 	// DB
 	// =========================
+	loginLimiter := middleware.NewRateLimiter(5, time.Minute)
 
 	dbpool, err := db.NewPostgres(db.Config{
 		Host:     cfg.DBHost,
@@ -61,7 +64,6 @@ func New() (*App, error) {
 	// --- Public routes ---
 	mux.HandleFunc("/auth/request-code", authHandler.RequestCode)
 	mux.HandleFunc("/auth/register", authHandler.Register)
-	mux.HandleFunc("/auth/login", authHandler.Login)
 	mux.HandleFunc("/auth/refresh", authHandler.Refresh)
 
 	// --- Protected routes ---
@@ -69,6 +71,13 @@ func New() (*App, error) {
 		"/auth/logout",
 		auth.AuthMiddleware(tokenManager)(
 			http.HandlerFunc(authHandler.Logout),
+		),
+	)
+
+	mux.Handle(
+		"/auth/login",
+		loginLimiter.Middleware(
+			http.HandlerFunc(authHandler.Login),
 		),
 	)
 
