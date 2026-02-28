@@ -6,25 +6,13 @@ import (
 	"time"
 )
 
-type responseWriter struct {
-	http.ResponseWriter
-	status int
-}
-
-func (rw *responseWriter) WriteHeader(code int) {
-	rw.status = code
-	rw.ResponseWriter.WriteHeader(code)
-}
-
 func Logging(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
 		start := time.Now()
 
-		// Оборачиваем writer, чтобы перехватить статус
 		rw := &responseWriter{
 			ResponseWriter: w,
-			status:         http.StatusOK,
+			statusCode:     http.StatusOK,
 		}
 
 		next.ServeHTTP(rw, r)
@@ -33,11 +21,11 @@ func Logging(next http.Handler) http.Handler {
 
 		logEntry := map[string]interface{}{
 			"timestamp":   time.Now().UTC().Format(time.RFC3339),
-			"level":       levelFromStatus(rw.status),
+			"level":       levelFromStatus(rw.statusCode),
 			"request_id":  GetRequestID(r.Context()),
 			"method":      r.Method,
 			"path":        r.URL.Path,
-			"status":      rw.status,
+			"status":      rw.statusCode,
 			"duration_ms": duration.Milliseconds(),
 			"ip":          clientIP(r),
 			"user_agent":  r.UserAgent(),

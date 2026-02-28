@@ -117,6 +117,9 @@ func New() (*App, error) {
 	// Потом RequestID
 	handler = middleware.RequestID(handler)
 
+	// Потом MetricsMiddleware
+	handler = middleware.MetricsMiddleware(handler)
+
 	// =========================
 	// Server
 	// =========================
