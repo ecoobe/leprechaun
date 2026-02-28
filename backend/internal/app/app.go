@@ -10,6 +10,7 @@ import (
 	"leprechaun/internal/config"
 	"leprechaun/internal/db"
 	httpHandler "leprechaun/internal/handlers/http"
+	"leprechaun/internal/metrics"
 	"leprechaun/internal/middleware"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -22,6 +23,9 @@ type App struct {
 
 func New() (*App, error) {
 	cfg := config.Load()
+
+	// Metrics
+	metrics.Init()
 
 	// =========================
 	// DB
