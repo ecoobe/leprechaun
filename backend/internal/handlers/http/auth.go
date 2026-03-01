@@ -214,6 +214,56 @@ func (h *AuthHandler) TelegramAuth(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// TelegramRedirect обрабатывает редирект от Telegram Login Widget.
+func (h *AuthHandler) TelegramRedirect(w http.ResponseWriter, r *http.Request) {
+	// 1. Собираем все параметры из запроса в map
+	data := make(map[string]string)
+	for key, values := range r.URL.Query() {
+		if len(values) > 0 {
+			data[key] = values[0]
+		}
+	}
+
+	// 2. Проверяем наличие обязательных полей
+	if _, ok := data["id"]; !ok {
+		http.Error(w, "missing telegram id", http.StatusBadRequest)
+		return
+	}
+
+	// 3. Вызываем тот же метод сервиса, что и для колбэка
+	access, refresh, err := h.service.TelegramLogin(r.Context(), data)
+	if err != nil {
+		// В случае ошибки можно редиректить на страницу логина с параметром ошибки
+		http.Redirect(w, r, "/login?error=telegram_auth_failed", http.StatusFound)
+		return
+	}
+
+	// 4. Успех — редиректим на фронтенд с токенами (или устанавливаем куки)
+	// Вариант А: редирект с токенами в query (менее безопасно, но просто)
+	// http.Redirect(w, r, fmt.Sprintf("/dashboard?access_token=%s&refresh_token=%s", access, refresh), http.StatusFound)
+
+	// Вариант Б: устанавливаем токены в httpOnly куки (безопаснее)
+	http.SetCookie(w, &http.Cookie{
+		Name:     "access_token",
+		Value:    access,
+		HttpOnly: true,
+		Secure:   true,
+		SameSite: http.SameSiteLaxMode,
+		Path:     "/",
+		MaxAge:   900, // 15 минут
+	})
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    refresh,
+		HttpOnly: true,
+		Secure:   true,
+		SameSite: http.SameSiteLaxMode,
+		Path:     "/",
+		MaxAge:   604800, // 7 дней
+	})
+	http.Redirect(w, r, "/dashboard", http.StatusFound)
+}
+
 func writeJSON(w http.ResponseWriter, status int, payload any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)

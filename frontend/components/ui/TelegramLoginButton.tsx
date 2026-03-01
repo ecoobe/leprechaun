@@ -36,6 +36,7 @@ export function TelegramLoginButton({ botName, onAuth, className }: TelegramLogi
     script.async = true;
     script.setAttribute('data-telegram-login', botName);
     script.setAttribute('data-size', 'large');
+	script.setAttribute('data-auth-url', `${window.location.origin}/api/auth/telegram-redirect`);
     script.setAttribute('data-onauth', 'onTelegramAuth(user)');
     script.setAttribute('data-request-access', 'write');
     script.setAttribute('data-lang', 'ru');
