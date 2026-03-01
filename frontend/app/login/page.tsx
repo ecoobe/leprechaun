@@ -126,10 +126,9 @@ export default function LoginPage() {
           </div>
 
           <TelegramLoginButton
-            botName={process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME!}
-            onAuth={handleTelegramAuth}
-            className="w-full"
-          />
+  				botName={process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME!}
+  				className="w-full"
+		  />
 
           <div className="text-center mt-6 form-text-muted space-y-1">
             <div>

@@ -232,11 +232,10 @@ export default function RegisterPage() {
   </div>
 </div>
 
-<TelegramLoginButton
-  botName={process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME!}
-  onAuth={handleTelegramAuth}
-  className="w-full"
-/>
+			<TelegramLoginButton
+  				botName={process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME!}
+  				className="w-full"
+			/>
 
             {/* Кнопка */}
             <motion.div layout transition={{ duration: 0.45, ease: "easeInOut" }}>
