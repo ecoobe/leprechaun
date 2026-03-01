@@ -30,7 +30,7 @@ services:
     build:
       context: .
       dockerfile: frontend/Dockerfile
-    args:
+      args:
       - NEXT_PUBLIC_TELEGRAM_BOT_NAME=${NEXT_PUBLIC_TELEGRAM_BOT_NAME}
     environment:
       - NEXT_PUBLIC_TELEGRAM_BOT_NAME=${NEXT_PUBLIC_TELEGRAM_BOT_NAME}
