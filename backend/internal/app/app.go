@@ -75,7 +75,6 @@ func New() (*App, error) {
 
 	// --- Telegram auth (публичный) ---
 	mux.HandleFunc("/auth/telegram", authHandler.TelegramAuth)
-	mux.HandleFunc("/auth/telegram-redirect", authHandler.TelegramRedirect) // новый
 
 	// --- Login с rate limit ---
 	mux.Handle(
