@@ -2,7 +2,10 @@
 # Stage 1 — build Next.js
 # ===============================
 FROM node:20-alpine AS builder
-
+# Принимаем аргумент сборки
+ARG NEXT_PUBLIC_TELEGRAM_BOT_NAME
+# Передаём его в переменную окружения для этапа сборки
+ENV NEXT_PUBLIC_TELEGRAM_BOT_NAME=$NEXT_PUBLIC_TELEGRAM_BOT_NAME
 WORKDIR /app
 
 COPY frontend/package*.json ./
