@@ -23,6 +23,7 @@ export function TelegramLoginButton({ botName, onAuth, className }: TelegramLogi
   const initialized = useRef(false);
 
   useEffect(() => {
+	console.log('Telegram botName prop:', botName);
     if (initialized.current) return;
     initialized.current = true;
 
