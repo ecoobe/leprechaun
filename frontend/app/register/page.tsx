@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Header } from "@/components/ui/Header";
 import { requestCode, register, login } from "@/lib/api";
 
+import { telegramLogin, type TelegramUser } from "@/lib/api";
+import { TelegramLoginButton } from "@/components/ui/TelegramLoginButton";
+
 export default function RegisterPage() {
   const router = useRouter();
   const [expanded, setExpanded] = useState(false);
@@ -96,6 +99,21 @@ export default function RegisterPage() {
       handleRequestCode();
     }
   };
+
+  const handleTelegramAuth = async (user: TelegramUser) => {
+  setLoading(true);
+  setError("");
+  try {
+    const data = await telegramLogin(user);
+    localStorage.setItem("access_token", data.access_token);
+    localStorage.setItem("refresh_token", data.refresh_token);
+    router.push("/dashboard");
+  } catch (err: any) {
+    setError(err.message || "Ошибка входа через Telegram");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <>
@@ -205,6 +223,20 @@ export default function RegisterPage() {
                 </motion.div>
               </>
             )}
+			<div className="relative my-6">
+  <div className="absolute inset-0 flex items-center">
+    <div className="w-full border-t border-zinc-700"></div>
+  </div>
+  <div className="relative flex justify-center text-xs uppercase">
+    <span className="bg-zinc-900 px-2 text-muted-foreground">или</span>
+  </div>
+</div>
+
+<TelegramLoginButton
+  botName={process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME!}
+  onAuth={handleTelegramAuth}
+  className="w-full"
+/>
 
             {/* Кнопка */}
             <motion.div layout transition={{ duration: 0.45, ease: "easeInOut" }}>

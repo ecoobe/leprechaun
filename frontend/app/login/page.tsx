@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/ui/Header";
 import Link from "next/link";
-import { login } from "@/lib/api";
+import { login, telegramLogin, type TelegramUser } from "@/lib/api";
+import { TelegramLoginButton } from "@/components/ui/TelegramLoginButton";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -21,16 +22,12 @@ export default function LoginPage() {
       setError("Заполните все поля");
       return;
     }
-
     setLoading(true);
     setError("");
-
     try {
       const data = await login(email, password);
-      // Сохраняем токены (можно также в httpOnly cookies, но для простоты используем localStorage)
       localStorage.setItem("access_token", data.access_token);
       localStorage.setItem("refresh_token", data.refresh_token);
-      // Перенаправляем в личный кабинет
       router.push("/dashboard");
     } catch (err: any) {
       setError(err.message || "Неверный email или пароль");
@@ -39,9 +36,23 @@ export default function LoginPage() {
     }
   };
 
+  const handleTelegramAuth = async (user: TelegramUser) => {
+    setLoading(true);
+    setError("");
+    try {
+      const data = await telegramLogin(user);
+      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("refresh_token", data.refresh_token);
+      router.push("/dashboard");
+    } catch (err: any) {
+      setError(err.message || "Ошибка входа через Telegram");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
-      {/* Background (оставляем как есть) */}
       <div className="pointer-events-none fixed inset-0">
         <div className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-indigo-500/20 blur-3xl" />
@@ -67,7 +78,6 @@ export default function LoginPage() {
             className="flex flex-col gap-6"
             onSubmit={handleSubmit}
           >
-            {/* Email */}
             <motion.div layout>
               <label className="form-label">Email</label>
               <input
@@ -81,13 +91,7 @@ export default function LoginPage() {
               />
             </motion.div>
 
-            {/* Password */}
-            <motion.div
-              layout
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            >
+            <motion.div layout>
               <label className="form-label">Пароль</label>
               <input
                 type="password"
@@ -100,7 +104,6 @@ export default function LoginPage() {
               />
             </motion.div>
 
-            {/* Submit button */}
             <motion.div layout>
               <Button
                 type="submit"
@@ -111,25 +114,39 @@ export default function LoginPage() {
                 {loading ? "Вход..." : "Войти"}
               </Button>
             </motion.div>
-
-            {/* Links */}
-            <motion.div layout className="text-center mt-2 form-text-muted space-y-1">
-              <div>
-                <span
-                  className="form-link cursor-pointer"
-                  onClick={() => alert("Форма восстановления пароля пока не реализована")}
-                >
-                  Забыл пароль?
-                </span>
-              </div>
-              <div>
-                Впервые у нас?{" "}
-                <Link href="/register" className="form-link">
-                  Зарегистрироваться
-                </Link>
-              </div>
-            </motion.div>
           </motion.form>
+
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-zinc-700"></div>
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-zinc-900 px-2 text-muted-foreground">или</span>
+            </div>
+          </div>
+
+          <TelegramLoginButton
+            botName={process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME!}
+            onAuth={handleTelegramAuth}
+            className="w-full"
+          />
+
+          <div className="text-center mt-6 form-text-muted space-y-1">
+            <div>
+              <span
+                className="form-link cursor-pointer"
+                onClick={() => alert("Форма восстановления пароля пока не реализована")}
+              >
+                Забыл пароль?
+              </span>
+            </div>
+            <div>
+              Впервые у нас?{" "}
+              <Link href="/register" className="form-link">
+                Зарегистрироваться
+              </Link>
+            </div>
+          </div>
         </div>
       </main>
     </>

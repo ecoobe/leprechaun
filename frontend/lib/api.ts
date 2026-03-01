@@ -11,6 +11,17 @@ export interface MessageResponse {
   message: string;
 }
 
+export interface TelegramUser {
+  id: number;
+  first_name: string;
+  last_name?: string;
+  username?: string;
+  photo_url?: string;
+  auth_date: number;
+  hash: string;
+}
+
+
 // Общая функция для обработки ответов
 async function handleResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
@@ -82,4 +93,14 @@ export async function logout(refreshToken: string): Promise<MessageResponse> {
     body: JSON.stringify({ refresh_token: refreshToken }),
   });
   return handleResponse<MessageResponse>(res);
+}
+
+// Telegram авторизация
+export async function telegramLogin(userData: TelegramUser): Promise<LoginResponse> {
+  const res = await fetch(`${API_PREFIX}/auth/telegram`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(userData),
+  });
+  return handleResponse<LoginResponse>(res);
 }
