@@ -16,11 +16,19 @@ var (
 // =======================
 // USER MODEL
 // =======================
-
 type User struct {
-	ID           string // UUID as string
+	ID           string
 	Email        string
 	PasswordHash string
+}
+
+// Identity представляет запись в user_identities
+type Identity struct {
+	ID             string
+	UserID         string
+	Provider       string
+	ProviderUserID string
+	CreatedAt      time.Time
 }
 
 type Repository struct {
@@ -48,7 +56,7 @@ func (r *Repository) UserExistsByEmail(ctx context.Context, email string) (bool,
 	return exists, err
 }
 
-// CreateUser создаёт нового пользователя
+// CreateUser создаёт нового пользователя с email
 func (r *Repository) CreateUser(ctx context.Context, email, passwordHash string) error {
 	_, err := r.db.ExecContext(
 		ctx,
@@ -74,6 +82,57 @@ func (r *Repository) FindUserByEmail(ctx context.Context, email string) (*User, 
 		return nil, err
 	}
 	return &user, nil
+}
+
+//
+// =======================
+// USER IDENTITIES (OAuth)
+// =======================
+//
+
+// FindUserByIdentity ищет identity по провайдеру и provider_user_id, возвращает user_id
+func (r *Repository) FindUserByIdentity(ctx context.Context, provider, providerUserID string) (string, error) {
+	var userID string
+	err := r.db.QueryRowContext(ctx,
+		`SELECT user_id FROM user_identities WHERE provider = $1 AND provider_user_id = $2`,
+		provider, providerUserID,
+	).Scan(&userID)
+	if errors.Is(err, sql.ErrNoRows) {
+		return "", ErrUserNotFound
+	}
+	return userID, err
+}
+
+// CreateUserFromOAuth создаёт нового пользователя из данных OAuth и его identity, возвращает userID
+func (r *Repository) CreateUserFromOAuth(ctx context.Context, provider, providerUserID, firstName, lastName, avatarURL string) (string, error) {
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		return "", err
+	}
+	defer tx.Rollback()
+
+	var userID string
+	err = tx.QueryRowContext(ctx,
+		`INSERT INTO users (first_name, last_name, avatar_url, email_verified) 
+		 VALUES ($1, $2, $3, false) RETURNING id`,
+		firstName, lastName, avatarURL,
+	).Scan(&userID)
+	if err != nil {
+		return "", err
+	}
+
+	_, err = tx.ExecContext(ctx,
+		`INSERT INTO user_identities (user_id, provider, provider_user_id) VALUES ($1, $2, $3)`,
+		userID, provider, providerUserID,
+	)
+	if err != nil {
+		return "", err
+	}
+
+	if err := tx.Commit(); err != nil {
+		return "", err
+	}
+	return userID, nil
 }
 
 //
@@ -152,10 +211,8 @@ func (r *Repository) DeleteUserRefreshTokens(ctx context.Context, userID string)
 	return err
 }
 
-// DeleteExpiredRefreshTokens удаляет все просроченные refresh токены.
 func (r *Repository) DeleteExpiredRefreshTokens(ctx context.Context) error {
-	query := `DELETE FROM refresh_tokens WHERE expires_at < NOW()`
-	_, err := r.db.ExecContext(ctx, query)
+	_, err := r.db.ExecContext(ctx, `DELETE FROM refresh_tokens WHERE expires_at < NOW()`)
 	return err
 }
 
@@ -165,14 +222,11 @@ func (r *Repository) RotateRefreshToken(
 	newHash string,
 	newExpires time.Time,
 ) (string, error) {
-
 	tx, err := r.db.BeginTx(ctx, nil)
 	if err != nil {
 		return "", err
 	}
-	defer func() {
-		_ = tx.Rollback()
-	}()
+	defer tx.Rollback()
 
 	var userID string
 	var expires time.Time
@@ -201,7 +255,6 @@ func (r *Repository) RotateRefreshToken(
 		return "", errors.New("refresh token expired")
 	}
 
-	// удаляем старый
 	_, err = tx.ExecContext(ctx,
 		`DELETE FROM refresh_tokens WHERE token_hash = $1`,
 		oldHash,
@@ -210,7 +263,6 @@ func (r *Repository) RotateRefreshToken(
 		return "", err
 	}
 
-	// создаём новый
 	_, err = tx.ExecContext(ctx,
 		`INSERT INTO refresh_tokens (user_id, token_hash, expires_at)
 		 VALUES ($1, $2, $3)`,
@@ -223,6 +275,5 @@ func (r *Repository) RotateRefreshToken(
 	if err := tx.Commit(); err != nil {
 		return "", err
 	}
-
 	return userID, nil
 }

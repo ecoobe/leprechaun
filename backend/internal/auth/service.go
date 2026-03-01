@@ -8,6 +8,8 @@ import (
 	"strings"
 	"time"
 
+	"leprechaun/internal/telegram"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -19,14 +21,16 @@ type TokenProvider interface {
 }
 
 type Service struct {
-	repo         *Repository
-	tokenManager TokenProvider
+	repo             *Repository
+	tokenManager     TokenProvider
+	telegramBotToken string // добавлено для Telegram
 }
 
-func NewService(repo *Repository, tm TokenProvider) *Service {
+func NewService(repo *Repository, tm TokenProvider, telegramBotToken string) *Service {
 	return &Service{
-		repo:         repo,
-		tokenManager: tm,
+		repo:             repo,
+		tokenManager:     tm,
+		telegramBotToken: telegramBotToken,
 	}
 }
 
@@ -175,7 +179,59 @@ func (s *Service) CleanupExpiredTokens(ctx context.Context) error {
 	return s.repo.DeleteExpiredRefreshTokens(ctx)
 }
 
+// =======================
+// TELEGRAM LOGIN
+// =======================
+func (s *Service) TelegramLogin(ctx context.Context, data map[string]string) (accessToken, refreshToken string, err error) {
+	// Валидация подписи
+	if !telegram.Validate(data, s.telegramBotToken) {
+		return "", "", errors.New("invalid telegram data")
+	}
+
+	providerUserID := data["id"]
+	if providerUserID == "" {
+		return "", "", errors.New("missing telegram id")
+	}
+
+	// Ищем существующего пользователя по identity
+	userID, err := s.repo.FindUserByIdentity(ctx, "telegram", providerUserID)
+	if err != nil && !errors.Is(err, ErrUserNotFound) {
+		return "", "", err
+	}
+
+	if userID == "" {
+		// Создаём нового пользователя
+		firstName := data["first_name"]
+		lastName := data["last_name"] // может отсутствовать
+		photoURL := data["photo_url"] // может отсутствовать
+		userID, err = s.repo.CreateUserFromOAuth(ctx, "telegram", providerUserID, firstName, lastName, photoURL)
+		if err != nil {
+			return "", "", err
+		}
+	}
+
+	// Генерируем токены
+	accessToken, err = s.tokenManager.GenerateAccessToken(userID)
+	if err != nil {
+		return "", "", err
+	}
+	refreshToken, err = s.tokenManager.GenerateRefreshToken()
+	if err != nil {
+		return "", "", err
+	}
+	hashRefresh := s.tokenManager.HashRefreshToken(refreshToken)
+	expires := time.Now().Add(7 * 24 * time.Hour)
+	if err := s.repo.CreateRefreshToken(ctx, userID, hashRefresh, expires); err != nil {
+		return "", "", err
+	}
+
+	// TODO: обновить last_login_at, если нужно
+	return accessToken, refreshToken, nil
+}
+
+// =======================
 // UTILS
+// =======================
 func normalizeEmail(email string) string {
 	return strings.ToLower(strings.TrimSpace(email))
 }

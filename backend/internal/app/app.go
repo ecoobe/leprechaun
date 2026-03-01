@@ -63,13 +63,18 @@ func New() (*App, error) {
 	// =========================
 	authRepo := auth.NewRepository(dbpool)
 	tokenManager := auth.NewTokenManager(cfg.JWTSecret)
-	authService := auth.NewService(authRepo, tokenManager)
+
+	// Передаём токен бота (может быть пустым, если не настроен)
+	authService := auth.NewService(authRepo, tokenManager, cfg.TelegramBotToken)
 	authHandler := httpHandler.NewAuthHandler(authService)
 
 	// --- Public routes ---
 	mux.HandleFunc("/auth/request-code", authHandler.RequestCode)
 	mux.HandleFunc("/auth/register", authHandler.Register)
 	mux.HandleFunc("/auth/refresh", authHandler.Refresh)
+
+	// --- Telegram auth (публичный) ---
+	mux.HandleFunc("/auth/telegram", authHandler.TelegramAuth)
 
 	// --- Login с rate limit ---
 	mux.Handle(

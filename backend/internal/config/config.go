@@ -15,6 +15,10 @@ type Config struct {
 	DBName     string
 
 	JWTSecret string
+
+	// Telegram OAuth
+	TelegramBotToken string
+	TelegramBotName  string
 }
 
 func Load() *Config {
@@ -28,6 +32,9 @@ func Load() *Config {
 		DBName:     getEnv("DB_NAME", "leprechaun"),
 
 		JWTSecret: getEnv("JWT_SECRET", "supersecret"),
+
+		TelegramBotToken: getEnv("TELEGRAM_BOT_TOKEN", ""),
+		TelegramBotName:  getEnv("TELEGRAM_BOT_NAME", ""),
 	}
 
 	log.Println("Configuration loaded")
