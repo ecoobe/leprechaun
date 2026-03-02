@@ -11,6 +11,10 @@ services:
       DB_PASSWORD: secret
       DB_NAME: leprechaun
       JWT_SECRET: supersecret
+    args:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+    env_file:
+      - .env
     depends_on:
       postgres:
         condition: service_healthy
