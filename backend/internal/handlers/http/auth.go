@@ -2,6 +2,7 @@ package http
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"net/mail"
@@ -216,6 +217,9 @@ func (h *AuthHandler) TelegramAuth(w http.ResponseWriter, r *http.Request) {
 
 // TelegramRedirect обрабатывает редирект от Telegram Login Widget.
 func (h *AuthHandler) TelegramRedirect(w http.ResponseWriter, r *http.Request) {
+	// Логируем входящие параметры для отладки
+	log.Printf("Telegram redirect query: %+v", r.URL.Query())
+
 	// 1. Собираем все параметры из запроса в map
 	data := make(map[string]string)
 	for key, values := range r.URL.Query() {
@@ -226,42 +230,23 @@ func (h *AuthHandler) TelegramRedirect(w http.ResponseWriter, r *http.Request) {
 
 	// 2. Проверяем наличие обязательных полей
 	if _, ok := data["id"]; !ok {
-		http.Error(w, "missing telegram id", http.StatusBadRequest)
+		log.Printf("Missing id in telegram data")
+		http.Redirect(w, r, "/login?error=missing_telegram_id", http.StatusFound)
 		return
 	}
 
-	// 3. Вызываем тот же метод сервиса, что и для колбэка
+	// 3. Вызываем метод сервиса для логина через Telegram
 	access, refresh, err := h.service.TelegramLogin(r.Context(), data)
 	if err != nil {
-		// В случае ошибки можно редиректить на страницу логина с параметром ошибки
+		log.Printf("TelegramLogin error: %v", err)
 		http.Redirect(w, r, "/login?error=telegram_auth_failed", http.StatusFound)
 		return
 	}
 
-	// 4. Успех — редиректим на фронтенд с токенами (или устанавливаем куки)
-	// Вариант А: редирект с токенами в query (менее безопасно, но просто)
-	// http.Redirect(w, r, fmt.Sprintf("/dashboard?access_token=%s&refresh_token=%s", access, refresh), http.StatusFound)
-
-	// Вариант Б: устанавливаем токены в httpOnly куки (безопаснее)
-	http.SetCookie(w, &http.Cookie{
-		Name:     "access_token",
-		Value:    access,
-		HttpOnly: true,
-		Secure:   true,
-		SameSite: http.SameSiteLaxMode,
-		Path:     "/",
-		MaxAge:   900, // 15 минут
-	})
-	http.SetCookie(w, &http.Cookie{
-		Name:     "refresh_token",
-		Value:    refresh,
-		HttpOnly: true,
-		Secure:   true,
-		SameSite: http.SameSiteLaxMode,
-		Path:     "/",
-		MaxAge:   604800, // 7 дней
-	})
-	http.Redirect(w, r, "/dashboard", http.StatusFound)
+	// 4. Успех — редиректим на дашборд с токенами в query-параметрах
+	redirectURL := fmt.Sprintf("/dashboard?access_token=%s&refresh_token=%s", access, refresh)
+	log.Printf("Telegram auth success, redirecting to %s", redirectURL)
+	http.Redirect(w, r, redirectURL, http.StatusFound)
 }
 
 func writeJSON(w http.ResponseWriter, status int, payload any) {

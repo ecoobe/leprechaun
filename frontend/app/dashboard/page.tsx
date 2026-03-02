@@ -203,6 +203,17 @@ export default function DashboardPage() {
   const [selectedToolId, setSelectedToolId] = useState<string | null>(null);
 
   useEffect(() => {
+    // Проверяем наличие токенов в URL (после редиректа от Telegram)
+    const urlParams = new URLSearchParams(window.location.search);
+    const accessToken = urlParams.get('access_token');
+    const refreshToken = urlParams.get('refresh_token');
+    if (accessToken && refreshToken) {
+      localStorage.setItem('access_token', accessToken);
+      localStorage.setItem('refresh_token', refreshToken);
+      // Очищаем URL от параметров, чтобы они не светились
+      window.history.replaceState({}, document.title, '/dashboard');
+    }
+
     const token = localStorage.getItem("access_token");
     if (!token) {
       router.push("/login");
