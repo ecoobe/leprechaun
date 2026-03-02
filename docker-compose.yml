@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
+      args:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
     environment:
       APP_PORT: 8080
       DB_HOST: postgres
@@ -11,8 +13,6 @@ services:
       DB_PASSWORD: secret
       DB_NAME: leprechaun
       JWT_SECRET: supersecret
-      args:
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
     env_file:
       - .env
     depends_on:
