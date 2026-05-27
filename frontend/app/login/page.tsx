@@ -142,7 +142,7 @@ export default function LoginPage() {
             <div>
               Впервые у нас?{" "}
               <Link href="/register" className="form-link">
-                Зарегистрироваться
+                Зарегистрироваться в
               </Link>
             </div>
           </div>
