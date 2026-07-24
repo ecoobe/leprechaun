@@ -15,36 +15,63 @@ type Config struct {
 	DBName     string
 
 	JWTSecret string
-
-	// Telegram OAuth
-	TelegramBotToken string
-	TelegramBotName  string
 }
 
 func Load() *Config {
+
 	cfg := &Config{
-		AppPort: getEnv("APP_PORT", "8080"),
 
-		DBHost:     getEnv("DB_HOST", "postgres"),
-		DBPort:     getEnv("DB_PORT", "5432"),
-		DBUser:     getEnv("DB_USER", "leprechaun"),
-		DBPassword: getEnv("DB_PASSWORD", "secret"),
-		DBName:     getEnv("DB_NAME", "leprechaun"),
+		AppPort: getEnv(
+			"APP_PORT",
+			"8080",
+		),
 
-		JWTSecret: getEnv("JWT_SECRET", "supersecret"),
+		DBHost: getEnv(
+			"DB_HOST",
+			"postgres",
+		),
 
-		TelegramBotToken: getEnv("TELEGRAM_BOT_TOKEN", ""),
-		TelegramBotName:  getEnv("TELEGRAM_BOT_NAME", ""),
+		DBPort: getEnv(
+			"DB_PORT",
+			"5432",
+		),
+
+		DBUser: getEnv(
+			"DB_USER",
+			"coobe",
+		),
+
+		DBPassword: getEnv(
+			"DB_PASSWORD",
+			"secret",
+		),
+
+		DBName: getEnv(
+			"DB_NAME",
+			"coobe",
+		),
+
+		JWTSecret: getEnv(
+			"JWT_SECRET",
+			"supersecret",
+		),
 	}
 
 	log.Println("Configuration loaded")
+
 	return cfg
 }
 
-func getEnv(key, fallback string) string {
+func getEnv(
+	key string,
+	fallback string,
+) string {
+
 	value := os.Getenv(key)
+
 	if value == "" {
 		return fallback
 	}
+
 	return value
 }

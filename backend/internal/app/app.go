@@ -51,33 +51,32 @@ func New() (*App, error) {
 	// =========================
 	mux := http.NewServeMux()
 
-	// --- Health ---
+	// Health
 	healthHandler := httpHandler.NewHealthHandler(dbpool)
 	mux.HandleFunc("/health", healthHandler)
 
-	// --- Prometheus ---
+	// Prometheus
 	mux.Handle("/metrics", promhttp.Handler())
 
 	// =========================
-	// Auth wiring
+	// Auth
 	// =========================
 	authRepo := auth.NewRepository(dbpool)
 	tokenManager := auth.NewTokenManager(cfg.JWTSecret)
 
-	// Передаём токен бота (может быть пустым, если не настроен)
-	authService := auth.NewService(authRepo, tokenManager, cfg.TelegramBotToken)
+	authService := auth.NewService(
+		authRepo,
+		tokenManager,
+	)
+
 	authHandler := httpHandler.NewAuthHandler(authService)
 
-	// --- Public routes ---
+	// Public routes
 	mux.HandleFunc("/auth/request-code", authHandler.RequestCode)
 	mux.HandleFunc("/auth/register", authHandler.Register)
 	mux.HandleFunc("/auth/refresh", authHandler.Refresh)
 
-	// --- Telegram auth (публичный) ---
-	mux.HandleFunc("/auth/telegram", authHandler.TelegramAuth)
-	mux.HandleFunc("/auth/telegram-redirect", authHandler.TelegramRedirect)
-
-	// --- Login с rate limit ---
+	// Login
 	mux.Handle(
 		"/auth/login",
 		loginLimiter.Middleware(
@@ -85,7 +84,7 @@ func New() (*App, error) {
 		),
 	)
 
-	// --- Protected routes ---
+	// Logout
 	mux.Handle(
 		"/auth/logout",
 		auth.AuthMiddleware(tokenManager)(
@@ -93,37 +92,47 @@ func New() (*App, error) {
 		),
 	)
 
-	// Пример защищённого endpoint
+	// Current user
 	mux.Handle(
 		"/me",
 		auth.AuthMiddleware(tokenManager)(
 			http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
 				userID, ok := auth.GetUserID(r.Context())
 				if !ok {
-					http.Error(w, "unauthorized", http.StatusUnauthorized)
+					http.Error(
+						w,
+						"unauthorized",
+						http.StatusUnauthorized,
+					)
 					return
 				}
 
-				w.Header().Set("Content-Type", "application/json")
+				w.Header().Set(
+					"Content-Type",
+					"application/json",
+				)
+
 				w.WriteHeader(http.StatusOK)
-				w.Write([]byte(`{"user_id":"` + userID + `"}`))
+
+				w.Write(
+					[]byte(
+						`{"user_id":"` +
+							userID +
+							`"}`,
+					),
+				)
 			}),
 		),
 	)
 
 	// =========================
-	// Global middleware chain
+	// Middleware chain
 	// =========================
 	var handler http.Handler = mux
 
-	// Порядок важен:
-	// Сначала Logging
 	handler = middleware.Logging(handler)
-
-	// Потом RequestID
 	handler = middleware.RequestID(handler)
-
-	// Потом MetricsMiddleware
 	handler = middleware.MetricsMiddleware(handler)
 
 	// =========================
