@@ -2,7 +2,7 @@
 set -e
 
 EMAIL="easyarm@yandex.ru"
-DOMAINS=("leprec.ru" "www.leprec.ru" "prometheus.leprec.ru" "grafana.leprec.ru" "node-exporter.leprec.ru")
+DOMAINS=("coobe.ru" "www.coobe.ru" "prometheus.coobe.ru" "grafana.coobe.ru" "node-exporter.coobe.ru")
 COMPOSE="docker compose"
 
 # ----------------------------------------
@@ -78,9 +78,9 @@ else
 fi
 
 echo "Проверяем полученные сертификаты..."
-if [ -d "./certbot/conf/live/leprec.ru" ]; then
-    echo "Сертификаты найдены в ./certbot/conf/live/leprec.ru/"
-    ls -la "./certbot/conf/live/leprec.ru/"
+if [ -d "./certbot/conf/live/coobe.ru" ]; then
+    echo "Сертификаты найдены в ./certbot/conf/live/coobe.ru/"
+    ls -la "./certbot/conf/live/coobe.ru/"
 else
     echo "Сертификаты не найдены. Проверьте логи выше."
     exit 1
