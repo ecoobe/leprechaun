@@ -4,14 +4,14 @@ services:
       context: .
       dockerfile: backend/Dockerfile
       args:
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+        - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
     environment:
       APP_PORT: 8080
       DB_HOST: postgres
       DB_PORT: 5432
-      DB_USER: leprechaun
+      DB_USER: coobe
       DB_PASSWORD: secret
-      DB_NAME: leprechaun
+      DB_NAME: coobe
       JWT_SECRET: supersecret
     env_file:
       - .env
@@ -35,7 +35,7 @@ services:
       context: .
       dockerfile: frontend/Dockerfile
       args:
-      - NEXT_PUBLIC_TELEGRAM_BOT_NAME=${NEXT_PUBLIC_TELEGRAM_BOT_NAME}
+        - NEXT_PUBLIC_TELEGRAM_BOT_NAME=${NEXT_PUBLIC_TELEGRAM_BOT_NAME}
     environment:
       - NEXT_PUBLIC_TELEGRAM_BOT_NAME=${NEXT_PUBLIC_TELEGRAM_BOT_NAME}
     env_file:
@@ -54,18 +54,18 @@ services:
 
   postgres:
     image: postgres:16
-    container_name: leprechaun_postgres
+    container_name: coobe_postgres
     restart: always
     environment:
-      POSTGRES_USER: leprechaun
+      POSTGRES_USER: coobe
       POSTGRES_PASSWORD: secret
-      POSTGRES_DB: leprechaun
+      POSTGRES_DB: coobe
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - coobe_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U leprechaun"]
+      test: ["CMD-SHELL", "pg_isready -U coobe"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -73,19 +73,19 @@ services:
       - app-network
 
   migrate:
-      image: migrate/migrate
-      command: [
-        "-path", "/migrations",
-        "-database", "postgres://leprechaun:secret@postgres:5432/leprechaun?sslmode=disable",
-        "up"
-      ]
-      volumes:
-        - ./backend/migrations:/migrations
-      depends_on:
-        postgres:
-          condition: service_healthy
-      networks:
-        - app-network  
+    image: migrate/migrate
+    command: [
+      "-path", "/migrations",
+      "-database", "postgres://coobe:secret@postgres:5432/coobe?sslmode=disable",
+      "up"
+    ]
+    volumes:
+      - ./backend/migrations:/migrations
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
 
   grafana:
     image: grafana/grafana:latest
@@ -94,7 +94,7 @@ services:
       - ./monitoring/grafana:/var/lib/grafana
       - ./monitoring/grafana/grafana.ini:/etc/grafana/grafana.ini
     environment:
-      GF_SERVER_ROOT_URL: https://grafana.leprec.ru
+      GF_SERVER_ROOT_URL: https://grafana.coobe.ru
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
       interval: 10s
@@ -184,7 +184,7 @@ services:
 
 volumes:
   prometheus_data:
-  postgres_data:
+  coobe_postgres_data:
 
 networks:
   app-network:
