@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/ui/Header";
+import { login } from "@/lib/api";
 import Link from "next/link";
 
 export default function LoginPage() {
