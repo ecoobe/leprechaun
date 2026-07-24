@@ -6,8 +6,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/ui/Header";
 import Link from "next/link";
-import { login, telegramLogin, type TelegramUser } from "@/lib/api";
-import { TelegramLoginButton } from "@/components/ui/TelegramLoginButton";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -31,21 +29,6 @@ export default function LoginPage() {
       router.push("/dashboard");
     } catch (err: any) {
       setError(err.message || "Неверный email или пароль");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleTelegramAuth = async (user: TelegramUser) => {
-    setLoading(true);
-    setError("");
-    try {
-      const data = await telegramLogin(user);
-      localStorage.setItem("access_token", data.access_token);
-      localStorage.setItem("refresh_token", data.refresh_token);
-      router.push("/dashboard");
-    } catch (err: any) {
-      setError(err.message || "Ошибка входа через Telegram");
     } finally {
       setLoading(false);
     }
@@ -124,11 +107,6 @@ export default function LoginPage() {
               <span className="bg-zinc-900 px-2 text-muted-foreground">или</span>
             </div>
           </div>
-
-          <TelegramLoginButton
-  				botName={process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME!}
-  				className="w-full"
-		  />
 
           <div className="text-center mt-6 form-text-muted space-y-1">
             <div>
