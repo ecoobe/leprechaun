@@ -14,7 +14,7 @@ export function HeroShowcase() {
 
         <motion.img
           src="/hand.png"
-          alt="Leprechaun hand"
+          alt="coobe hand"
           width={220}
           height={140}
           className="absolute bottom-[10px] left-[69%] -translate-x-1/2 z-0 origin-bottom"
@@ -23,7 +23,7 @@ export function HeroShowcase() {
 
         <motion.img
           src="/hat.png"
-          alt="Leprechaun hat"
+          alt="coobe hat"
           width={320}
           height={220}
           className="relative z-10 origin-bottom-left -mb-[45px]"

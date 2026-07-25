@@ -92,7 +92,7 @@ export function Sidebar({ tools, selectedToolId, onSelectTool }: SidebarProps) {
     <aside className="fixed left-0 top-0 h-screen w-64 bg-card/80 backdrop-blur-xl border-r border-border p-6 flex flex-col">
       <div className="mb-8">
         <Link href="/dashboard" className="block" onClick={() => console.log("Logo clicked")}>
-          <span className="logo-text text-2xl">leprechaun</span>
+          <span className="logo-text text-2xl">coobe</span>
         </Link>
       </div>
       <div className="flex-1 space-y-4">

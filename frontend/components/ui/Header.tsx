@@ -9,7 +9,7 @@ export function Header() {
       <nav className="nav-container flex items-center justify-between">
         {/* Логотип слева — ведёт на главную */}
         <Link href="/#hero" className="group shrink-0">
-          <span className="logo-text">leprechaun</span>
+          <span className="logo-text">coobe</span>
         </Link>
 
         {/* Центральный блок — навигация для гостей */}

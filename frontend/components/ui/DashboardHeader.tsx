@@ -13,7 +13,7 @@ export function DashboardHeader({ email }: DashboardHeaderProps) {
       <nav className="nav-container flex items-center justify-between">
         {/* Логотип слева — ведёт на главную дашборда */}
         <Link href="/dashboard" className="group shrink-0">
-          <span className="logo-text">leprechaun</span>
+          <span className="logo-text">coobe</span>
         </Link>
 
         {/* Центральный блок пустой (или можно оставить для симметрии) */}

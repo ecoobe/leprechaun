@@ -81,7 +81,7 @@ export function CTASection() {
         <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-8">
           <div>
             <div className="text-zinc-300 text-lg font-medium">
-              Leprechaun
+              coobe
             </div>
             <div className="mt-3 text-sm text-zinc-600 max-w-md">
               Финансовый помощник, который помогает держать обязательства под контролем
@@ -90,7 +90,7 @@ export function CTASection() {
           </div>
 
           <div className="footer-text">
-            © {new Date().getFullYear()} Leprechaun. Все права защищены.
+            © {new Date().getFullYear()} coobe. Все права защищены.
           </div>
         </div>
       </footer>
