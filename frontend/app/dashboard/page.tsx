@@ -125,24 +125,6 @@ const ToolContent = ({ tool }: { tool: Tool }) => {
             </div>
           </div>
         );
-      case "bot":
-        return (
-          <div className="space-y-4">
-            <h2 className="text-2xl font-semibold">Telegram-бот</h2>
-            <p className="text-muted-foreground">
-              Настройте уведомления и получайте напоминания в Telegram.
-            </p>
-            <div className="p-4 rounded-xl border border-border bg-card/50">
-              <div className="flex items-center gap-3">
-                <Bot className="w-8 h-8 text-emerald-400" />
-                <div>
-                  <div className="font-medium">Бот активен</div>
-                  <div className="text-sm text-muted-foreground">@leprechaun_bot</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
       case "notifications":
         return (
           <div className="space-y-4">
