@@ -6,12 +6,12 @@ import (
 	"net/http"
 	"time"
 
-	"leprechaun/internal/auth"
-	"leprechaun/internal/config"
-	"leprechaun/internal/db"
-	httpHandler "leprechaun/internal/handlers/http"
-	"leprechaun/internal/metrics"
-	"leprechaun/internal/middleware"
+	"coobe/internal/auth"
+	"coobe/internal/config"
+	"coobe/internal/db"
+	httpHandler "coobe/internal/handlers/http"
+	"coobe/internal/metrics"
+	"coobe/internal/middleware"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )

@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"leprechaun/internal/app"
+	"coobe/internal/app"
 )
 
 func main() {

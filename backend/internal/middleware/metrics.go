@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"leprechaun/internal/metrics"
+	"coobe/internal/metrics"
 )
 
 func MetricsMiddleware(next http.Handler) http.Handler {

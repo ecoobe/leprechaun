@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"leprechaun/internal/metrics"
+	"coobe/internal/metrics"
 )
 
 type RateLimiter struct {

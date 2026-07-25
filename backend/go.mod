@@ -1,4 +1,4 @@
-module leprechaun
+module coobe
 
 go 1.25.1
 

@@ -7,8 +7,8 @@ import (
 	"net/mail"
 	"strings"
 
-	"leprechaun/internal/auth"
-	"leprechaun/internal/metrics"
+	"coobe/internal/auth"
+	"coobe/internal/metrics"
 )
 
 type AuthHandler struct {
