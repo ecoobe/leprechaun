@@ -14,7 +14,7 @@ export function Logo() {
         z-20
         select-none
         text-3xl
-        font-regular
+        font-medium
         tracking-[-0.04em]
         text-zinc-100
         transition-colors
