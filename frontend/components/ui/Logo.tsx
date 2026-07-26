@@ -8,19 +8,21 @@ export function Logo() {
       href="/"
       className="
         absolute
-        left-6
         top-6
+        left-10
         z-20
-        text-xl
+        select-none
+        text-3xl
         font-semibold
         tracking-tight
-        text-white
         transition-colors
-        duration-150
-        hover:text-zinc-300
+        duration-200
       "
+      aria-label="Coobe"
     >
-      coobe
+      <span className="text-white">c</span>
+      <span className="text-zinc-500">oo</span>
+      <span className="text-white">be</span>
     </Link>
   );
 }
