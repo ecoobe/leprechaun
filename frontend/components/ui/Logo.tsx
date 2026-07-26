@@ -6,6 +6,7 @@ export function Logo() {
   return (
     <Link
       href="/"
+      aria-label="coobe"
       className="
         absolute
         top-6
@@ -14,15 +15,14 @@ export function Logo() {
         select-none
         text-3xl
         font-semibold
-        tracking-tight
+        tracking-[-0.04em]
+        text-zinc-100
         transition-colors
         duration-200
+        hover:text-white
       "
-      aria-label="Coobe"
     >
-      <span className="text-white">c</span>
-      <span className="text-zinc-500">oo</span>
-      <span className="text-white">be</span>
+      coobe
     </Link>
   );
 }
