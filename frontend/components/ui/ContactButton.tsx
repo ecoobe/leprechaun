@@ -55,7 +55,7 @@ export function ContactButton() {
             group-hover:opacity-100
           "
         >
-          Написать разработчику
+          Написать разработчику мне
         </span>
       </Link>
     </motion.div>
