@@ -12,7 +12,6 @@ import {
   Sparkles,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { DashboardHeader } from "@/components/ui/DashboardHeader";
 
 interface TokenPayload {
   uid: string;
@@ -272,7 +271,6 @@ export default function DashboardPage() {
       </div>
 
       {/* Хедер дашборда */}
-      <DashboardHeader email={email || ""} />
 
       <main className="relative min-h-screen pt-24">
         <div className="p-8">
