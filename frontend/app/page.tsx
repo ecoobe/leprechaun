@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { ContactButton } from "@/components/ui/ContactButton";
+
 import { AuthModal } from "@/components/ui/AuthModal";
+import { ContactButton } from "@/components/ui/ContactButton";
+import { BackgroundGradient } from "@/components/ui/BackgroundGradient";
+import { Logo } from "@/components/ui/Logo";
 
 export default function HomePage() {
   const [authOpen, setAuthOpen] = useState(false);
@@ -10,7 +13,10 @@ export default function HomePage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-black">
 
-      {/* Login button */}
+      <BackgroundGradient />
+
+      <Logo />
+
       <button
         onClick={() => setAuthOpen(true)}
         className="
@@ -21,31 +27,26 @@ export default function HomePage() {
           rounded-full
           border
           border-zinc-800
-          bg-zinc-950/40
+          bg-black
           px-5
           py-2
           text-sm
           text-zinc-200
-          backdrop-blur-sm
-          transition
+          transition-colors
+          duration-150
           hover:border-zinc-600
-          hover:bg-zinc-900
+          hover:bg-zinc-950
         "
       >
         Войти
       </button>
 
-
-      {/* Support */}
       <ContactButton />
 
-
-      {/* Auth */}
       <AuthModal
         open={authOpen}
         onClose={() => setAuthOpen(false)}
       />
-
     </main>
   );
 }
