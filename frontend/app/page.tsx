@@ -1,36 +1,51 @@
 "use client";
 
-import Link from "next/link";
+import { useState } from "react";
 import { ContactButton } from "@/components/ui/ContactButton";
+import { AuthModal } from "@/components/ui/AuthModal";
 
 export default function HomePage() {
-  return (
-    <main className="relative min-h-screen bg-black overflow-hidden">
-      {/* Кнопка входа */}
-      <div className="absolute top-6 right-6 z-10">
-        <Link
-          href="/login"
-          className="
-            rounded-full
-            border border-zinc-800
-            bg-zinc-900/40
-            px-5 py-2.5
-            text-sm font-medium
-            text-zinc-200
-            backdrop-blur-xl
-            transition-all
-            hover:border-zinc-700
-            hover:bg-zinc-900/70
-          "
-        >
-          Войти
-        </Link>
-      </div>
+  const [authOpen, setAuthOpen] = useState(false);
 
-      {/* Кнопка связи */}
+  return (
+    <main className="relative min-h-screen overflow-hidden bg-black">
+
+      {/* Login button */}
+      <button
+        onClick={() => setAuthOpen(true)}
+        className="
+          absolute
+          top-6
+          right-6
+          z-20
+          rounded-full
+          border
+          border-zinc-800
+          bg-zinc-950/40
+          px-5
+          py-2
+          text-sm
+          text-zinc-200
+          backdrop-blur-sm
+          transition
+          hover:border-zinc-600
+          hover:bg-zinc-900
+        "
+      >
+        Войти
+      </button>
+
+
+      {/* Support */}
       <ContactButton />
 
-      {/* Пока пустой экран */}
+
+      {/* Auth */}
+      <AuthModal
+        open={authOpen}
+        onClose={() => setAuthOpen(false)}
+      />
+
     </main>
   );
 }
