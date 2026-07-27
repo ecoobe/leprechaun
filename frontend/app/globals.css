@@ -5,9 +5,10 @@
    =========================================================== */
 
 :root {
-  --bg: #000;
+  --bg: #000000;
+
   --surface: #090909;
-  --surface-hover: #111;
+  --surface-hover: #111111;
 
   --text: #f5f5f5;
   --text-secondary: #a1a1aa;
@@ -16,11 +17,7 @@
   --border: #27272a;
   --border-hover: #52525b;
 
-  --danger: #ef4444;
-
-  --radius-sm: 8px;
   --radius: 10px;
-  --radius-lg: 16px;
 
   --transition: 180ms ease;
 }
@@ -43,6 +40,7 @@ body {
   margin: 0;
 
   background: var(--bg);
+
   color: var(--text);
 
   font-family:
@@ -54,37 +52,26 @@ body {
     sans-serif;
 
   -webkit-font-smoothing: antialiased;
+
+  text-rendering: optimizeLegibility;
 }
 
 a {
   color: inherit;
+
   text-decoration: none;
 }
 
 button,
-input {
+input,
+textarea {
   font: inherit;
 }
 
-button {
-  cursor: pointer;
-}
-
 ::selection {
-  background: white;
-  color: black;
-}
+  background: #fff;
 
-/* ===========================================================
-   LAYOUT
-   =========================================================== */
-
-.page {
-  @apply relative min-h-screen overflow-hidden bg-black text-white;
-}
-
-.flex-center {
-  @apply flex items-center justify-center;
+  color: #000;
 }
 
 /* ===========================================================
@@ -103,6 +90,204 @@ button {
   @apply mb-2 block text-sm text-zinc-400;
 }
 
+/* ===========================================================
+   COMPONENT SYSTEM
+   =========================================================== */
+
+@layer components {
+  /* ---------------------------
+   BUTTONS
+---------------------------- */
+
+  .btn {
+    @apply inline-flex items-center justify-center;
+
+    height: 42px;
+
+    padding: 0 18px;
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    background: var(--surface);
+
+    color: var(--text);
+
+    cursor: pointer;
+
+    transition: var(--transition);
+  }
+
+  .btn:hover {
+    border-color: var(--border-hover);
+
+    background: var(--surface-hover);
+  }
+
+  .btn:disabled {
+    opacity: 0.45;
+
+    cursor: not-allowed;
+  }
+
+  .btn-primary {
+    background: #fff;
+
+    color: #000;
+
+    border-color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #e5e5e5;
+
+    border-color: #e5e5e5;
+  }
+
+  .btn-secondary {
+    background: transparent;
+  }
+
+  .btn-icon {
+    width: 42px;
+
+    padding: 0;
+  }
+
+  /* ---------------------------
+   INPUTS
+---------------------------- */
+
+  .input {
+    width: 100%;
+
+    height: 42px;
+
+    padding: 0 14px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    color: var(--text);
+
+    transition: var(--transition);
+  }
+
+  .input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .input:focus {
+    outline: none;
+
+    border-color: var(--border-hover);
+  }
+
+  .input:disabled {
+    opacity: 0.5;
+  }
+
+  /* ---------------------------
+   CARDS
+---------------------------- */
+
+  .card {
+    background: rgba(10, 10, 10, 0.92);
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    backdrop-filter: blur(18px);
+  }
+
+  .panel {
+    padding: 24px;
+
+    background: rgba(10, 10, 10, 0.92);
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    backdrop-filter: blur(18px);
+  }
+
+  /* ---------------------------
+   MODAL
+---------------------------- */
+
+  .modal {
+    width: 100%;
+
+    max-width: 420px;
+
+    padding: 32px;
+
+    background: rgba(10, 10, 10, 0.92);
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    backdrop-filter: blur(18px);
+  }
+
+  .modal-header {
+    margin-bottom: 32px;
+  }
+
+  .modal-title {
+    @apply text-2xl font-medium;
+  }
+
+  /* ---------------------------
+   LINKS
+---------------------------- */
+
+  .link {
+    color: var(--text-secondary);
+
+    transition: var(--transition);
+  }
+
+  .link:hover {
+    color: var(--text);
+  }
+
+  /* ---------------------------
+   DIVIDER
+---------------------------- */
+
+  .divider {
+    width: 100%;
+
+    height: 1px;
+
+    background: var(--border);
+  }
+}
+
+/* ===========================================================
+   UTILITIES
+   =========================================================== */
+
+.glass {
+  backdrop-filter: blur(18px);
+}
+
+.border-default {
+  border: 1px solid var(--border);
+}
+
+.border-hover:hover {
+  border-color: var(--border-hover);
+}
+
 .text-muted {
   color: var(--text-muted);
 }
@@ -112,298 +297,37 @@ button {
 }
 
 /* ===========================================================
-   BUTTONS
+   ANIMATIONS
    =========================================================== */
 
-.btn {
-  @apply inline-flex items-center justify-center;
-
-  height: 42px;
-  padding: 0 18px;
-
-  border: 1px solid var(--border);
-
-  border-radius: var(--radius);
-
-  background: var(--surface);
-  color: var(--text);
-
-  transition: var(--transition);
+.fade-in {
+  animation: fade-in 0.18s ease;
 }
 
-.btn:hover {
-  background: var(--surface-hover);
-  border-color: var(--border-hover);
+.scale-in {
+  animation: scale-in 0.18s ease;
 }
 
-.btn:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
-.btn-primary {
-  background: white;
-  color: black;
-  border-color: white;
-}
+@keyframes scale-in {
+  from {
+    opacity: 0;
 
-.btn-primary:hover {
-  background: #e5e5e5;
-}
+    transform: scale(0.98);
+  }
 
-.btn-secondary {
-  background: transparent;
-}
+  to {
+    opacity: 1;
 
-.btn-icon {
-  width: 42px;
-  padding: 0;
-}
-
-.icon-button {
-  @apply flex items-center justify-center;
-
-  width: 42px;
-  height: 42px;
-
-  border: 1px solid var(--border);
-  border-radius: 999px;
-
-  background: black;
-  color: var(--text-secondary);
-
-  transition: var(--transition);
-}
-
-.icon-button:hover {
-  border-color: var(--border-hover);
-  color: white;
-}
-
-/* ===========================================================
-   INPUTS
-   =========================================================== */
-
-.input {
-  width: 100%;
-  height: 42px;
-
-  padding: 0 14px;
-
-  background: var(--surface);
-
-  border: 1px solid var(--border);
-
-  border-radius: var(--radius);
-
-  color: var(--text);
-
-  transition: var(--transition);
-}
-
-.input::placeholder {
-  color: var(--text-muted);
-}
-
-.input:focus {
-  outline: none;
-  border-color: var(--border-hover);
-}
-
-.input:disabled {
-  opacity: 0.5;
-}
-
-/* ===========================================================
-   CARDS / MODALS
-   =========================================================== */
-
-.card {
-  background: rgba(10, 10, 10, 0.92);
-
-  border: 1px solid var(--border);
-
-  border-radius: var(--radius-lg);
-}
-
-.modal {
-  @apply card;
-
-  width: 100%;
-  max-width: 420px;
-
-  padding: 32px;
-}
-
-.modal-header {
-  margin-bottom: 32px;
-}
-
-.modal-title {
-  @apply text-2xl font-medium;
-}
-
-/* ===========================================================
-   MODAL
-   =========================================================== */
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-
-  z-index: 50;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: rgba(0, 0, 0, 0.8);
-}
-
-/* ===========================================================
-   USER MENU
-   =========================================================== */
-
-.dropdown {
-  position: absolute;
-  right: 0;
-
-  margin-top: 8px;
-
-  width: 220px;
-
-  overflow: hidden;
-
-  background: black;
-
-  border: 1px solid var(--border);
-
-  border-radius: var(--radius);
-}
-
-.dropdown-item {
-  width: 100%;
-
-  padding: 12px 16px;
-
-  text-align: left;
-
-  color: var(--text-secondary);
-
-  transition: var(--transition);
-}
-
-.dropdown-item:hover {
-  background: var(--surface-hover);
-  color: white;
-}
-
-/* ===========================================================
-   LOGO
-   =========================================================== */
-
-.logo {
-  @apply absolute z-20 select-none;
-
-  top: 24px;
-  left: 40px;
-
-  font-size: 30px;
-  font-weight: 500;
-
-  letter-spacing: -0.04em;
-
-  color: white;
-
-  transition: var(--transition);
-}
-
-.logo:hover {
-  color: #fff;
-}
-
-/* ===========================================================
-   TOOLTIP
-   =========================================================== */
-
-.tooltip {
-  pointer-events: none;
-
-  position: absolute;
-
-  right: 56px;
-
-  white-space: nowrap;
-
-  padding: 8px 12px;
-
-  background: black;
-
-  border: 1px solid var(--border);
-
-  border-radius: var(--radius-sm);
-
-  font-size: 14px;
-
-  color: var(--text-secondary);
-
-  opacity: 0;
-
-  transition: var(--transition);
-}
-
-.group:hover .tooltip {
-  opacity: 1;
-}
-
-/* ===========================================================
-   DASHBOARD
-   =========================================================== */
-
-.dashboard-header {
-  @apply relative flex items-center justify-center;
-
-  height: 80px;
-
-  border-bottom: 1px solid #18181b;
-}
-
-.dashboard-title {
-  @apply text-lg font-medium tracking-tight;
-}
-
-.dashboard-content {
-  @apply flex items-center justify-center;
-
-  min-height: calc(100vh - 80px);
-}
-
-/* ===========================================================
-   STATES
-   =========================================================== */
-
-.error-box {
-  padding: 12px;
-
-  border: 1px solid #7f1d1d;
-
-  background: rgba(127, 29, 29, 0.15);
-
-  color: #fca5a5;
-
-  border-radius: var(--radius);
-
-  font-size: 14px;
-}
-
-/* ===========================================================
-   HELPERS
-   =========================================================== */
-
-.border-default {
-  border: 1px solid var(--border);
-}
-
-.border-hover:hover {
-  border-color: var(--border-hover);
+    transform: scale(1);
+  }
 }
