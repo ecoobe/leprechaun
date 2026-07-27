@@ -245,6 +245,29 @@ textarea {
     @apply text-2xl font-medium;
   }
 
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.75);
+  }
+
+  .alert-error {
+    padding: 12px;
+
+    border: 1px solid #450a0a;
+    background: rgba(127, 29, 29, 0.15);
+
+    color: #fca5a5;
+
+    font-size: 14px;
+  }
+
   /* ---------------------------
    LINKS
 ---------------------------- */
