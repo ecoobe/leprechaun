@@ -11,6 +11,7 @@
   --surface-hover: #111111;
 
   --text: #f5f5f5;
+
   --text-secondary: #a1a1aa;
   --text-muted: #71717a;
 
@@ -43,6 +44,7 @@ body {
   margin: 0;
 
   background: var(--bg);
+
   color: var(--text);
 
   font-family:
@@ -54,20 +56,33 @@ body {
     sans-serif;
 
   -webkit-font-smoothing: antialiased;
+
+  text-rendering: optimizeLegibility;
 }
 
 button,
-input {
+input,
+textarea {
   font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
 }
 
 a {
   color: inherit;
+
   text-decoration: none;
 }
 
 ::selection {
   background: white;
+
   color: black;
 }
 
@@ -97,7 +112,9 @@ a {
 
 .btn {
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   height: 42px;
@@ -113,8 +130,6 @@ a {
   color: var(--text);
 
   transition: var(--transition);
-
-  cursor: pointer;
 }
 
 .btn:hover {
@@ -133,12 +148,12 @@ a {
 
 .btn-primary:hover {
   background: #e5e5e5;
+
+  border-color: #e5e5e5;
 }
 
 .btn:disabled {
   opacity: 0.45;
-
-  cursor: not-allowed;
 }
 
 /* ===========================================================
@@ -179,12 +194,10 @@ a {
 
 .input:disabled {
   opacity: 0.45;
-
-  cursor: not-allowed;
 }
 
 /* ===========================================================
-   PANELS / CARDS
+   CARDS / PANELS
    =========================================================== */
 
 .card {
@@ -196,7 +209,11 @@ a {
 }
 
 .panel {
-  @apply card;
+  background: rgba(10, 10, 10, 0.96);
+
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
 
   padding: 28px;
 }
@@ -271,7 +288,6 @@ a {
 
 /* ===========================================================
    ICON BUTTONS
-   (ContactButton, UserMenu)
    =========================================================== */
 
 .icon-button {
@@ -335,11 +351,31 @@ a {
 }
 
 /* ===========================================================
-   ANIMATION
+   UTILITIES
+   =========================================================== */
+
+.border-default {
+  border: 1px solid var(--border);
+}
+
+.border-hover:hover {
+  border-color: var(--border-hover);
+}
+
+.glass {
+  backdrop-filter: blur(18px);
+}
+
+/* ===========================================================
+   ANIMATIONS
    =========================================================== */
 
 .fade-in {
   animation: fade-in 0.18s ease;
+}
+
+.scale-in {
+  animation: scale-in 0.18s ease;
 }
 
 @keyframes fade-in {
@@ -349,5 +385,19 @@ a {
 
   to {
     opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+
+    transform: scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: scale(1);
   }
 }
