@@ -2,133 +2,167 @@
 
 import { motion } from "framer-motion";
 
-const lines = [
-  ["0%", "30%", "25%", "10%"],
-  ["25%", "10%", "45%", "25%"],
-  ["45%", "25%", "70%", "15%"],
-  ["70%", "15%", "95%", "35%"],
+const nodes = [
+  { x: "5%", y: "18%" },
+  { x: "18%", y: "10%" },
+  { x: "32%", y: "22%" },
+  { x: "48%", y: "12%" },
+  { x: "65%", y: "20%" },
+  { x: "82%", y: "14%" },
 
-  ["10%", "70%", "30%", "50%"],
-  ["30%", "50%", "55%", "65%"],
-  ["55%", "65%", "80%", "45%"],
-  ["80%", "45%", "100%", "70%"],
+  { x: "10%", y: "42%" },
+  { x: "26%", y: "52%" },
+  { x: "44%", y: "40%" },
+  { x: "62%", y: "55%" },
+  { x: "78%", y: "42%" },
+  { x: "92%", y: "50%" },
 
-  ["25%", "10%", "30%", "50%"],
-  ["45%", "25%", "55%", "65%"],
-  ["70%", "15%", "80%", "45%"],
-
-  ["5%", "45%", "25%", "30%"],
-  ["25%", "30%", "50%", "40%"],
-  ["50%", "40%", "75%", "30%"],
-  ["75%", "30%", "95%", "50%"],
+  { x: "6%", y: "75%" },
+  { x: "22%", y: "85%" },
+  { x: "38%", y: "70%" },
+  { x: "55%", y: "82%" },
+  { x: "72%", y: "72%" },
+  { x: "88%", y: "86%" },
 ];
 
-const nodes = [
-  ["25%", "10%"],
-  ["45%", "25%"],
-  ["70%", "15%"],
-  ["30%", "50%"],
-  ["55%", "65%"],
-  ["80%", "45%"],
-  ["50%", "40%"],
+
+const connections = [
+  [0,1],
+  [1,2],
+  [2,3],
+  [3,4],
+  [4,5],
+
+  [0,6],
+  [1,7],
+  [2,8],
+  [3,9],
+  [4,10],
+  [5,11],
+
+  [6,7],
+  [7,8],
+  [8,9],
+  [9,10],
+  [10,11],
+
+  [6,12],
+  [7,13],
+  [8,14],
+  [9,15],
+  [10,16],
+  [11,17],
+
+  [12,13],
+  [13,14],
+  [14,15],
+  [15,16],
+  [16,17],
 ];
 
 
 export function BackgroundGradient() {
   return (
-    <div
-      className="
-        pointer-events-none
-        absolute
-        inset-0
-        overflow-hidden
-      "
-    >
+    <div className="
+      pointer-events-none
+      absolute
+      inset-0
+      overflow-hidden
+    ">
 
       <motion.svg
-        viewBox="0 0 1200 800"
-        preserveAspectRatio="xMidYMid slice"
+        viewBox="0 0 1000 1000"
+        className="
+          absolute
+          -left-[15%]
+          -top-[15%]
+          h-[130%]
+          w-[130%]
+        "
         animate={{
-          x: [-40, 40, -40],
-          y: [-20, 30, -20],
-          scale: [1, 1.08, 1],
-          opacity: [0.45, 0.65, 0.45],
+          x: [-20, 20, -20],
+          y: [-15, 15, -15],
+          rotate: [-1, 1, -1],
         }}
         transition={{
-          duration: 40,
+          duration: 45,
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="
-          absolute
-          -inset-[20%]
-          h-[140%]
-          w-[140%]
-        "
       >
 
         <g
-          stroke="rgba(82,82,91,0.25)"
+          stroke="#27272a"
           strokeWidth="1"
-          fill="none"
+          opacity="0.45"
         >
 
-          {lines.map((line, index) => (
-            <line
+          {connections.map(([a,b], index)=>(
+            <motion.line
               key={index}
-              x1={line[0]}
-              y1={line[1]}
-              x2={line[2]}
-              y2={line[3]}
+              x1={nodes[a].x}
+              y1={nodes[a].y}
+              x2={nodes[b].x}
+              y2={nodes[b].y}
+
+              initial={{
+                opacity:0.2
+              }}
+
+              animate={{
+                opacity:[
+                  0.25,
+                  0.55,
+                  0.25
+                ]
+              }}
+
+              transition={{
+                duration:
+                  6 + index % 5,
+                repeat:Infinity,
+                ease:"easeInOut",
+                delay:index * 0.15
+              }}
             />
           ))}
 
         </g>
 
 
-        <g
-          fill="rgba(113,113,122,0.35)"
-        >
+        <g fill="#3f3f46">
+
           {nodes.map((node,index)=>(
-            <circle
+            <motion.circle
+
               key={index}
-              cx={node[0]}
-              cy={node[1]}
+
+              cx={node.x}
+              cy={node.y}
               r="2"
+
+              animate={{
+                opacity:[
+                  0.2,
+                  0.7,
+                  0.2
+                ]
+              }}
+
+              transition={{
+                duration:4,
+                repeat:Infinity,
+                delay:index*0.2,
+                ease:"easeInOut"
+              }}
+
             />
           ))}
-        </g>
 
+        </g>
 
       </motion.svg>
 
-
-      {/* лёгкий дополнительный слой движения */}
-      <motion.div
-        animate={{
-          rotate: [0, 3, 0],
-          x: [-20, 20, -20],
-          y: [20, -20, 20],
-        }}
-        transition={{
-          duration: 60,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="
-          absolute
-          -inset-[30%]
-          opacity-30
-        "
-      >
-        <div
-          className="
-            h-full
-            w-full
-            bg-[radial-gradient(circle_at_center,rgba(82,82,91,0.12),transparent_55%)]
-          "
-        />
-      </motion.div>
 
     </div>
   );
