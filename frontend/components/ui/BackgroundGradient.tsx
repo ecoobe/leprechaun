@@ -2,78 +2,95 @@
 
 import { motion } from "framer-motion";
 
+const lines = [
+  { x1: "10%", y1: "20%", x2: "35%", y2: "35%" },
+  { x1: "35%", y1: "35%", x2: "60%", y2: "20%" },
+  { x1: "60%", y1: "20%", x2: "85%", y2: "40%" },
+
+  { x1: "15%", y1: "70%", x2: "40%", y2: "55%" },
+  { x1: "40%", y1: "55%", x2: "65%", y2: "75%" },
+  { x1: "65%", y1: "75%", x2: "90%", y2: "60%" },
+
+  { x1: "35%", y1: "35%", x2: "40%", y2: "55%" },
+  { x1: "60%", y1: "20%", x2: "65%", y2: "75%" },
+];
+
+
+const nodes = [
+  ["10%", "20%"],
+  ["35%", "35%"],
+  ["60%", "20%"],
+  ["85%", "40%"],
+
+  ["15%", "70%"],
+  ["40%", "55%"],
+  ["65%", "75%"],
+  ["90%", "60%"],
+];
+
+
 export function BackgroundGradient() {
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
-
-      <motion.div
+    <div className="
+      pointer-events-none
+      fixed
+      inset-0
+      overflow-hidden
+      opacity-40
+    ">
+      
+      <motion.svg
+        viewBox="0 0 1000 1000"
+        className="
+          absolute
+          h-full
+          w-full
+        "
         animate={{
-          x: [-80, 80, -80],
-          y: [-40, 50, -40],
-          scale: [1, 1.15, 1],
+          x: [-15, 15, -15],
+          y: [10, -10, 10],
         }}
         transition={{
-          duration: 26,
+          duration: 40,
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="
-          absolute
-          -left-64
-          -top-64
-          h-[650px]
-          w-[650px]
-          rounded-full
-          bg-zinc-800/10
-          blur-3xl
-        "
-      />
+      >
 
-      <motion.div
-        animate={{
-          x: [70, -60, 70],
-          y: [60, -70, 60],
-          scale: [1.1, 1, 1.1],
-        }}
-        transition={{
-          duration: 34,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="
-          absolute
-          right-[-250px]
-          top-[10%]
-          h-[700px]
-          w-[700px]
-          rounded-full
-          bg-zinc-700/10
-          blur-3xl
-        "
-      />
+        {lines.map((line, index) => (
+          <line
+            key={index}
+            x1={line.x1}
+            y1={line.y1}
+            x2={line.x2}
+            y2={line.y2}
+            stroke="rgb(63 63 70)"
+            strokeWidth="1"
+            opacity="0.35"
+          />
+        ))}
 
-      <motion.div
-        animate={{
-          x: [-40, 50, -40],
-          y: [60, -50, 60],
-          scale: [1, 1.08, 1],
-        }}
-        transition={{
-          duration: 30,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="
-          absolute
-          bottom-[-280px]
-          left-[20%]
-          h-[600px]
-          w-[600px]
-          rounded-full
-          bg-zinc-600/10
-          blur-3xl
-        "
-      />
+
+        {nodes.map(([cx, cy], index) => (
+          <motion.circle
+            key={index}
+            cx={cx}
+            cy={cy}
+            r="3"
+            fill="rgb(82 82 91)"
+            animate={{
+              opacity: [0.2, 0.7, 0.2],
+            }}
+            transition={{
+              duration: 4 + index,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: index * 0.5,
+            }}
+          />
+        ))}
+
+      </motion.svg>
 
     </div>
   );

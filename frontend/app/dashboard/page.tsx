@@ -3,7 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
+
 import { UserMenu } from "@/components/ui/UserMenu";
+import { BackgroundGradient } from "@/components/ui/BackgroundGradient";
+import { Logo } from "@/components/ui/Logo";
 
 interface TokenPayload {
   uid: string;
@@ -12,7 +15,6 @@ interface TokenPayload {
 }
 
 export default function DashboardPage() {
-
   const router = useRouter();
 
   const [email, setEmail] = useState("");
@@ -20,149 +22,83 @@ export default function DashboardPage() {
 
 
   useEffect(() => {
-
     const token = localStorage.getItem("access_token");
 
-
     if (!token) {
-      router.push("/");
+      router.replace("/");
       return;
     }
 
-
     try {
+      jwtDecode<TokenPayload>(token);
 
-      const decoded = jwtDecode<TokenPayload>(token);
-
-      // Пока нет /auth/me
-      // временная заглушка
+      // Временно, пока нет /auth/me
       setEmail("user@example.com");
 
-
-    } catch(error){
-
+    } catch (error) {
       console.error("Invalid token", error);
 
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
 
-      router.push("/");
-
-    }
-    finally {
-
+      router.replace("/");
+    } finally {
       setLoading(false);
-
     }
 
   }, [router]);
 
 
-
-  if(loading){
-
+  if (loading) {
     return (
-      <main className="
-      min-h-screen
-      bg-black
-      flex
-      items-center
-      justify-center
-      text-zinc-500
-      ">
-        Загрузка...
+      <main className="page flex-center">
+        <span className="text-muted">
+          Загрузка...
+        </span>
       </main>
     );
-
   }
 
 
-
   return (
+    <main className="page">
 
-    <main className="
-      min-h-screen
-      bg-black
-      text-white
-      "
-    >
+      <BackgroundGradient />
+
+      <Logo />
 
 
-      {/* Верхняя панель */}
+      <header className="dashboard-header">
 
-      <header className="
-        relative
-        h-20
-        flex
-        items-center
-        justify-center
-        border-b
-        border-zinc-900
-      ">
-
-
-        <h1 className="
-          text-lg
-          font-medium
-          tracking-tight
-        ">
+        <h1 className="dashboard-title">
           Личный кабинет пользователя
         </h1>
 
 
-        <div className="
-          absolute
-          right-6
-        ">
-
-          <UserMenu email={email}/>
-
+        <div className="absolute right-6">
+          <UserMenu email={email} />
         </div>
-
 
       </header>
 
 
 
-      {/* Контент */}
+      <section className="dashboard-content">
 
-      <section className="
-        flex
-        items-center
-        justify-center
-        min-h-[calc(100vh-5rem)]
-      ">
+        <div className="text-center">
 
-
-        <div className="
-          text-center
-        ">
-
-          <h2 className="
-            text-xl
-            font-medium
-          ">
+          <h2 className="text-xl font-medium">
             Добро пожаловать
           </h2>
 
-
-          <p className="
-            mt-2
-            text-sm
-            text-zinc-500
-          ">
+          <p className="text-muted mt-2">
             Здесь скоро появится ваш личный кабинет
           </p>
 
-
         </div>
-
 
       </section>
 
-
     </main>
-
   );
-
 }

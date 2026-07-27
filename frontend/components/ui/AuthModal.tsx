@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { login, register, requestCode } from "@/lib/api";
+import { Button } from "@/components/ui/button";
 
 interface AuthModalProps {
   open: boolean;
@@ -15,382 +16,234 @@ export function AuthModal({ open, onClose }: AuthModalProps) {
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [step, setStep] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    if (!open) {
+      setMode("login");
+      setEmail("");
+      setCode("");
+      setPassword("");
+      setConfirmPassword("");
+      setStep(false);
+      setLoading(false);
+      setError("");
+    }
+  }, [open]);
+
   if (!open) return null;
 
+  async function handleLogin() {
+    if (!email || !password) {
+      setError("Заполните все поля");
+      return;
+    }
 
-  const handleLogin = async () => {
     try {
       setLoading(true);
       setError("");
 
       const data = await login(email, password);
 
-      localStorage.setItem(
-        "access_token",
-        data.access_token
-      );
+      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("refresh_token", data.refresh_token);
 
-      localStorage.setItem(
-        "refresh_token",
-        data.refresh_token
-      );
-
-      window.location.href="/dashboard";
-
-    } catch(err:any){
+      window.location.href = "/dashboard";
+    } catch (err: any) {
       setError(err.message || "Ошибка входа");
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
-  };
+  }
 
-
-  const handleRegisterCode = async () => {
+  async function handleRequestCode() {
+    if (!email) {
+      setError("Введите Email");
+      return;
+    }
 
     try {
-
       setLoading(true);
       setError("");
 
       await requestCode(email);
 
       setStep(true);
-
-    } catch(err:any){
-      setError(err.message || "Ошибка отправки кода");
-    }
-    finally {
+    } catch (err: any) {
+      setError(err.message || "Не удалось отправить код");
+    } finally {
       setLoading(false);
     }
+  }
 
-  };
+  async function handleRegister() {
+    if (!email || !code || !password || !confirmPassword) {
+      setError("Заполните все поля");
+      return;
+    }
 
-
-  const handleRegister = async () => {
-
-    if(password !== confirm){
+    if (password !== confirmPassword) {
       setError("Пароли не совпадают");
       return;
     }
 
-
     try {
-
       setLoading(true);
       setError("");
 
-      await register(
-        email,
-        code,
-        password
-      );
+      await register(email, code, password);
 
       await handleLogin();
-
-    }
-    catch(err:any){
+    } catch (err: any) {
       setError(err.message || "Ошибка регистрации");
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
-
-  };
-
+  }
 
   return (
     <AnimatePresence>
-
-      <div
-        className="
-        fixed inset-0
-        z-50
-        flex
-        items-center
-        justify-center
-        bg-black/80
-        "
+      <motion.div
+        className="modal-backdrop"
         onClick={onClose}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
       >
-
         <motion.div
-          initial={{
-            opacity:0,
-            y:10
-          }}
-          animate={{
-            opacity:1,
-            y:0
-          }}
-          exit={{
-            opacity:0,
-            y:10
-          }}
-          transition={{
-            duration:.15
-          }}
-          onClick={(e)=>e.stopPropagation()}
-          className="
-          w-full
-          max-w-sm
-          border
-          border-zinc-800
-          bg-black
-          p-6
-          rounded-lg
-          "
+          className="panel w-full max-w-sm"
+          onClick={(e) => e.stopPropagation()}
+          initial={{ opacity: 0, y: 12, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 12, scale: 0.98 }}
+          transition={{ duration: 0.18 }}
         >
-
-          <div className="mb-6">
-
-            <h2 className="
-              text-xl
-              font-medium
-              text-white
-            ">
-              {mode==="login"
-                ? "Войти"
-                : "Создать аккаунт"
-              }
+          <header className="mb-7">
+            <h2 className="text-xl font-medium">
+              {mode === "login" ? "Войти" : "Создать аккаунт"}
             </h2>
 
-            <p className="
-              mt-1
-              text-sm
-              text-zinc-500
-            ">
-              {mode==="login"
-                ? "Введите данные аккаунта"
-                : "Регистрация нового пользователя"
-              }
+            <p className="text-muted mt-2">
+              {mode === "login"
+                ? "Введите данные вашего аккаунта"
+                : "Регистрация нового пользователя"}
             </p>
-
-          </div>
-
+          </header>
 
           {error && (
-            <div className="
-            mb-4
-            border
-            border-red-900
-            bg-red-950/30
-            p-3
-            text-sm
-            text-red-300
-            rounded-md
-            ">
+            <div className="alert-error mb-5">
               {error}
             </div>
           )}
 
-
-
           <div className="space-y-3">
-
-
             <input
-              className="
-              w-full
-              h-11
-              border
-              border-zinc-800
-              bg-black
-              px-3
-              text-sm
-              text-white
-              outline-none
-              rounded-md
-              placeholder:text-zinc-600
-              focus:border-zinc-500
-              "
+              className="input"
               placeholder="Email"
               value={email}
-              onChange={
-                e=>setEmail(e.target.value)
-              }
+              disabled={loading || (mode === "register" && step)}
+              onChange={(e) => setEmail(e.target.value)}
             />
 
-
-            {
-              mode==="register" && step &&
+            {mode === "register" && step && (
               <input
-                className="
-                w-full
-                h-11
-                border
-                border-zinc-800
-                bg-black
-                px-3
-                text-sm
-                text-white
-                outline-none
-                rounded-md
-                placeholder:text-zinc-600
-                focus:border-zinc-500
-                "
-                placeholder="Код из письма"
+                className="input"
+                placeholder="Код подтверждения"
                 value={code}
-                onChange={
-                  e=>setCode(e.target.value)
-                }
+                disabled={loading}
+                onChange={(e) => setCode(e.target.value)}
               />
-            }
+            )}
 
-
-            {
-              (mode==="login" || step) &&
+            {(mode === "login" || step) && (
               <>
-              <input
-                type="password"
-                className="
-                w-full
-                h-11
-                border
-                border-zinc-800
-                bg-black
-                px-3
-                text-sm
-                text-white
-                outline-none
-                rounded-md
-                placeholder:text-zinc-600
-                focus:border-zinc-500
-                "
-                placeholder="Пароль"
-                value={password}
-                onChange={
-                  e=>setPassword(e.target.value)
-                }
-              />
-
-
-              {
-                mode==="register" &&
                 <input
+                  className="input"
                   type="password"
-                  className="
-                  w-full
-                  h-11
-                  border
-                  border-zinc-800
-                  bg-black
-                  px-3
-                  text-sm
-                  text-white
-                  outline-none
-                  rounded-md
-                  placeholder:text-zinc-600
-                  focus:border-zinc-500
-                  "
-                  placeholder="Повторите пароль"
-                  value={confirm}
-                  onChange={
-                    e=>setConfirm(e.target.value)
-                  }
+                  placeholder="Пароль"
+                  value={password}
+                  disabled={loading}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
-              }
+
+                {mode === "register" && (
+                  <input
+                    className="input"
+                    type="password"
+                    placeholder="Повторите пароль"
+                    value={confirmPassword}
+                    disabled={loading}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                )}
               </>
-            }
+            )}
 
-
-            <button
+            <Button
+              className="w-full"
               disabled={loading}
               onClick={
-                mode==="login"
-                ? handleLogin
-                : step
-                ? handleRegister
-                : handleRegisterCode
+                mode === "login"
+                  ? handleLogin
+                  : step
+                  ? handleRegister
+                  : handleRequestCode
               }
-              className="
-              mt-3
-              w-full
-              h-11
-              bg-white
-              text-black
-              text-sm
-              font-medium
-              rounded-md
-              hover:bg-zinc-200
-              transition
-              disabled:opacity-50
-              "
             >
-              {
-                loading
+              {loading
                 ? "Загрузка..."
-                :
-                mode==="login"
+                : mode === "login"
                 ? "Войти"
-                :
-                step
+                : step
                 ? "Создать аккаунт"
-                : "Получить код"
-              }
-
-            </button>
-
-
+                : "Получить код"}
+            </Button>
           </div>
 
-
-          <div className="
-          mt-6
-          text-center
-          text-sm
-          text-zinc-500
-          ">
-
-            {
-              mode==="login"
-              ?
+          <footer className="mt-7 text-center text-sm">
+            {mode === "login" ? (
               <>
-              Нет аккаунта?{" "}
-              <button
-                className="
-                text-white
-                hover:text-zinc-300
-                "
-                onClick={()=>{
-                  setMode("register");
-                  setError("");
-                }}
-              >
-                Регистрация
-              </button>
+                <span className="text-muted">
+                  Нет аккаунта?{" "}
+                </span>
+
+                <button
+                  className="link"
+                  onClick={() => {
+                    setMode("register");
+                    setStep(false);
+                    setError("");
+                  }}
+                >
+                  Регистрация
+                </button>
               </>
-              :
+            ) : (
               <>
-              Уже есть аккаунт?{" "}
-              <button
-                className="
-                text-white
-                hover:text-zinc-300
-                "
-                onClick={()=>{
-                  setMode("login");
-                  setError("");
-                }}
-              >
-                Войти
-              </button>
+                <span className="text-muted">
+                  Уже есть аккаунт?{" "}
+                </span>
+
+                <button
+                  className="link"
+                  onClick={() => {
+                    setMode("login");
+                    setStep(false);
+                    setError("");
+                  }}
+                >
+                  Войти
+                </button>
               </>
-            }
-
-          </div>
-
-
+            )}
+          </footer>
         </motion.div>
-
-      </div>
-
+      </motion.div>
     </AnimatePresence>
   );
 }

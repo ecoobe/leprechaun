@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { logout } from "@/lib/api";
 
@@ -10,21 +10,30 @@ interface UserMenuProps {
 
 export function UserMenu({ email }: UserMenuProps) {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
 
-  const initial = email.charAt(0).toUpperCase();
+  const [open, setOpen] = useState(false);
+
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const initial = (email || "?").charAt(0).toUpperCase();
 
   useEffect(() => {
-    const handler = (event: MouseEvent) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node)
+      ) {
         setOpen(false);
       }
-    };
+    }
 
-    document.addEventListener("mousedown", handler);
+    document.addEventListener("mousedown", handleClickOutside);
 
-    return () => document.removeEventListener("mousedown", handler);
+    return () =>
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
   }, []);
 
   async function handleLogout() {
@@ -33,7 +42,9 @@ export function UserMenu({ email }: UserMenuProps) {
     if (refreshToken) {
       try {
         await logout(refreshToken);
-      } catch {}
+      } catch {
+        // ignore
+      }
     }
 
     localStorage.removeItem("access_token");
@@ -43,33 +54,37 @@ export function UserMenu({ email }: UserMenuProps) {
   }
 
   return (
-    <div className="relative" ref={ref}>
+    <div
+      ref={menuRef}
+      className="relative"
+    >
       <button
-        onClick={() => setOpen(!open)}
-        className="flex h-10 w-10 items-center justify-center rounded-full border border-zinc-700 bg-black text-sm font-medium text-white transition hover:border-zinc-500"
+        onClick={() => setOpen((v) => !v)}
+        className="avatar"
+        aria-label="Меню пользователя"
       >
         {initial}
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-56 rounded-lg border border-zinc-800 bg-black shadow-xl">
-          <div className="border-b border-zinc-800 px-4 py-3 text-xs text-zinc-500">
+        <div className="dropdown">
+          <div className="dropdown-header">
             {email}
           </div>
 
           <button
+            className="dropdown-item"
             onClick={() => {
               setOpen(false);
               router.push("/dashboard/settings");
             }}
-            className="block w-full px-4 py-3 text-left text-sm text-zinc-200 hover:bg-zinc-900"
           >
             Настройки
           </button>
 
           <button
+            className="dropdown-item"
             onClick={handleLogout}
-            className="block w-full px-4 py-3 text-left text-sm text-zinc-200 hover:bg-zinc-900"
           >
             Выйти
           </button>

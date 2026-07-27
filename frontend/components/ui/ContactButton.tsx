@@ -9,52 +9,18 @@ export function ContactButton() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
       className="fixed bottom-6 right-6 z-50"
     >
       <Link
         href="https://t.me/dmilarin"
         target="_blank"
-        className="
-          group
-          relative
-          flex
-          h-11
-          w-11
-          items-center
-          justify-center
-          rounded-full
-          border
-          border-zinc-800
-          bg-black
-          text-zinc-500
-          transition-colors
-          duration-150
-          hover:border-zinc-600
-          hover:text-white
-        "
+        aria-label="Написать разработчику"
+        className="icon-button group"
       >
-        <MessageCircle className="h-4.5 w-4.5" />
+        <MessageCircle className="h-4 w-4" />
 
-        <span
-          className="
-            pointer-events-none
-            absolute
-            right-14
-            whitespace-nowrap
-            rounded-md
-            border
-            border-zinc-800
-            bg-black
-            px-3
-            py-2
-            text-sm
-            text-zinc-300
-            opacity-0
-            transition-all
-            duration-150
-            group-hover:opacity-100
-          "
-        >
+        <span className="tooltip">
           Написать разработчику
         </span>
       </Link>
