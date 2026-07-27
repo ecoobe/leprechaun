@@ -1,519 +1,599 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 
-import { login, register, requestCode } from "@/lib/api";
+import {
+  login,
+  register,
+  requestCode
+} from "@/lib/api";
+
 import { Button } from "@/components/ui/button";
 
+
 interface AuthModalProps {
-  open: boolean;
-  onClose: () => void;
+  open:boolean;
+  onClose:()=>void;
 }
 
-export function AuthModal({ open, onClose }: AuthModalProps) {
-  const [mode, setMode] = useState<"login" | "register">("login");
 
-  const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
+export function AuthModal({
+  open,
+  onClose
+}:AuthModalProps){
 
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+const [mode,setMode]
+=
+useState<"login"|"register">("login");
 
-  const [step, setStep] = useState(false);
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+const [email,setEmail]=useState("");
+const [code,setCode]=useState("");
 
+const [password,setPassword]=useState("");
+const [confirmPassword,setConfirmPassword]=useState("");
 
 
-  useEffect(() => {
-    if (!open) {
-      setMode("login");
-      setEmail("");
-      setCode("");
-      setPassword("");
-      setConfirmPassword("");
-      setShowPassword(false);
-      setShowConfirm(false);
-      setStep(false);
-      setLoading(false);
-      setError("");
-    }
-  }, [open]);
+const [step,setStep]=useState(false);
 
+const [loading,setLoading]=useState(false);
 
+const [error,setError]=useState("");
 
-  if (!open) return null;
 
+const [showPassword,setShowPassword]=useState(false);
+const [showConfirm,setShowConfirm]=useState(false);
 
 
-  async function handleLogin() {
 
-    if (!email || !password) {
-      setError("Заполните все поля");
-      return;
-    }
+useEffect(()=>{
 
-    try {
-      setLoading(true);
-      setError("");
+if(!open){
 
-      const data = await login(email, password);
+setMode("login");
 
-      localStorage.setItem(
-        "access_token",
-        data.access_token
-      );
+setEmail("");
 
-      localStorage.setItem(
-        "refresh_token",
-        data.refresh_token
-      );
+setCode("");
 
-      window.location.href = "/dashboard";
+setPassword("");
 
-    } catch (err:any) {
-      setError(err.message || "Ошибка входа");
-    } finally {
-      setLoading(false);
-    }
-  }
+setConfirmPassword("");
 
+setStep(false);
 
+setError("");
 
-  async function handleRequestCode() {
+setShowPassword(false);
 
-    if (!email) {
-      setError("Введите Email");
-      return;
-    }
+}
 
-    try {
+},[open]);
 
-      setLoading(true);
-      setError("");
 
-      await requestCode(email);
 
-      setStep(true);
+if(!open)
+return null;
 
-    } catch(err:any) {
-      setError(err.message || "Не удалось отправить код");
-    } finally {
-      setLoading(false);
-    }
-  }
 
 
+async function handleLogin(){
 
-  async function handleRegister() {
+try{
 
-    if (!email || !code || !password || !confirmPassword) {
-      setError("Заполните все поля");
-      return;
-    }
+setLoading(true);
+setError("");
 
+const data =
+await login(email,password);
 
-    if (password !== confirmPassword) {
-      setError("Пароли не совпадают");
-      return;
-    }
 
+localStorage.setItem(
+"access_token",
+data.access_token
+);
 
-    try {
 
-      setLoading(true);
-      setError("");
+localStorage.setItem(
+"refresh_token",
+data.refresh_token
+);
 
-      await register(
-        email,
-        code,
-        password
-      );
 
-      await handleLogin();
+window.location.href="/dashboard";
 
-    } catch(err:any) {
 
-      setError(
-        err.message || "Ошибка регистрации"
-      );
+}
+catch(err:any){
 
-    } finally {
-      setLoading(false);
-    }
-  }
+setError(err.message || "Ошибка входа");
 
+}
+finally{
 
+setLoading(false);
 
-  function PasswordInput({
-    value,
-    setValue,
-    placeholder,
-    visible,
-    setVisible,
-  }: {
-    value:string;
-    setValue:(v:string)=>void;
-    placeholder:string;
-    visible:boolean;
-    setVisible:(v:boolean)=>void;
-  }) {
+}
 
-    return (
-      <div className="relative">
+}
 
-        <input
-          className="input pr-10"
-          type={visible ? "text" : "password"}
-          placeholder={placeholder}
-          value={value}
-          disabled={loading}
-          onChange={(e)=>setValue(e.target.value)}
-        />
 
-        <button
-          type="button"
-          onClick={()=>setVisible(!visible)}
-          className="
-            absolute
-            right-3
-            top-1/2
-            -translate-y-1/2
-            text-zinc-500
-            transition
-            hover:text-white
-          "
-        >
-          {
-            visible
-            ? <EyeOff size={16}/>
-            : <Eye size={16}/>
-          }
 
-        </button>
+async function handleRequestCode(){
 
-      </div>
-    );
-  }
+try{
 
+setLoading(true);
 
+setError("");
 
-  return (
+await requestCode(email);
 
-    <AnimatePresence>
 
-      <motion.div
+setStep(true);
 
-        className="modal-backdrop"
 
-        onClick={onClose}
+}
+catch(err:any){
 
-        initial={{
-          opacity:0
-        }}
+setError(err.message || "Ошибка отправки кода");
 
-        animate={{
-          opacity:1
-        }}
+}
+finally{
 
-        exit={{
-          opacity:0
-        }}
+setLoading(false);
 
-      >
+}
 
+}
 
-        <motion.div
 
-          className="modal"
 
-          onClick={(e)=>e.stopPropagation()}
+async function handleRegister(){
 
-          initial={{
-            opacity:0,
-            y:12,
-            scale:0.98
-          }}
 
-          animate={{
-            opacity:1,
-            y:0,
-            scale:1
-          }}
+if(password!==confirmPassword){
 
-          exit={{
-            opacity:0,
-            y:12,
-            scale:0.98
-          }}
+setError("Пароли не совпадают");
 
-          transition={{
-            duration:0.18
-          }}
+return;
 
-        >
+}
 
 
-          <header className="modal-header">
+try{
 
-            <h2 className="modal-title">
-              {
-                mode==="login"
-                ? "Войти"
-                : "Создать аккаунт"
-              }
-            </h2>
+setLoading(true);
 
+setError("");
 
-            <p className="subtitle mt-2">
 
-              {
-                mode==="login"
-                ? "Введите данные вашего аккаунта"
-                : "Регистрация нового пользователя"
-              }
+await register(
+email,
+code,
+password
+);
 
-            </p>
 
-          </header>
+await handleLogin();
 
 
+}
+catch(err:any){
 
-          {
-            error &&
-            <div className="alert-error mb-5">
-              {error}
-            </div>
-          }
+setError(err.message || "Ошибка регистрации");
 
+}
+finally{
 
+setLoading(false);
 
-          <div className="space-y-3">
+}
 
 
-            <input
+}
 
-              className={`
-                input
-                ${
-                  mode==="register" && step
-                  ? "opacity-40 cursor-not-allowed"
-                  : ""
-                }
-              `}
 
-              placeholder="Email"
 
-              value={email}
+return (
 
-              disabled={
-                loading ||
-                (
-                  mode==="register" &&
-                  step
-                )
-              }
+<AnimatePresence>
 
-              onChange={
-                e=>setEmail(e.target.value)
-              }
+<motion.div
 
-            />
+className="modal-backdrop"
 
+onClick={onClose}
 
 
-            {
-              mode==="register" &&
-              step &&
-              <input
+initial={{
+opacity:0
+}}
 
-                className="input"
+animate={{
+opacity:1
+}}
 
-                placeholder="Код подтверждения"
+exit={{
+opacity:0
+}}
 
-                value={code}
+>
 
-                disabled={loading}
 
-                onChange={
-                  e=>setCode(e.target.value)
-                }
+<motion.div
 
-              />
-            }
+className="modal panel"
 
+onClick={
+e=>e.stopPropagation()
+}
 
 
-            {
-              (
-                mode==="login" ||
-                step
-              ) &&
+initial={{
+opacity:0,
+y:8,
+scale:.98
+}}
 
-              <>
+animate={{
+opacity:1,
+y:0,
+scale:1
+}}
 
-                <PasswordInput
+exit={{
+opacity:0,
+y:8,
+scale:.98
+}}
 
-                  value={password}
+transition={{
+duration:.16
+}}
 
-                  setValue={setPassword}
+>
 
-                  placeholder="Пароль"
 
-                  visible={showPassword}
+<h2 className="text-xl font-medium">
 
-                  setVisible={setShowPassword}
+{
+mode==="login"
+?
+"Войти"
+:
+"Создать аккаунт"
+}
 
-                />
+</h2>
 
 
+<p className="mt-2 text-sm text-muted">
 
-                {
-                  mode==="register" &&
+{
+mode==="login"
+?
+"Введите данные аккаунта"
+:
+"Регистрация нового пользователя"
+}
 
-                  <PasswordInput
+</p>
 
-                    value={confirmPassword}
 
-                    setValue={setConfirmPassword}
 
-                    placeholder="Повторите пароль"
+{error &&
+<div className="alert-error mt-5">
 
-                    visible={showConfirm}
+{error}
 
-                    setVisible={setShowConfirm}
+</div>
+}
 
-                  />
-                }
 
 
-              </>
+<div className="mt-6 space-y-3">
 
-            }
 
 
+<input
 
-            <Button
+className="input"
 
-              className="w-full"
+placeholder="Email"
 
-              disabled={loading}
+value={email}
 
-              onClick={
-                mode==="login"
-                ? handleLogin
-                :
-                step
-                ? handleRegister
-                :
-                handleRequestCode
-              }
+disabled={
+loading ||
+(mode==="register" && step)
+}
 
-            >
+onChange={
+e=>setEmail(e.target.value)
+}
 
-              {
-                loading
-                ?
-                "Загрузка..."
-                :
-                mode==="login"
-                ?
-                "Войти"
-                :
-                step
-                ?
-                "Создать аккаунт"
-                :
-                "Получить код"
-              }
+/>
 
-            </Button>
 
 
-          </div>
+{
+mode==="register" && step &&
 
+<input
 
+className="input"
 
-          <footer className="mt-7 text-center text-sm">
+placeholder="Код подтверждения"
 
+value={code}
 
-            {
-              mode==="login"
+disabled={loading}
 
-              ?
+onChange={
+e=>setCode(e.target.value)
+}
 
-              <>
+/>
 
-                <span className="text-muted">
-                  Нет аккаунта?{" "}
-                </span>
+}
 
 
-                <button
 
-                  className="link"
 
-                  onClick={()=>{
+{
+(mode==="login" || step)
+&&
 
-                    setMode("register");
-                    setError("");
+<PasswordInput
 
-                  }}
+value={password}
 
-                >
-                  Регистрация
-                </button>
+placeholder="Пароль"
 
-              </>
+disabled={loading}
 
+show={showPassword}
 
-              :
+setShow={setShowPassword}
 
+onChange={setPassword}
 
-              <>
+/>
 
-                <span className="text-muted">
-                  Уже есть аккаунт?{" "}
-                </span>
+}
 
 
-                <button
 
-                  className="link"
+{
+mode==="register" && step &&
 
-                  onClick={()=>{
+<PasswordInput
 
-                    setMode("login");
-                    setStep(false);
-                    setError("");
+value={confirmPassword}
 
-                  }}
+placeholder="Повторите пароль"
 
-                >
-                  Войти
-                </button>
+disabled={loading}
 
-              </>
+show={showConfirm}
 
-            }
+setShow={setShowConfirm}
 
+onChange={setConfirmPassword}
 
-          </footer>
+/>
 
+}
 
-        </motion.div>
 
 
-      </motion.div>
+<Button
 
+className="w-full"
 
-    </AnimatePresence>
+disabled={loading}
 
-  );
+onClick={
+mode==="login"
+?
+handleLogin
+:
+step
+?
+handleRegister
+:
+handleRequestCode
+}
+
+>
+
+{
+loading
+?
+"Загрузка..."
+:
+mode==="login"
+?
+"Войти"
+:
+step
+?
+"Создать аккаунт"
+:
+"Получить код"
+}
+
+</Button>
+
+
+
+</div>
+
+
+
+<div className="mt-7 text-center text-sm">
+
+
+{
+mode==="login"
+
+?
+
+<>
+
+<span className="text-muted">
+Нет аккаунта?{" "}
+</span>
+
+
+<button
+
+className="link"
+
+onClick={()=>{
+setMode("register");
+setError("");
+}}
+
+>
+
+Регистрация
+
+</button>
+
+</>
+
+
+:
+
+<>
+
+<span className="text-muted">
+Уже есть аккаунт?{" "}
+</span>
+
+
+<button
+
+className="link"
+
+onClick={()=>{
+setMode("login");
+setError("");
+}}
+
+>
+
+Войти
+
+</button>
+
+
+</>
+
+}
+
+
+</div>
+
+
+
+</motion.div>
+
+
+</motion.div>
+
+
+</AnimatePresence>
+
+)
+
+}
+
+
+
+function PasswordInput({
+
+value,
+
+placeholder,
+
+disabled,
+
+show,
+
+setShow,
+
+onChange
+
+
+}:any){
+
+
+return (
+
+<div className="relative">
+
+
+<input
+
+className="input pr-12"
+
+type={
+show
+?
+"text"
+:
+"password"
+}
+
+placeholder={placeholder}
+
+value={value}
+
+disabled={disabled}
+
+onChange={
+e=>onChange(e.target.value)
+}
+
+/>
+
+
+<button
+
+type="button"
+
+className="
+absolute
+right-3
+top-1/2
+-translate-y-1/2
+text-zinc-500
+hover:text-white
+"
+
+onClick={()=>setShow(!show)}
+
+>
+
+{
+show
+?
+<EyeOff size={17}/>
+:
+<Eye size={17}/>
+}
+
+</button>
+
+
+</div>
+
+)
+
 }
